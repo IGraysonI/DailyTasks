@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
-import 'package:novaforge_starter/src/common/model/dependencies.dart';
-import 'package:novaforge_starter/src/common/util/error_util.dart';
-import 'package:novaforge_starter/src/feature/initialization/initialize_dependencies.dart';
+import 'package:daily_tasks/src/common/model/dependencies.dart';
+import 'package:daily_tasks/src/common/util/error_util.dart';
+import 'package:daily_tasks/src/feature/initialization/initialize_dependencies.dart';
 
 /// Ephemerally initializes the app and prepares it for use.
 Future<Dependencies>? _$initializeApp;

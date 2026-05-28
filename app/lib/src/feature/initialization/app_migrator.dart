@@ -7,7 +7,7 @@
 // import 'package:daily_tasks/src/common/constant/pubspec.yaml.g.dart';
 // import 'package:database/database.dart';
 // import 'package:l/l.dart';
-// import 'package:novaforge_starter/src/common/constant/config.dart';
+// import 'package:daily_tasks/src/common/constant/config.dart';
 
 // /// Migrate application when version is changed.
 // sealed class AppMigrator {

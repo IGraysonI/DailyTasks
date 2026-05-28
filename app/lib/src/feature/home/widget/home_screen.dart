@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
-import 'package:novaforge_starter/src/common/widget/common_actions.dart';
+import 'package:daily_tasks/src/common/widget/common_actions.dart';
 
 /// {@template home_screen}
 /// HomeScreen widget.

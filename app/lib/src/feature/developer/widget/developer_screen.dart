@@ -1,8 +1,8 @@
 import 'package:database/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:novaforge_starter/src/common/model/dependencies.dart';
-import 'package:novaforge_starter/src/constants/pubspec.yaml.g.dart';
+import 'package:daily_tasks/src/common/model/dependencies.dart';
+import 'package:daily_tasks/src/constants/pubspec.yaml.g.dart';
 import 'package:octopus/octopus.dart';
 import 'package:ui/ui.dart';
 import 'package:url_launcher/url_launcher_string.dart' as url_launcher;

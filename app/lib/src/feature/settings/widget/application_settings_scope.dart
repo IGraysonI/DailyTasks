@@ -1,8 +1,8 @@
 import 'package:control/control.dart';
 import 'package:flutter/widgets.dart';
-import 'package:novaforge_starter/src/common/model/dependencies.dart';
-import 'package:novaforge_starter/src/feature/settings/controller/application_settings_controller.dart';
-import 'package:novaforge_starter/src/feature/settings/model/application_settings.dart';
+import 'package:daily_tasks/src/common/model/dependencies.dart';
+import 'package:daily_tasks/src/feature/settings/controller/application_settings_controller.dart';
+import 'package:daily_tasks/src/feature/settings/model/application_settings.dart';
 
 /// {@template settings_scope}
 /// SettingsScope widget.

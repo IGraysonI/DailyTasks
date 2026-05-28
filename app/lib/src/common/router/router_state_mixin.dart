@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart' show DefaultTransitionDelegate, State, StatefulWidget, ValueNotifier;
-import 'package:novaforge_starter/src/common/router/home_guard.dart';
-import 'package:novaforge_starter/src/common/router/routes.dart';
+import 'package:daily_tasks/src/common/router/home_guard.dart';
+import 'package:daily_tasks/src/common/router/routes.dart';
 import 'package:octopus/octopus.dart';
 
 /// {@template router_state_mixin}

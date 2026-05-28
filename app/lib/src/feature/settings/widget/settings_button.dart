@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:novaforge_starter/src/common/router/routes.dart';
+import 'package:daily_tasks/src/common/router/routes.dart';
 import 'package:octopus/octopus.dart';
 
 /// {@template settings_button}

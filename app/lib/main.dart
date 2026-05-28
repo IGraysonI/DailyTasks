@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:novaforge_starter/src/common/util/app_zone.dart';
-import 'package:novaforge_starter/src/common/util/error_util.dart';
-import 'package:novaforge_starter/src/common/widget/application.dart';
-import 'package:novaforge_starter/src/common/widget/application_error.dart' deferred as app_error;
-import 'package:novaforge_starter/src/feature/initialization/initialization.dart' deferred as initialization;
-import 'package:novaforge_starter/src/feature/settings/widget/application_settings_scope.dart';
+import 'package:daily_tasks/src/common/util/app_zone.dart';
+import 'package:daily_tasks/src/common/util/error_util.dart';
+import 'package:daily_tasks/src/common/widget/application.dart';
+import 'package:daily_tasks/src/common/widget/application_error.dart' deferred as app_error;
+import 'package:daily_tasks/src/feature/initialization/initialization.dart' deferred as initialization;
+import 'package:daily_tasks/src/feature/settings/widget/application_settings_scope.dart';
 import 'package:octopus/octopus.dart';
 import 'package:platform_info/platform_info.dart';
 

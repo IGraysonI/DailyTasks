@@ -1,8 +1,8 @@
 import 'package:control/control.dart';
 import 'package:flutter/foundation.dart';
-import 'package:novaforge_starter/src/common/controller/state_base.dart';
-import 'package:novaforge_starter/src/feature/settings/data/application_settings_repository.dart';
-import 'package:novaforge_starter/src/feature/settings/model/application_settings.dart';
+import 'package:daily_tasks/src/common/controller/state_base.dart';
+import 'package:daily_tasks/src/feature/settings/data/application_settings_repository.dart';
+import 'package:daily_tasks/src/feature/settings/model/application_settings.dart';
 
 part 'application_settings_state.dart';
 

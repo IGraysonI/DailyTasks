@@ -1,7 +1,7 @@
 import 'package:database/database.dart';
 import 'package:flutter/widgets.dart';
-import 'package:novaforge_starter/src/common/model/app_metadata.dart';
-import 'package:novaforge_starter/src/feature/settings/controller/application_settings_controller.dart';
+import 'package:daily_tasks/src/common/model/app_metadata.dart';
+import 'package:daily_tasks/src/feature/settings/controller/application_settings_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// {@template dependencies}

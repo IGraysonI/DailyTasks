@@ -1,11 +1,11 @@
 {
-    "name": "novaforge_starter",
-    "short_name": "novaforge_starter",
+    "name": "daily_tasks",
+    "short_name": "daily_tasks",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "Production-ready template for Flutter applications",
+    "description": "My project description",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

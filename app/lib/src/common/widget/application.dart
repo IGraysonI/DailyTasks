@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
-import 'package:novaforge_starter/src/common/router/router_state_mixin.dart';
-import 'package:novaforge_starter/src/common/widget/window_scope.dart';
-import 'package:novaforge_starter/src/feature/settings/widget/application_settings_scope.dart';
+import 'package:daily_tasks/src/common/router/router_state_mixin.dart';
+import 'package:daily_tasks/src/common/widget/window_scope.dart';
+import 'package:daily_tasks/src/feature/settings/widget/application_settings_scope.dart';
 import 'package:octopus/octopus.dart';
 
 /// {@template app}

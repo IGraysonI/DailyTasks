@@ -1,4 +1,4 @@
-package com.example.novaforge_starter
+package com.example.daily_tasks
 
 import io.flutter.embedding.android.FlutterActivity
 

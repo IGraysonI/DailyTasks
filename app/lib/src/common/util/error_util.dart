@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:l/l.dart';
-import 'package:novaforge_starter/src/common/util/platform/error_util_vm.dart'
+import 'package:daily_tasks/src/common/util/platform/error_util_vm.dart'
     if (dart.library.html) 'package:flutter_template_name/src/common/util/platform/error_util_js.dart';
 
 /// Error util.

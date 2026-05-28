@@ -1,10 +1,10 @@
 import 'dart:ui';
 
-import 'package:novaforge_starter/src/common/util/color_codec.dart';
-import 'package:novaforge_starter/src/common/util/persisted_entry.dart';
-import 'package:novaforge_starter/src/feature/settings/data/theme_mode_codec.dart';
-import 'package:novaforge_starter/src/feature/settings/model/application_settings.dart';
-import 'package:novaforge_starter/src/feature/settings/model/application_theme.dart';
+import 'package:daily_tasks/src/common/util/color_codec.dart';
+import 'package:daily_tasks/src/common/util/persisted_entry.dart';
+import 'package:daily_tasks/src/feature/settings/data/theme_mode_codec.dart';
+import 'package:daily_tasks/src/feature/settings/model/application_settings.dart';
+import 'package:daily_tasks/src/feature/settings/model/application_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// {@template app_settings_datasource}

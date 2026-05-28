@@ -1,6 +1,6 @@
 import 'package:control/control.dart';
 import 'package:l/l.dart';
-import 'package:novaforge_starter/src/common/util/error_util.dart';
+import 'package:daily_tasks/src/common/util/error_util.dart';
 
 /// Observer for [Controller], react to changes in any controller.
 final class ControllerObserver implements IControllerObserver {

@@ -3,7 +3,7 @@
 import 'dart:ui' show Locale;
 
 import 'package:flutter/foundation.dart';
-import 'package:novaforge_starter/src/feature/settings/model/application_theme.dart';
+import 'package:daily_tasks/src/feature/settings/model/application_theme.dart';
 
 /// {@template app_settings}
 /// Application settings

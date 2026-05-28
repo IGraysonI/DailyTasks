@@ -1,5 +1,5 @@
-import 'package:novaforge_starter/src/feature/settings/data/application_settings_datasource.dart';
-import 'package:novaforge_starter/src/feature/settings/model/application_settings.dart';
+import 'package:daily_tasks/src/feature/settings/data/application_settings_datasource.dart';
+import 'package:daily_tasks/src/feature/settings/model/application_settings.dart';
 
 /// {@template app_settings_repository}
 /// [ApplicationSettingsRepository] sets and gets app settings.

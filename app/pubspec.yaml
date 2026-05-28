@@ -1,5 +1,5 @@
-name: novaforge_starter
-description: "Production-ready template for Flutter applications"
+name: daily_tasks
+description: "My project description"
 publish_to: 'none'
 version: 0.0.1
 
@@ -40,6 +40,7 @@ dependencies:
   collection: any
   async: any
   intl: any
+  path: any
 
   # Localization
   flutter_localizations:

@@ -1,0 +1,12 @@
+{
+  "@@locale": "ru",
+  "@@last_modified": "2026-04-08T08:30:39.432866Z",
+  "title": "NovaForge Starter",
+  "@title": {
+    "description": "application name"
+  },
+  "yes": "Да",
+  "@yes": {
+    "description": "yes label"
+  }
+}

@@ -1,0 +1,28 @@
+name: localization
+description: "Localization layer of the application, providing translations and locale management."
+version: 0.0.1
+homepage:
+
+resolution: workspace
+
+environment:
+  sdk: ^3.8.1
+  flutter: ">=3.27.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+    
+  sheety_localization: ^0.4.2
+  intl: ^0.20.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  test: ^1.25.0
+
+flutter:
+  generate: true

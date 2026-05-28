@@ -1,0 +1,24 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Generate Localization",
+      "type": "shell",
+      "command": [
+        // "dart pub global activate sheety_localization",
+        // "&& 
+        "dart pub global run sheety_localization:generate --credentials=credentials.json",
+        "--sheet=1rAo4H65psLdapV0D8TSAI6aepMgj8oAA2Cvz2HHdZRU",
+        "--lib=lib",
+        "--arb=src/l10n",
+        "--gen=src/generated",
+        "--prefix=app",
+        "--format"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/packages/localization"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

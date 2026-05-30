@@ -1,6 +1,6 @@
+import 'package:daily_tasks/src/feature/settings/widget/application_settings_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:daily_tasks/src/feature/settings/widget/application_settings_scope.dart';
 import 'package:octopus/octopus.dart';
 import 'package:ui/ui.dart';
 

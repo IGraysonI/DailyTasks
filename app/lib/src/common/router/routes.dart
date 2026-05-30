@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:daily_tasks/src/feature/developer/widget/developer_screen.dart';
 import 'package:daily_tasks/src/feature/home/widget/home_screen.dart';
 import 'package:daily_tasks/src/feature/settings/widget/settings_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:octopus/octopus.dart';
 
 /// {@template routes}

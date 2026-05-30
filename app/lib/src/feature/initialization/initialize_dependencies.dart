@@ -1,18 +1,21 @@
 import 'dart:async';
 
 import 'package:control/control.dart';
-import 'package:database/database.dart';
-import 'package:l/l.dart';
 import 'package:daily_tasks/src/common/controller/controller_observer.dart';
 import 'package:daily_tasks/src/common/model/app_metadata.dart';
 import 'package:daily_tasks/src/common/model/dependencies.dart';
 import 'package:daily_tasks/src/common/util/screen_util.dart';
 import 'package:daily_tasks/src/constants/pubspec.yaml.g.dart';
+import 'package:daily_tasks/src/feature/daily_tasks/controller/daily_tasks_controller.dart';
+import 'package:daily_tasks/src/feature/daily_tasks/data/daily_tasks_datasource.dart';
+import 'package:daily_tasks/src/feature/daily_tasks/data/daily_tasks_repository.dart';
 import 'package:daily_tasks/src/feature/initialization/platform/platform_initialization.dart';
 import 'package:daily_tasks/src/feature/settings/controller/application_settings_controller.dart';
 import 'package:daily_tasks/src/feature/settings/data/application_settings_datasource.dart';
 import 'package:daily_tasks/src/feature/settings/data/application_settings_repository.dart';
 import 'package:daily_tasks/src/feature/settings/model/application_settings.dart';
+import 'package:database/database.dart';
+import 'package:l/l.dart';
 import 'package:platform_info/platform_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -103,6 +106,11 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
       initialState: initialState,
     );
   },
+  'Prepare daily tasks controller': (dependencies) => dependencies.dailyTasksController = DailyTasksController(
+    dailyTasksRepository: DailyTasksRepositoryImpl(
+      DailyTasksDatasourceImpl(SqlDatabaseSource(dependencies.database)),
+    ),
+  ),
   'Collect logs': (dependencies) async {
     // TODO: Implement log collection
     //   await (dependencies.database.select<LogTbl, LogTblData>(dependencies.database.logTbl)

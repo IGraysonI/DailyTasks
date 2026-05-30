@@ -1,0 +1,82 @@
+import 'package:database/src/sql_database.dart';
+
+/// Type definition for a daily task id.
+typedef DailyTaskId = String;
+
+/// {@template daily_task}
+/// Model for a daily task.
+/// {@endtemplate}
+class DailyTaskModel {
+  /// {@macro daily_task}
+  DailyTaskModel({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.weight,
+    required this.isCompleted,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  /// Creates a [DailyTaskModel] from a a [DailyTask] table instance.
+  factory DailyTaskModel.fromTable(DailyTask data) => DailyTaskModel(
+    id: data.id,
+    title: data.title,
+    description: data.description,
+    weight: data.weight,
+    isCompleted: data.isCompleted,
+    createdAt: data.createdAt,
+    updatedAt: data.updatedAt,
+  );
+
+  /// Converts the [DailyTaskModel] to a map.
+  Map<String, dynamic> toMap() => {
+    'id': id,
+    'title': title,
+    'description': description,
+    'weight': weight,
+    'isCompleted': isCompleted ? 1 : 0,
+    'createdAt': createdAt.millisecondsSinceEpoch ~/ 1000,
+    'updatedAt': updatedAt.millisecondsSinceEpoch ~/ 1000,
+  };
+
+  /// Copy with method
+  DailyTaskModel copyWith({
+    String? id,
+    String? title,
+    String? description,
+    int? weight,
+    bool? isCompleted,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) => DailyTaskModel(
+    id: id ?? this.id,
+    title: title ?? this.title,
+    description: description ?? this.description,
+    weight: weight ?? this.weight,
+    isCompleted: isCompleted ?? this.isCompleted,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+
+  /// The unique identifier for the task.
+  final String id;
+
+  /// The title of the task.
+  final String title;
+
+  /// The description of the task.
+  final String? description;
+
+  /// The weight of the task.
+  final int weight;
+
+  /// Whether the task is completed.
+  final bool isCompleted;
+
+  /// The date and time the task was created.
+  final DateTime createdAt;
+
+  /// The date and time the task was last updated.
+  final DateTime updatedAt;
+}

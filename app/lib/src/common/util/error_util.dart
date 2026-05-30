@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:l/l.dart';
 import 'package:daily_tasks/src/common/util/platform/error_util_vm.dart'
     if (dart.library.html) 'package:flutter_template_name/src/common/util/platform/error_util_js.dart';
+import 'package:l/l.dart';
 
 /// Error util.
 abstract final class ErrorUtil {

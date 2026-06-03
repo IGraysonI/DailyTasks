@@ -19,7 +19,7 @@ abstract class BaseSchema extends Table {
   String get tableName;
 
   /// Unique identificator column for each record, auto incremented
-  IdentificatorColumn get id => integer().autoIncrement().nullable()();
+  IdentificatorColumn get id => integer().autoIncrement()();
 
   /// Date of creation of the record
   DateTimeColumn get createdAt => dateTime()();

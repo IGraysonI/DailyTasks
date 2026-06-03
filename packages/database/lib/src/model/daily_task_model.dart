@@ -33,7 +33,7 @@ class DailyTaskModel {
 
   /// Creates a [DailyTaskModel] from a a [DailyTask] table instance.
   factory DailyTaskModel.fromTable(DailyTask data) => DailyTaskModel(
-    id: data.id ?? 0,
+    id: data.id,
     title: data.title,
     description: data.description,
     weight: data.weight,

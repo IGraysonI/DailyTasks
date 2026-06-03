@@ -30,7 +30,7 @@ class SqlDatabase extends _$SqlDatabase {
 
   /// Version of the database schema
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(

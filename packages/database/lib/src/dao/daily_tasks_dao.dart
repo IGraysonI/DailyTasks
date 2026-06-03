@@ -14,7 +14,7 @@ final class DailyTaskDao extends BasicDao<DailyTasks, DailyTask, SqlDatabase> {
   }
 
   /// Get a task by [taskId] and return as a [DailyTaskModel]
-  Future<DailyTaskModel?> getTaskById(String taskId) async {
+  Future<DailyTaskModel?> getTaskById(int taskId) async {
     final task = await (select(table)..where((tbl) => tbl.id.equals(taskId))).getSingleOrNull();
     return task != null ? DailyTaskModel.fromTable(task) : null;
   }
@@ -33,26 +33,26 @@ final class DailyTaskDao extends BasicDao<DailyTasks, DailyTask, SqlDatabase> {
 
   /// Update a task in the database
   Future<void> updateTask(DailyTaskModel task) async => await update(table).replace(
-    DailyTasksCompanion.insert(
+    DailyTasksCompanion(
       id: Value(task.id),
-      title: task.title,
+      title: Value(task.title),
       description: Value(task.description),
-      weight: task.weight,
+      weight: Value(task.weight),
       isCompleted: Value(task.isCompleted),
-      createdAt: task.createdAt,
-      updatedAt: task.updatedAt,
+      createdAt: Value(task.createdAt),
+      updatedAt: Value(task.updatedAt),
     ),
   );
 
   /// Delete a task from the database
-  Future<void> deleteTask(String taskId) async => await (delete(table)..where((tbl) => tbl.id.equals(taskId))).go();
+  Future<void> deleteTask(int taskId) async => await (delete(table)..where((tbl) => tbl.id.equals(taskId))).go();
 
   /// Delete all tasks from the database
   Future<void> deleteAllTasks() async => await delete(table).go();
 
   /// Toggle task completion status
-  Future<void> toggleTaskCompletion(String id) async {
-    final task = await getTaskById(id);
+  Future<void> toggleTaskCompletion(int taskId) async {
+    final task = await getTaskById(taskId);
     if (task == null) return;
     await updateTask(task.copyWith(isCompleted: !task.isCompleted));
   }

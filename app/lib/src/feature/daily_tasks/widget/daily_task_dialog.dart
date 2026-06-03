@@ -60,16 +60,10 @@ class _DailyTaskDialogState extends State<DailyTaskDialog> {
       TextButton(
         onPressed: () {
           if (formKey.currentState!.validate()) {
-            // TODO: Перенести в репозиторий?
-            final dailyTask = DailyTaskModel(
-              // TODO: Генерация ID
-              id: '0',
+            final dailyTask = DailyTaskModel.create(
               title: taskTitleController.text,
               description: taskDescriptionController.text,
               weight: taskWeight,
-              isCompleted: false,
-              createdAt: DateTime.now(),
-              updatedAt: DateTime.now(),
             );
             DailyTasksScope.controller(context).manageDailyTask(dailyTask, TasksActionEnum.add);
             Navigator.of(context).pop();

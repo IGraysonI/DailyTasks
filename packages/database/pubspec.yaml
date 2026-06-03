@@ -10,7 +10,6 @@ environment:
 
 dependencies:
   meta: any
-  uuid: any
   l: any
 
   drift: ^2.31.0

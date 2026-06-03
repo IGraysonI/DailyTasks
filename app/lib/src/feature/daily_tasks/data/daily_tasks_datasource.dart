@@ -8,7 +8,7 @@ abstract interface class DailyTasksDatasource {
   Future<List<DailyTaskModel>> getDailyTasks();
 
   /// Get the [DailyTaskModel] by [dailyTaskId] from the local database.
-  Future<DailyTaskModel?> getDailyTaskById(String dailyTaskId);
+  Future<DailyTaskModel?> getDailyTaskById(int dailyTaskId);
 
   /// Add [DailyTaskModel] to the local database.
   Future<void> addDailyTask(DailyTaskModel dailyTask);
@@ -17,7 +17,7 @@ abstract interface class DailyTasksDatasource {
   Future<void> updateDailyTask(DailyTaskModel dailyTask);
 
   /// Remove [DailyTaskModel] from the local database.
-  Future<void> deleteDailyTask(String dailyTaskId);
+  Future<void> deleteDailyTask(int dailyTaskId);
 
   /// Remove all [DailyTaskModel] from the local database.
   Future<void> deleteAllDailyTasks();
@@ -38,7 +38,7 @@ final class DailyTasksDatasourceImpl implements DailyTasksDatasource {
   Future<List<DailyTaskModel>> getDailyTasks() => dataSource.dao<DailyTaskDao>().getAllTasks();
 
   @override
-  Future<DailyTaskModel?> getDailyTaskById(String id) => dataSource.dao<DailyTaskDao>().getTaskById(id);
+  Future<DailyTaskModel?> getDailyTaskById(int dailyTaskId) => dataSource.dao<DailyTaskDao>().getTaskById(dailyTaskId);
 
   @override
   Future<void> addDailyTask(DailyTaskModel dailyTask) => dataSource.dao<DailyTaskDao>().insertTask(dailyTask);
@@ -47,7 +47,7 @@ final class DailyTasksDatasourceImpl implements DailyTasksDatasource {
   Future<void> updateDailyTask(DailyTaskModel dailyTask) => dataSource.dao<DailyTaskDao>().updateTask(dailyTask);
 
   @override
-  Future<void> deleteDailyTask(String dailyTaskId) => dataSource.dao<DailyTaskDao>().deleteTask(dailyTaskId);
+  Future<void> deleteDailyTask(int dailyTaskId) => dataSource.dao<DailyTaskDao>().deleteTask(dailyTaskId);
 
   @override
   Future<void> deleteAllDailyTasks() => dataSource.dao<DailyTaskDao>().deleteAllTasks();

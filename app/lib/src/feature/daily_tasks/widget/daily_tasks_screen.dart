@@ -167,7 +167,7 @@ class _DailyTasksListView extends StatelessWidget {
           final dailyTask = dailyTasks[index];
           return _DailyTaskListTile(
             dailyTask,
-            key: ValueKey<String>(dailyTask.id),
+            key: ValueKey<int>(dailyTask.id),
           );
         },
         childCount: dailyTasks.length,

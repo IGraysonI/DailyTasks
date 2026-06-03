@@ -4,7 +4,6 @@ import 'package:database/src/schema/base_schema.dart';
 import 'package:database/src/tables/tables.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:l/l.dart';
-import 'package:uuid/uuid.dart';
 
 export 'package:database/src/source/sql_database_source.dart';
 export 'package:database/src/sql_database.dart' show SqlDatabase;
@@ -31,7 +30,7 @@ class SqlDatabase extends _$SqlDatabase {
 
   /// Version of the database schema
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(

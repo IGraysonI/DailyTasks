@@ -9,8 +9,8 @@ abstract interface class DailyTasksRepository {
   /// Get the [DailyTaskModel] as list from the source of truth.
   Future<List<DailyTaskModel>> getDailyTasks();
 
-  /// Get the [DailyTaskModel] as by [id] from the source of truth.
-  Future<DailyTaskModel?> getDailyTaskById(String id);
+  /// Get the [DailyTaskModel] as by [dailyTaskId] from the source of truth.
+  Future<DailyTaskModel?> getDailyTaskById(int dailyTaskId);
 
   /// Create the [DailyTaskModel].
   Future<void> manageDailyTask(DailyTaskModel dailyTask, TasksActionEnum action);
@@ -31,7 +31,8 @@ final class DailyTasksRepositoryImpl implements DailyTasksRepository {
   Future<List<DailyTaskModel>> getDailyTasks() async => dailyTasksDatasource.getDailyTasks();
 
   @override
-  Future<DailyTaskModel?> getDailyTaskById(String id) async => await dailyTasksDatasource.getDailyTaskById(id);
+  Future<DailyTaskModel?> getDailyTaskById(int dailyTaskId) async =>
+      await dailyTasksDatasource.getDailyTaskById(dailyTaskId);
 
   @override
   Future<void> manageDailyTask(DailyTaskModel dailyTask, TasksActionEnum action) => switch (action) {

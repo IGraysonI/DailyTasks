@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:database/src/schema/base_schema.dart';
+import 'package:database/src/tables/tables.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:l/l.dart';
 
@@ -11,7 +12,9 @@ export 'package:drift/drift.dart' hide Column, JsonKey;
 
 part 'sql_database.g.dart';
 
-const List<Type> _driftTables = <Type>[];
+const List<Type> _driftTables = <Type>[
+  DailyTasks,
+];
 
 @DriftDatabase(tables: _driftTables)
 class SqlDatabase extends _$SqlDatabase {
@@ -27,7 +30,7 @@ class SqlDatabase extends _$SqlDatabase {
 
   /// Version of the database schema
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(

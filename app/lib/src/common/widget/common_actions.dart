@@ -1,9 +1,9 @@
 import 'dart:collection';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 import 'package:daily_tasks/src/feature/developer/widget/developer_button.dart';
 import 'package:daily_tasks/src/feature/settings/widget/settings_button.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 
 /// {@template common_actions}
 /// CommonActions is a list of common actions used in the app for the app bar.

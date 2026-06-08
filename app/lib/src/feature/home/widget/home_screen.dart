@@ -1,6 +1,7 @@
 import 'package:daily_tasks/src/common/router/routes.dart';
 import 'package:daily_tasks/src/common/widget/common_actions.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/widget/daily_tasks_screen.dart';
+import 'package:daily_tasks/src/feature/weekly_tasks/widget/weekly_tasks_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:l/l.dart';
 import 'package:octopus/octopus.dart';
@@ -48,8 +49,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       controller: _tabController,
       children: const [
         DailyTasksScreen(),
-        // WeeklyTasksScreen(),
-        Placeholder(),
+        WeeklyTasksScreen(),
       ],
     ),
   );

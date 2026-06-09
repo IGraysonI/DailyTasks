@@ -24,6 +24,9 @@ abstract interface class DailyTasksDatasource {
 
   /// Mark [DailyTaskModel] as done in the local database.
   Future<void> toggleTaskCompletetion(DailyTaskModel dailyTask);
+
+  /// Set the all daily tasks as not completed on new day.
+  Future<void> resetDailyTasks();
 }
 
 /// {@macro daily_tasks_datasource}
@@ -55,4 +58,7 @@ final class DailyTasksDatasourceImpl implements DailyTasksDatasource {
   @override
   Future<void> toggleTaskCompletetion(DailyTaskModel dailyTask) =>
       dataSource.dao<DailyTaskDao>().toggleTaskCompletion(dailyTask.id);
+
+  @override
+  Future<void> resetDailyTasks() => dataSource.dao<DailyTaskDao>().resetTasksCompletions();
 }

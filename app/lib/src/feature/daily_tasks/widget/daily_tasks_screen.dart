@@ -89,6 +89,11 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> with AutomaticKeepA
                         onPressed: () => DailyTaskDialog.show(context),
                         child: const Text('Add'),
                       ),
+                      Space.sm(),
+                      ElevatedButton(
+                        onPressed: () => _dailyTasksController.resetDailyTasks(),
+                        child: const Text('Reset all'),
+                      ),
                     ],
                   ),
                 ),

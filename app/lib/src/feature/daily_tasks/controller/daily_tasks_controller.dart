@@ -77,4 +77,21 @@ final class DailyTasksController extends StateController<DailyTasksState> with D
     ),
     done: () async => setState(DailyTasksState.idle(dailyTasks: state.dailyTasks, message: 'Daily tasks idle')),
   );
+
+  /// Reset all daily tasks.
+  void resetDailyTasks() => handle(
+    () async {
+      setState(DailyTasksState.processing(dailyTasks: state.dailyTasks, message: 'Resetting daily tasks'));
+      await _dailyTasksRepository.resetDailyTasks();
+      final newDailyTasks = await _dailyTasksRepository.getDailyTasks();
+      setState(DailyTasksState.idle(dailyTasks: newDailyTasks, message: 'Daily tasks reset'));
+    },
+    error: (error, _) async => setState(
+      DailyTasksState.idle(
+        dailyTasks: state.dailyTasks,
+        error: kDebugMode ? 'Error resetting daily tasks: $error' : 'Error resetting daily tasks',
+        message: 'Failed to reset daily tasks',
+      ),
+    ),
+  );
 }

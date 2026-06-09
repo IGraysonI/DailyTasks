@@ -17,6 +17,9 @@ abstract interface class DailyTasksRepository {
 
   /// Delete all [DailyTask] from the source of truth.
   Future<void> deleteAllDailyTasks();
+
+  /// Set the all daily tasks as not completed on new day.
+  Future<void> resetDailyTasks();
 }
 
 /// {@macro daily_tasks_repository}
@@ -44,4 +47,7 @@ final class DailyTasksRepositoryImpl implements DailyTasksRepository {
 
   @override
   Future<void> deleteAllDailyTasks() => dailyTasksDatasource.deleteAllDailyTasks();
+
+  @override
+  Future<void> resetDailyTasks() => dailyTasksDatasource.resetDailyTasks();
 }

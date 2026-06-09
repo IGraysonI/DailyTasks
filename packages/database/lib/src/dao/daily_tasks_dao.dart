@@ -56,4 +56,10 @@ final class DailyTaskDao extends BasicDao<DailyTasks, DailyTask, SqlDatabase> {
     if (task == null) return;
     await updateTask(task.copyWith(isCompleted: !task.isCompleted));
   }
+
+  /// Set all tasks as not completed on new day
+  Future<void> resetTasksCompletions() async =>
+      await (update(table)..where((tbl) => tbl.isCompleted.equals(true))).write(
+        const DailyTasksCompanion(isCompleted: Value(false)),
+      );
 }

@@ -54,7 +54,12 @@ final class DailyTaskDao extends BasicDao<DailyTasks, DailyTask, SqlDatabase> {
   Future<void> toggleTaskCompletion(int taskId) async {
     final task = await getTaskById(taskId);
     if (task == null) return;
-    await updateTask(task.copyWith(isCompleted: !task.isCompleted));
+    await updateTask(
+      task.copyWith(
+        isCompleted: !task.isCompleted,
+        updatedAt: DateTime.now(),
+      ),
+    );
   }
 
   /// Set all tasks as not completed on new day

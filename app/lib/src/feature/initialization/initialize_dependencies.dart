@@ -9,6 +9,7 @@ import 'package:daily_tasks/src/constants/pubspec.yaml.g.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/controller/daily_tasks_controller.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/data/daily_tasks_datasource.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/data/daily_tasks_repository.dart';
+import 'package:daily_tasks/src/feature/daily_tasks/service/daily_tasks_reset_service.dart';
 import 'package:daily_tasks/src/feature/initialization/platform/platform_initialization.dart';
 import 'package:daily_tasks/src/feature/settings/controller/application_settings_controller.dart';
 import 'package:daily_tasks/src/feature/settings/data/application_settings_datasource.dart';
@@ -108,9 +109,23 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
   },
   'Prepare daily tasks controller': (dependencies) => dependencies.dailyTasksController = DailyTasksController(
     dailyTasksRepository: DailyTasksRepositoryImpl(
-      DailyTasksDatasourceImpl(SqlDatabaseSource(dependencies.database)),
+      DailyTasksDatasourceImpl(
+        SqlDatabaseSource(dependencies.database),
+        dependencies.sharedPreferences,
+      ),
     ),
   ),
+  'Initialize daily tasks reset service': (dependencies) async {
+    final resetService = DailyTasksResetService(
+      dailyTasksDatasource: DailyTasksDatasourceImpl(
+        SqlDatabaseSource(dependencies.database),
+        dependencies.sharedPreferences,
+      ),
+    );
+    dependencies.dailyTasksResetService = resetService;
+    // TODO: Add ways to trigger daily task reset on interval or when app is resumed(?)
+    await resetService.resetTasksIfNewDay();
+  },
   'Collect logs': (dependencies) async {
     // TODO: Implement log collection
     //   await (dependencies.database.select<LogTbl, LogTblData>(dependencies.database.logTbl)

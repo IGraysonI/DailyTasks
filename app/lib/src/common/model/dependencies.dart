@@ -1,5 +1,6 @@
 import 'package:daily_tasks/src/common/model/app_metadata.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/controller/daily_tasks_controller.dart';
+import 'package:daily_tasks/src/feature/daily_tasks/service/daily_tasks_reset_service.dart';
 import 'package:daily_tasks/src/feature/settings/controller/application_settings_controller.dart';
 import 'package:database/database.dart';
 import 'package:flutter/widgets.dart';
@@ -34,6 +35,9 @@ class Dependencies {
 
   /// Daily Tasks Controller
   late final DailyTasksController dailyTasksController;
+
+  /// Daily Tasks Reset Service
+  late final DailyTasksResetService dailyTasksResetService;
 
   @override
   String toString() => 'Dependencies{}';

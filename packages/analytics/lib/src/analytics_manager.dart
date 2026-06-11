@@ -1,7 +1,6 @@
 import 'package:analytics/src/event/analytics_event.dart';
 import 'package:analytics/src/report/analytics_reporter.dart';
 
-// TODO: Add analysis options to this project
 abstract interface class AnalyticsManager {
   /// Initializes the analytics manager.
   Future<void> initialize();

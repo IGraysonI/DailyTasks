@@ -197,25 +197,53 @@ class _DailyTaskListTile extends StatelessWidget {
     title: Text(
       dailyTaskModel.title,
       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-        color: dailyTaskModel.isCompleted ? Colors.green : Colors.black,
+        color: dailyTaskModel.isCompleted ? Colors.green : Colors.white,
       ),
     ),
     subtitle: Text(dailyTaskModel.description ?? ''),
-    trailing: GestureDetector(
-      onTap: () => _onTap(context),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            '${dailyTaskModel.weight}',
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-              color: dailyTaskModel.isCompleted ? Colors.green : Colors.grey,
-            ),
+    trailing: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        GestureDetector(
+          onTap: () => _onTap(context),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '${dailyTaskModel.weight}',
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: dailyTaskModel.isCompleted ? Colors.green : Colors.grey,
+                ),
+              ),
+              Space.sm(),
+              Icon(Icons.check_circle, color: dailyTaskModel.isCompleted ? Colors.green : Colors.grey),
+            ],
           ),
-          Space.sm(),
-          Icon(Icons.check_circle, color: dailyTaskModel.isCompleted ? Colors.green : Colors.grey),
-        ],
-      ),
+        ),
+        _OptionsPopupButton(dailyTaskModel),
+      ],
     ),
+  );
+}
+
+class _OptionsPopupButton extends StatelessWidget {
+  const _OptionsPopupButton(this.dailyTaskModel);
+
+  final DailyTaskModel dailyTaskModel;
+
+  @override
+  Widget build(BuildContext context) => PopupMenuButton<void>(
+    itemBuilder: (context) => [
+      PopupMenuItem(
+        child: const Text('Edit Task'),
+        onTap: () {
+          //TODO: Add edit task functionality
+        },
+      ),
+      PopupMenuItem(
+        child: const Text('Delete Task'),
+        onTap: () => DailyTasksScope.controller(context).manageDailyTask(dailyTaskModel, TasksActionEnum.delete),
+      ),
+    ],
   );
 }

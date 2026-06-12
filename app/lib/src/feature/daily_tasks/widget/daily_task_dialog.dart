@@ -15,11 +15,20 @@ import 'package:ui/ui.dart';
 /// {@endtemplate}
 class DailyTaskDialog extends StatefulWidget {
   /// {@macro logs_dialog}
-  const DailyTaskDialog({super.key});
+  const DailyTaskDialog({
+    this.dailyTaskModel,
+    super.key,
+  });
 
-  /// Show the logs screen
+  final DailyTaskModel? dailyTaskModel;
+
+  /// Show the daily task dialog
   static Future<void> show(BuildContext context) =>
       Octopus.of(context).showDialog<void>((context) => const DailyTaskDialog());
+
+  /// Show the daily task dialog for editing an existing task
+  static Future<void> showEdit(BuildContext context, DailyTaskModel task) =>
+      Octopus.of(context).showDialog<void>((context) => DailyTaskDialog(dailyTaskModel: task));
 
   /// The state from the closest instance of this class
   /// that encloses the given context, if any.
@@ -38,6 +47,16 @@ class _DailyTaskDialogState extends State<DailyTaskDialog> {
   int taskWeight = 1;
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.dailyTaskModel != null) {
+      taskTitleController.text = widget.dailyTaskModel!.title;
+      taskDescriptionController.text = widget.dailyTaskModel!.description ?? '';
+      taskWeight = widget.dailyTaskModel!.weight;
+    }
+  }
+
+  @override
   void dispose() {
     taskTitleController.dispose();
     taskDescriptionController.dispose();
@@ -51,7 +70,7 @@ class _DailyTaskDialogState extends State<DailyTaskDialog> {
     elevation: 8,
     insetPadding: const EdgeInsets.all(36),
     content: const _DialogBody(),
-    title: const Text('Добавить задачу'),
+    title: Text(widget.dailyTaskModel != null ? 'Редактировать задачу' : 'Добавить задачу'),
     actions: [
       TextButton(
         onPressed: () => Navigator.of(context).pop(),
@@ -59,13 +78,27 @@ class _DailyTaskDialogState extends State<DailyTaskDialog> {
       ),
       TextButton(
         onPressed: () {
+          // TODO: Maybe move and separate (?)
           if (formKey.currentState!.validate()) {
-            final dailyTask = DailyTaskModel.create(
-              title: taskTitleController.text,
-              description: taskDescriptionController.text,
-              weight: taskWeight,
+            final dailyTask = widget.dailyTaskModel == null
+                ? DailyTaskModel.create(
+                    title: taskTitleController.text,
+                    description: taskDescriptionController.text,
+                    weight: taskWeight,
+                  )
+                : DailyTaskModel(
+                    id: widget.dailyTaskModel!.id,
+                    title: taskTitleController.text,
+                    description: taskDescriptionController.text,
+                    weight: taskWeight,
+                    isCompleted: widget.dailyTaskModel!.isCompleted,
+                    createdAt: widget.dailyTaskModel!.createdAt,
+                    updatedAt: DateTime.now(),
+                  );
+            DailyTasksScope.controller(context).manageDailyTask(
+              dailyTask,
+              widget.dailyTaskModel != null ? TasksActionEnum.update : TasksActionEnum.add,
             );
-            DailyTasksScope.controller(context).manageDailyTask(dailyTask, TasksActionEnum.add);
             Navigator.of(context).pop();
             l.i('Adding task: $dailyTask');
           } else {
@@ -75,7 +108,7 @@ class _DailyTaskDialogState extends State<DailyTaskDialog> {
             );
           }
         },
-        child: const Text('Добавить'),
+        child: Text(widget.dailyTaskModel != null ? 'Сохранить' : 'Добавить'),
       ),
     ],
   );

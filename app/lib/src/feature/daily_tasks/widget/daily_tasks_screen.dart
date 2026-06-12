@@ -236,9 +236,7 @@ class _OptionsPopupButton extends StatelessWidget {
     itemBuilder: (context) => [
       PopupMenuItem(
         child: const Text('Edit Task'),
-        onTap: () {
-          //TODO: Add edit task functionality
-        },
+        onTap: () => DailyTaskDialog.showEdit(context, dailyTaskModel),
       ),
       PopupMenuItem(
         child: const Text('Delete Task'),

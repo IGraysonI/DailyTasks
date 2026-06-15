@@ -13,6 +13,7 @@ export 'package:drift/drift.dart' hide Column, JsonKey;
 part 'sql_database.g.dart';
 
 const List<Type> _driftTables = <Type>[
+  DailyTaskRewards,
   DailyTasks,
 ];
 
@@ -30,7 +31,7 @@ class SqlDatabase extends _$SqlDatabase {
 
   /// Version of the database schema
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(

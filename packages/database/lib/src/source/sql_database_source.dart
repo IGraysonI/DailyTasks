@@ -24,6 +24,7 @@ base class SqlDatabaseSource extends BaseDriftDataSource<SqlDatabase> with DaoFa
   SqlDatabaseSource._(super.sqlDatabase, {required super.callTracing})
     : super(
         daos: UnmodifiableSetView(<BaseDao>{
+          DailyTaskRewardsDao(sqlDatabase, companionType: DailyTaskRewardsCompanion),
           DailyTaskDao(sqlDatabase, companionType: DailyTasksCompanion),
         }),
       );

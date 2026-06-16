@@ -83,7 +83,7 @@ class _DailyTaskDialogState extends State<DailyTaskDialog> {
             final dailyTask = widget.dailyTaskModel == null
                 ? DailyTaskModel.create(
                     title: taskTitleController.text,
-                    description: taskDescriptionController.text,
+                    description: taskDescriptionController.text.isEmpty ? null : taskDescriptionController.text,
                     weight: taskWeight,
                   )
                 : DailyTaskModel(
@@ -141,10 +141,6 @@ class _DialogBody extends StatelessWidget {
           TextFormField(
             controller: taskDescriptionController,
             decoration: const InputDecoration(hintText: 'Описание задачи'),
-            validator: (value) {
-              if (value == null || value.isEmpty) return 'Пожалуйста, введите описание задачи';
-              return null;
-            },
           ),
           Space.sm(),
           DropdownButtonFormField<int>(

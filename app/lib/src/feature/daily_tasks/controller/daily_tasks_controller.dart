@@ -28,7 +28,7 @@ final class DailyTasksController extends StateController<DailyTasksState> with D
     TasksActionEnum action,
   ) => handle(
     () async {
-      setState(DailyTasksState.processing(dailyTasks: state.dailyTasks, message: 'Updating theme'));
+      setState(DailyTasksState.processing(dailyTasks: state.dailyTasks, message: 'Updating daily task'));
       await _dailyTasksRepository.manageDailyTask(dailyTask, action);
       final newDailyTasks = await _dailyTasksRepository.getDailyTasks();
       setState(DailyTasksState.idle(dailyTasks: newDailyTasks, message: 'Daily task updated'));
@@ -37,7 +37,7 @@ final class DailyTasksController extends StateController<DailyTasksState> with D
       DailyTasksState.idle(
         dailyTasks: state.dailyTasks,
         error: kDebugMode ? 'Error ${action.name} daily task: $error' : 'Error managing daily task',
-        message: 'Failed to update theme',
+        message: 'Failed to update daily task',
       ),
     ),
   );

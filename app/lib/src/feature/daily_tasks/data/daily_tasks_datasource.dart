@@ -3,7 +3,7 @@ import 'package:database/database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// {@template daily_tasks_datasource}
-/// [DailyTasksDatasource] sets and gets app settings.
+/// [DailyTasksDatasource] is responsible for managing daily tasks data.
 /// {@endtemplate}
 abstract interface class DailyTasksDatasource {
   /// Gel all [DailyTaskModel] from the local database.
@@ -21,7 +21,7 @@ abstract interface class DailyTasksDatasource {
   /// Remove [DailyTaskModel] from the local database.
   Future<void> deleteDailyTask(int dailyTaskId);
 
-  /// Remove all [DailyTaskModel] from the local database.
+  /// Remove all [DailyTask] from the local database.
   Future<void> deleteAllDailyTasks();
 
   /// Mark [DailyTaskModel] as done in the local database.

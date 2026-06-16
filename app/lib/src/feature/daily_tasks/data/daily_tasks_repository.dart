@@ -24,7 +24,7 @@ abstract interface class DailyTasksRepository {
 
 /// {@macro daily_tasks_repository}
 final class DailyTasksRepositoryImpl implements DailyTasksRepository {
-  /// {@macro app_settings_repository}
+  /// {@macro daily_tasks_repository}
   const DailyTasksRepositoryImpl(this.dailyTasksDatasource);
 
   /// The instance of [DailyTasksDatasource] used to interact with the source of truth.

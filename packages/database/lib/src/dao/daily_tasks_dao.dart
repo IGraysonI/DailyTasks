@@ -1,8 +1,8 @@
 import 'package:database/database.dart';
 import 'package:database/src/service/basic_dao.dart';
 
-final class DailyTaskDao extends BasicDao<DailyTasks, DailyTask, SqlDatabase> {
-  DailyTaskDao(super.db, {required super.companionType});
+final class DailyTasksDao extends BasicDao<DailyTasks, DailyTask, SqlDatabase> {
+  DailyTasksDao(super.db, {required super.companionType});
 
   @override
   TableInfo<DailyTasks, DailyTask> get table => db.dailyTasks;

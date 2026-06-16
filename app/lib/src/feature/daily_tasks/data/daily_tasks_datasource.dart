@@ -54,29 +54,29 @@ final class DailyTasksDatasourceImpl implements DailyTasksDatasource {
   late final _lastResetDate = DailyTaskResetDateEntry(sharedPreferences: sharedPreferences);
 
   @override
-  Future<List<DailyTaskModel>> getDailyTasks() => dataSource.dao<DailyTaskDao>().getAllTasks();
+  Future<List<DailyTaskModel>> getDailyTasks() => dataSource.dao<DailyTasksDao>().getAllTasks();
 
   @override
-  Future<DailyTaskModel?> getDailyTaskById(int dailyTaskId) => dataSource.dao<DailyTaskDao>().getTaskById(dailyTaskId);
+  Future<DailyTaskModel?> getDailyTaskById(int dailyTaskId) => dataSource.dao<DailyTasksDao>().getTaskById(dailyTaskId);
 
   @override
-  Future<void> addDailyTask(DailyTaskModel dailyTask) => dataSource.dao<DailyTaskDao>().insertTask(dailyTask);
+  Future<void> addDailyTask(DailyTaskModel dailyTask) => dataSource.dao<DailyTasksDao>().insertTask(dailyTask);
 
   @override
-  Future<void> updateDailyTask(DailyTaskModel dailyTask) => dataSource.dao<DailyTaskDao>().updateTask(dailyTask);
+  Future<void> updateDailyTask(DailyTaskModel dailyTask) => dataSource.dao<DailyTasksDao>().updateTask(dailyTask);
 
   @override
-  Future<void> deleteDailyTask(int dailyTaskId) => dataSource.dao<DailyTaskDao>().deleteTask(dailyTaskId);
+  Future<void> deleteDailyTask(int dailyTaskId) => dataSource.dao<DailyTasksDao>().deleteTask(dailyTaskId);
 
   @override
-  Future<void> deleteAllDailyTasks() => dataSource.dao<DailyTaskDao>().deleteAllTasks();
+  Future<void> deleteAllDailyTasks() => dataSource.dao<DailyTasksDao>().deleteAllTasks();
 
   @override
   Future<void> toggleTaskCompletetion(DailyTaskModel dailyTask) =>
-      dataSource.dao<DailyTaskDao>().toggleTaskCompletion(dailyTask.id);
+      dataSource.dao<DailyTasksDao>().toggleTaskCompletion(dailyTask.id);
 
   @override
-  Future<void> resetDailyTasks() => dataSource.dao<DailyTaskDao>().resetTasksCompletions();
+  Future<void> resetDailyTasks() => dataSource.dao<DailyTasksDao>().resetTasksCompletions();
 
   @override
   Future<int?> getLastResetDate() => _lastResetDate.read();

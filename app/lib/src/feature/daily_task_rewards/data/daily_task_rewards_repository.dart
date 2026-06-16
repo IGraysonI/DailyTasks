@@ -1,5 +1,5 @@
+import 'package:daily_tasks/src/common/enum/task_rewards_action_enum.dart';
 import 'package:daily_tasks/src/feature/daily_task_rewards/data/daily_task_rewards_datasource.dart';
-import 'package:daily_tasks/src/feature/daily_task_rewards/enum/task_rewards_action_enum.dart';
 import 'package:database/database.dart';
 
 /// {@template daily_task_rewards_repository}

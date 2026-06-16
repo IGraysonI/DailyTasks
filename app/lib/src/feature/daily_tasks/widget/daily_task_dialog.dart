@@ -1,7 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:daily_tasks/src/common/enum/tasks_action_enum.dart';
 import 'package:daily_tasks/src/common/util/snackbar_utils.dart';
-import 'package:daily_tasks/src/feature/daily_tasks/enum/tasks_action_enum.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/widget/daily_tasks_scope.dart';
 import 'package:database/database.dart';
 import 'package:flutter/material.dart';

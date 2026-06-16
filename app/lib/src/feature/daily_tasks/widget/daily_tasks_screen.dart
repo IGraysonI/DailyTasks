@@ -1,9 +1,9 @@
 import 'package:control/control.dart';
+import 'package:daily_tasks/src/common/enum/tasks_action_enum.dart';
 import 'package:daily_tasks/src/common/extensions/date_time_extension.dart';
 import 'package:daily_tasks/src/common/model/dependencies.dart';
 import 'package:daily_tasks/src/common/util/snackbar_utils.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/controller/daily_tasks_controller.dart';
-import 'package:daily_tasks/src/feature/daily_tasks/enum/tasks_action_enum.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/widget/daily_task_dialog.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/widget/daily_tasks_scope.dart';
 import 'package:database/database.dart';

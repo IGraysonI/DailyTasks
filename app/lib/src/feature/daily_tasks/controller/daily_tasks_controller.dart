@@ -1,7 +1,7 @@
 import 'package:control/control.dart';
 import 'package:daily_tasks/src/common/controller/state_base.dart';
+import 'package:daily_tasks/src/common/enum/tasks_action_enum.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/data/daily_tasks_repository.dart';
-import 'package:daily_tasks/src/feature/daily_tasks/enum/tasks_action_enum.dart';
 import 'package:database/database.dart';
 import 'package:flutter/foundation.dart';
 

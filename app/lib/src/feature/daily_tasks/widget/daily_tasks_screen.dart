@@ -77,7 +77,38 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> with AutomaticKeepA
                     children: [
                       ElevatedButton(
                         onPressed: () => _dailyTasksController.deleteAllDailyTasks(),
-                        child: const Text('Clear'),
+                        child: const Text('Delete all'),
+                      ),
+                      Space.sm(),
+                      ElevatedButton(
+                        onPressed: () => _dailyTasksController.fetchDailyTasks(),
+                        child: const Text('Fetch'),
+                      ),
+                      Space.sm(),
+                      ElevatedButton(
+                        onPressed: () => DailyTaskDialog.show(context),
+                        child: const Text('Add'),
+                      ),
+                    ],
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: Text(
+                    'Задачи за ${_todaysDate.dateOnly}',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ),
+                SliverToBoxAdapter(child: Space.sm()),
+                const SliverToBoxAdapter(child: _SegmentedLinearProgressIndicator()),
+                SliverToBoxAdapter(child: Space.sm()),
+                SliverToBoxAdapter(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () => _dailyTasksController.deleteAllDailyTasks(),
+                        child: const Text('Delete all'),
                       ),
                       Space.sm(),
                       ElevatedButton(
@@ -97,14 +128,6 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> with AutomaticKeepA
                     ],
                   ),
                 ),
-                SliverToBoxAdapter(
-                  child: Text(
-                    'Задачи за ${_todaysDate.dateOnly}',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                ),
-                SliverToBoxAdapter(child: Space.sm()),
-                const SliverToBoxAdapter(child: _SegmentedLinearProgressIndicator()),
                 SliverToBoxAdapter(child: Space.sm()),
                 const _DailyTasksListView(),
               ],

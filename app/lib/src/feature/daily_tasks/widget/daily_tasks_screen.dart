@@ -1,8 +1,8 @@
 import 'package:control/control.dart';
 import 'package:daily_tasks/src/common/enum/tasks_action_enum.dart';
-import 'package:daily_tasks/src/common/extensions/date_time_extension.dart';
 import 'package:daily_tasks/src/common/model/dependencies.dart';
 import 'package:daily_tasks/src/common/util/snackbar_utils.dart';
+import 'package:daily_tasks/src/feature/daily_task_rewards/widget/daily_task_rewards_indicator.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/controller/daily_tasks_controller.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/widget/daily_task_dialog.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/widget/daily_tasks_scope.dart';
@@ -35,6 +35,12 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> with AutomaticKeepA
   void initState() {
     super.initState();
     _dailyTasksController = Dependencies.of(context).dailyTasksController..fetchDailyTasks();
+  }
+
+  @override
+  void dispose() {
+    _dailyTasksController.dispose();
+    super.dispose();
   }
 
   void _onStateChanged(
@@ -70,36 +76,15 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> with AutomaticKeepA
             ignoring: state.isProcessing,
             child: CustomScrollView(
               slivers: [
-                SliverToBoxAdapter(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () => _dailyTasksController.deleteAllDailyTasks(),
-                        child: const Text('Delete all'),
-                      ),
-                      Space.sm(),
-                      ElevatedButton(
-                        onPressed: () => _dailyTasksController.fetchDailyTasks(),
-                        child: const Text('Fetch'),
-                      ),
-                      Space.sm(),
-                      ElevatedButton(
-                        onPressed: () => DailyTaskDialog.show(context),
-                        child: const Text('Add'),
-                      ),
-                    ],
-                  ),
-                ),
+                const SliverToBoxAdapter(child: DailyTaskRewardsIndicator()),
+                SliverToBoxAdapter(child: Space.sm()),
+                const SliverToBoxAdapter(child: Divider()),
                 SliverToBoxAdapter(
                   child: Text(
-                    'Задачи за ${_todaysDate.dateOnly}',
+                    'Список задач',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
-                SliverToBoxAdapter(child: Space.sm()),
-                const SliverToBoxAdapter(child: _SegmentedLinearProgressIndicator()),
                 SliverToBoxAdapter(child: Space.sm()),
                 SliverToBoxAdapter(
                   child: Row(
@@ -153,33 +138,6 @@ class _NoDataWidget extends StatelessWidget {
       onPressed: () => DailyTaskDialog.show(context).ignore(),
     ),
   );
-}
-
-class _SegmentedLinearProgressIndicator extends StatelessWidget {
-  const _SegmentedLinearProgressIndicator();
-
-  @override
-  Widget build(BuildContext context) {
-    final state = DailyTasksScope.controller(context).state;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SegmentedLinearProgressIndicator(
-          maxValue: state.totalWeight,
-          currentValue: state.weightOfCompletedTasks,
-          filledColor: Colors.green,
-          emptyColor: Colors.grey.shade300,
-        ),
-        Space.sm(),
-        const Divider(),
-        Text(
-          'Список задач',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        Space.sm(),
-      ],
-    );
-  }
 }
 
 class _DailyTasksListView extends StatelessWidget {

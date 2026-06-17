@@ -1,5 +1,6 @@
 import 'package:daily_tasks/src/common/router/router_state_mixin.dart';
 import 'package:daily_tasks/src/common/widget/window_scope.dart';
+import 'package:daily_tasks/src/feature/daily_task_rewards/widget/daily_task_rewards_scope.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/widget/daily_tasks_scope.dart';
 import 'package:daily_tasks/src/feature/settings/widget/application_settings_scope.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +61,9 @@ class _ApplicationState extends State<Application> with RouterStateMixin {
           title: Sheet1Localization.of(context).title,
           child: OctopusTools(
             child: DailyTasksScope(
-              child: child ?? const SizedBox.shrink(),
+              child: DailyTaskRewardsScope(
+                child: child ?? const SizedBox.shrink(),
+              ),
             ),
           ),
         ),

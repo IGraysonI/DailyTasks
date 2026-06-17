@@ -6,6 +6,9 @@ import 'package:daily_tasks/src/common/model/app_metadata.dart';
 import 'package:daily_tasks/src/common/model/dependencies.dart';
 import 'package:daily_tasks/src/common/util/screen_util.dart';
 import 'package:daily_tasks/src/constants/pubspec.yaml.g.dart';
+import 'package:daily_tasks/src/feature/daily_task_rewards/controller/daily_task_rewards_controller.dart';
+import 'package:daily_tasks/src/feature/daily_task_rewards/data/daily_task_rewards_datasource.dart';
+import 'package:daily_tasks/src/feature/daily_task_rewards/data/daily_task_rewards_repository.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/controller/daily_tasks_controller.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/data/daily_tasks_datasource.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/data/daily_tasks_repository.dart';
@@ -125,6 +128,13 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
     dependencies.dailyTasksResetService = resetService;
     // TODO: Add ways to trigger daily task reset on interval or when app is resumed(?)
     await resetService.resetTasksIfNewDay();
+  },
+  'Prepare daily task rewards controller': (dependencies) async {
+    dependencies.dailyTaskRewardsController = DailyTaskRewardsController(
+      dailyTaskRewardsRepository: DailyTaskRewardsRepositoryImpl(
+        DailyTaskRewardsDatasourceImpl(SqlDatabaseSource(dependencies.database)),
+      ),
+    );
   },
   'Collect logs': (dependencies) async {
     // TODO: Implement log collection

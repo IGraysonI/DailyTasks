@@ -43,6 +43,7 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> with AutomaticKeepA
     super.dispose();
   }
 
+  // TODO: Moved to make default state listener
   void _onStateChanged(
     BuildContext context,
     DailyTasksController controller,

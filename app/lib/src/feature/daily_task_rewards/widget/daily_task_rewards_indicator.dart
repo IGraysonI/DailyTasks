@@ -3,6 +3,7 @@ import 'package:daily_tasks/src/common/extensions/date_time_extension.dart';
 import 'package:daily_tasks/src/common/model/dependencies.dart';
 import 'package:daily_tasks/src/common/util/snackbar_utils.dart';
 import 'package:daily_tasks/src/feature/daily_task_rewards/controller/daily_task_rewards_controller.dart';
+import 'package:daily_tasks/src/feature/daily_task_rewards/widget/daily_task_rewards_dialog.dart';
 import 'package:daily_tasks/src/feature/daily_task_rewards/widget/daily_task_rewards_scope.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/widget/daily_tasks_scope.dart';
 import 'package:flutter/material.dart';
@@ -70,17 +71,17 @@ class _DailyTaskRewardsIndicatorState extends State<DailyTaskRewardsIndicator> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () => _dailyTaskRewardsController.deleteAllDailyTaskRewards(),
                 child: const Text('Delete all'),
               ),
               Space.sm(),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () => _dailyTaskRewardsController.fetchDailyTaskRewards(),
                 child: const Text('Fetch'),
               ),
               Space.sm(),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () => DailyTaskRewardDialog.show(context),
                 child: const Text('Add'),
               ),
             ],
@@ -116,6 +117,8 @@ class _RewardsList extends StatelessWidget {
       children: [
         Space.sm(),
         ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: dailyRewards.length,
           itemBuilder: (context, index) {
             final reward = dailyRewards[index];

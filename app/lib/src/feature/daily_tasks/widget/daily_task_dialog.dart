@@ -10,11 +10,11 @@ import 'package:meta/meta.dart';
 import 'package:octopus/octopus.dart';
 import 'package:ui/ui.dart';
 
-/// {@template logs_dialog}
-/// LogsDialog widget.
+/// {@template daily_task_dialog}
+/// DailyTaskDialog widget that allows users to create or edit a daily task.
 /// {@endtemplate}
 class DailyTaskDialog extends StatefulWidget {
-  /// {@macro logs_dialog}
+  /// {@macro daily_task_dialog}
   const DailyTaskDialog({
     this.dailyTaskModel,
     super.key,

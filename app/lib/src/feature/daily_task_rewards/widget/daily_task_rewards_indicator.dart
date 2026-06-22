@@ -111,6 +111,7 @@ class _RewardsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dailyRewards = DailyTaskRewardsScope.getDailyTaskRewards(context);
+    final weightOfCompletedTasks = DailyTasksScope.controller(context).state.weightOfCompletedTasks;
     if (dailyRewards.isEmpty) return const SizedBox.shrink();
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -123,8 +124,13 @@ class _RewardsList extends StatelessWidget {
           itemBuilder: (context, index) {
             final reward = dailyRewards[index];
             return ListTile(
+              trailing: Icon(
+                weightOfCompletedTasks >= reward.goalWeight ? Icons.check_circle : Icons.radio_button_unchecked,
+                color: weightOfCompletedTasks >= reward.goalWeight ? Colors.green : Colors.grey,
+              ),
               title: Text(reward.title),
               subtitle: Text(reward.description ?? ''),
+              leading: Text('Цель: ${reward.goalWeight}'),
             );
           },
         ),

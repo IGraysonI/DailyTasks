@@ -67,6 +67,8 @@ abstract base class _$DailyTaskRewardsStateBase extends StateBase<DailyTaskRewar
   @nonVirtual
   final List<DailyTaskRewardModel> dailyTaskRewards;
 
+  List<int>? get rewardSegments => dailyTaskRewards.map((e) => e.goalWeight).toList();
+
   /// Pattern matching for [DailyTaskRewardsState].
   @override
   R map<R>({

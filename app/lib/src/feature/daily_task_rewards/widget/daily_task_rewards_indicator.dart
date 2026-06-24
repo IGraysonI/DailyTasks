@@ -1,4 +1,5 @@
 import 'package:control/control.dart';
+import 'package:daily_tasks/src/common/enum/task_rewards_action_enum.dart';
 import 'package:daily_tasks/src/common/extensions/date_time_extension.dart';
 import 'package:daily_tasks/src/common/model/dependencies.dart';
 import 'package:daily_tasks/src/common/util/snackbar_utils.dart';
@@ -6,6 +7,7 @@ import 'package:daily_tasks/src/feature/daily_task_rewards/controller/daily_task
 import 'package:daily_tasks/src/feature/daily_task_rewards/widget/daily_task_rewards_dialog.dart';
 import 'package:daily_tasks/src/feature/daily_task_rewards/widget/daily_task_rewards_scope.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/widget/daily_tasks_scope.dart';
+import 'package:database/database.dart';
 import 'package:flutter/material.dart';
 import 'package:ui/ui.dart';
 
@@ -127,9 +129,15 @@ class _RewardsList extends StatelessWidget {
           itemBuilder: (context, index) {
             final reward = dailyRewards[index];
             return ListTile(
-              trailing: Icon(
-                weightOfCompletedTasks >= reward.goalWeight ? Icons.check_circle : Icons.radio_button_unchecked,
-                color: weightOfCompletedTasks >= reward.goalWeight ? Colors.green : Colors.grey,
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    weightOfCompletedTasks >= reward.goalWeight ? Icons.check_circle : Icons.radio_button_unchecked,
+                    color: weightOfCompletedTasks >= reward.goalWeight ? Colors.green : Colors.grey,
+                  ),
+                  _OptionsPopupButton(reward),
+                ],
               ),
               title: Text(reward.title),
               subtitle: Text(reward.description ?? ''),
@@ -140,4 +148,26 @@ class _RewardsList extends StatelessWidget {
       ],
     );
   }
+}
+
+class _OptionsPopupButton extends StatelessWidget {
+  const _OptionsPopupButton(this.dailyTaskRewardModel);
+
+  final DailyTaskRewardModel dailyTaskRewardModel;
+
+  @override
+  Widget build(BuildContext context) => PopupMenuButton<void>(
+    itemBuilder: (context) => [
+      PopupMenuItem(
+        child: const Text('Edit Reward'),
+        onTap: () => DailyTaskRewardDialog.showEdit(context, dailyTaskRewardModel),
+      ),
+      PopupMenuItem(
+        child: const Text('Delete Reward'),
+        onTap: () => DailyTaskRewardsScope.controller(
+          context,
+        ).manageDailyTaskReward(dailyTaskRewardModel, TaskRewardsActionEnum.delete),
+      ),
+    ],
+  );
 }

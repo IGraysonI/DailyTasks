@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:control/control.dart';
 import 'package:daily_tasks/src/common/enum/task_rewards_action_enum.dart';
 import 'package:daily_tasks/src/common/extensions/date_time_extension.dart';
@@ -117,6 +119,7 @@ class _RewardsList extends StatelessWidget {
   Widget build(BuildContext context) {
     final dailyRewards = DailyTaskRewardsScope.getDailyTaskRewards(context);
     final weightOfCompletedTasks = DailyTasksScope.controller(context).state.weightOfCompletedTasks;
+    final totalWeight = DailyTasksScope.controller(context).state.totalWeight;
     if (dailyRewards.isEmpty) return const SizedBox.shrink();
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -128,26 +131,90 @@ class _RewardsList extends StatelessWidget {
           itemCount: dailyRewards.length,
           itemBuilder: (context, index) {
             final reward = dailyRewards[index];
-            return ListTile(
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    weightOfCompletedTasks >= reward.goalWeight ? Icons.check_circle : Icons.radio_button_unchecked,
-                    color: weightOfCompletedTasks >= reward.goalWeight ? Colors.green : Colors.grey,
-                  ),
-                  _OptionsPopupButton(reward),
-                ],
-              ),
-              title: Text(reward.title),
-              subtitle: Text(reward.description ?? ''),
-              leading: Text('Цель: ${reward.goalWeight}'),
-            );
+            final isRewardAchievable = totalWeight >= reward.goalWeight;
+            if (isRewardAchievable) return _RewardListTile(reward, weightOfCompletedTasks);
+            return _UnachivableRewardListTile(reward, weightOfCompletedTasks);
           },
         ),
       ],
     );
   }
+}
+
+class _RewardListTile extends StatelessWidget {
+  const _RewardListTile(
+    this.dailyTaskRewardModel,
+    this.weightOfCompletedTasks,
+  );
+
+  final DailyTaskRewardModel dailyTaskRewardModel;
+  final int weightOfCompletedTasks;
+
+  @override
+  Widget build(BuildContext context) => ListTile(
+    trailing: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(
+          weightOfCompletedTasks >= dailyTaskRewardModel.goalWeight ? Icons.check_circle : Icons.radio_button_unchecked,
+          color: weightOfCompletedTasks >= dailyTaskRewardModel.goalWeight ? Colors.green : Colors.grey,
+        ),
+        _OptionsPopupButton(dailyTaskRewardModel),
+      ],
+    ),
+    title: Text(dailyTaskRewardModel.title),
+    subtitle: Text(dailyTaskRewardModel.description ?? ''),
+    leading: Text('Цель: ${dailyTaskRewardModel.goalWeight}'),
+  );
+}
+
+class _UnachivableRewardListTile extends StatelessWidget {
+  const _UnachivableRewardListTile(
+    this.dailyTaskRewardModel,
+    this.weightOfCompletedTasks,
+  );
+
+  final DailyTaskRewardModel dailyTaskRewardModel;
+  final int weightOfCompletedTasks;
+
+  @override
+  Widget build(BuildContext context) => Stack(
+    children: [
+      Positioned.fill(
+        child: ClipRect(
+          child: Padding(
+            padding: const EdgeInsets.all(4),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.5),
+                  borderRadius: BorderRadius.all(Radius.circular(Values.cornerRadius)),
+                ),
+                // color: Colors.black.withOpacity(0.5),
+                child: Center(
+                  child: Transform.rotate(
+                    angle: 0,
+                    child: Text(
+                      'Цель не может быть достигнута из-за недостатка очков за ваши задачи',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+      _RewardListTile(
+        dailyTaskRewardModel,
+        weightOfCompletedTasks,
+      ),
+    ],
+  );
 }
 
 class _OptionsPopupButton extends StatelessWidget {

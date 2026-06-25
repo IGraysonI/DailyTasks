@@ -10,10 +10,6 @@ import 'package:database/database.dart';
 import 'package:flutter/material.dart';
 import 'package:ui/ui.dart';
 
-// TODO: Добавить награды за определнные трешхолды выполненных задач.
-// Например, targetWeight = 10, если выполнено вес заполнен на 2, то одна награда, если на 5, то другая награда и т.д.
-// Добавить возможность добавления наград за определенные вес.
-
 /// {@template daily_tasks_screen}
 /// Screen that displays all daily tasks.
 /// {@endtemplate}
@@ -29,7 +25,6 @@ class DailyTasksScreen extends StatefulWidget {
 
 class _DailyTasksScreenState extends State<DailyTasksScreen> with AutomaticKeepAliveClientMixin {
   late final DailyTasksController _dailyTasksController;
-  final _todaysDate = DateTime.now();
 
   @override
   void initState() {

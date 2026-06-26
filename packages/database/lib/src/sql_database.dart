@@ -15,6 +15,8 @@ part 'sql_database.g.dart';
 const List<Type> _driftTables = <Type>[
   DailyTaskRewards,
   DailyTasks,
+  WeeklyTaskRewards,
+  WeeklyTasks,
 ];
 
 @DriftDatabase(tables: _driftTables)

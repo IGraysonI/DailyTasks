@@ -31,6 +31,7 @@ class SqlDatabase extends _$SqlDatabase {
         ),
       );
 
+  // TODO: Make migration not delete existing data
   /// Version of the database schema
   @override
   int get schemaVersion => 5;

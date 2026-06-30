@@ -3,6 +3,7 @@ import 'package:daily_tasks/src/common/enum/tasks_action_enum.dart';
 import 'package:daily_tasks/src/common/model/dependencies.dart';
 import 'package:daily_tasks/src/common/util/snackbar_utils.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/widget/daily_task_dialog.dart';
+import 'package:daily_tasks/src/feature/weekly_task_rewards/widget/weekly_task_rewards_indicator.dart';
 import 'package:daily_tasks/src/feature/weekly_tasks/controller/weekly_tasks_controller.dart';
 import 'package:daily_tasks/src/feature/weekly_tasks/widget/weekly_task_dialog.dart';
 import 'package:daily_tasks/src/feature/weekly_tasks/widget/weekly_tasks_scope.dart';
@@ -72,7 +73,7 @@ class _WeeklyTasksScreenState extends State<WeeklyTasksScreen> with AutomaticKee
             ignoring: state.isProcessing,
             child: CustomScrollView(
               slivers: [
-                // const SliverToBoxAdapter(child: WeeklyTaskRewardsIndicator()),
+                const SliverToBoxAdapter(child: WeeklyTaskRewardsIndicator()),
                 SliverToBoxAdapter(child: Space.sm()),
                 const SliverToBoxAdapter(child: Divider()),
                 SliverToBoxAdapter(

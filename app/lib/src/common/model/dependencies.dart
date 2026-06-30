@@ -3,6 +3,7 @@ import 'package:daily_tasks/src/feature/daily_task_rewards/controller/daily_task
 import 'package:daily_tasks/src/feature/daily_tasks/controller/daily_tasks_controller.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/service/daily_tasks_reset_service.dart';
 import 'package:daily_tasks/src/feature/settings/controller/application_settings_controller.dart';
+import 'package:daily_tasks/src/feature/weekly_task_rewards/controller/weekly_task_rewards_controller.dart';
 import 'package:daily_tasks/src/feature/weekly_tasks/controller/weekly_tasks_controller.dart';
 import 'package:database/database.dart';
 import 'package:flutter/widgets.dart';
@@ -46,6 +47,9 @@ class Dependencies {
 
   /// Weekly Tasks Controller
   late final WeeklyTasksController weeklyTasksController;
+
+  /// Weekly Task Rewards Controller
+  late final WeeklyTaskRewardsController weeklyTaskRewardsController;
 
   @override
   String toString() => 'Dependencies{}';

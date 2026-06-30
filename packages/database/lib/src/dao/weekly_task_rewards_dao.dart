@@ -43,8 +43,9 @@ final class WeeklyTaskRewardsDao extends BasicDao<WeeklyTaskRewards, WeeklyTaskR
   );
 
   /// Delete a task from the database
-  Future<void> deleteDailyReward(int taskId) async => await (delete(table)..where((tbl) => tbl.id.equals(taskId))).go();
+  Future<void> deleteWeeklyReward(int taskId) async =>
+      await (delete(table)..where((tbl) => tbl.id.equals(taskId))).go();
 
   /// Delete all tasks from the database
-  Future<void> deleteAllDailyRewards() async => await delete(table).go();
+  Future<void> deleteAllWeeklyRewards() async => await delete(table).go();
 }

@@ -18,6 +18,9 @@ import 'package:daily_tasks/src/feature/settings/controller/application_settings
 import 'package:daily_tasks/src/feature/settings/data/application_settings_datasource.dart';
 import 'package:daily_tasks/src/feature/settings/data/application_settings_repository.dart';
 import 'package:daily_tasks/src/feature/settings/model/application_settings.dart';
+import 'package:daily_tasks/src/feature/weekly_task_rewards/controller/weekly_task_rewards_controller.dart';
+import 'package:daily_tasks/src/feature/weekly_task_rewards/data/weekly_task_rewards_datasource.dart';
+import 'package:daily_tasks/src/feature/weekly_task_rewards/data/weekly_task_rewards_repository.dart';
 import 'package:daily_tasks/src/feature/weekly_tasks/controller/weekly_tasks_controller.dart';
 import 'package:daily_tasks/src/feature/weekly_tasks/data/weekly_tasks_datasource.dart';
 import 'package:daily_tasks/src/feature/weekly_tasks/data/weekly_tasks_repository.dart';
@@ -149,6 +152,15 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
       ),
     );
   },
+
+  'Prepare weekly task rewards controller': (dependencies) async {
+    dependencies.weeklyTaskRewardsController = WeeklyTaskRewardsController(
+      weeklyTaskRewardsRepository: WeeklyTaskRewardsRepositoryImpl(
+        WeeklyTaskRewardsDatasourceImpl(SqlDatabaseSource(dependencies.database)),
+      ),
+    );
+  },
+
   'Collect logs': (dependencies) async {
     // TODO: Implement log collection
     //   await (dependencies.database.select<LogTbl, LogTblData>(dependencies.database.logTbl)

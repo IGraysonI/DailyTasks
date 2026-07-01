@@ -4,7 +4,7 @@ import 'package:control/control.dart';
 import 'package:daily_tasks/src/common/enum/task_rewards_action_enum.dart';
 import 'package:daily_tasks/src/common/extensions/date_time_extension.dart';
 import 'package:daily_tasks/src/common/model/dependencies.dart';
-import 'package:daily_tasks/src/common/util/snackbar_utils.dart';
+import 'package:daily_tasks/src/common/util/state_listener_util.dart';
 import 'package:daily_tasks/src/feature/weekly_task_rewards/controller/weekly_task_rewards_controller.dart';
 import 'package:daily_tasks/src/feature/weekly_task_rewards/widget/weekly_task_rewards_dialog.dart';
 import 'package:daily_tasks/src/feature/weekly_task_rewards/widget/weekly_task_rewards_scope.dart';
@@ -42,30 +42,12 @@ class _WeeklyTaskRewardsIndicatorState extends State<WeeklyTaskRewardsIndicator>
     super.dispose();
   }
 
-  void _onStateChanged(
-    BuildContext context,
-    WeeklyTaskRewardsController controller,
-    WeeklyTaskRewardsState prev,
-    WeeklyTaskRewardsState next,
-  ) {
-    if (next.isProcessing) return;
-    if (next.error != null) {
-      SnackbarUtils.showSnackBar(
-        context,
-        SnackBar(
-          content: Text(next.error!),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final weeklyTasksState = WeeklyTasksScope.controller(context).state;
     return StateConsumer<WeeklyTaskRewardsController, WeeklyTaskRewardsState>(
       controller: _weeklyTaskRewardsController,
-      listener: _onStateChanged,
+      listener: StateListenerUtil.defaultStateListener,
       builder: (context, state, child) => Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,

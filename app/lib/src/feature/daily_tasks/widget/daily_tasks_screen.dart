@@ -1,7 +1,7 @@
 import 'package:control/control.dart';
 import 'package:daily_tasks/src/common/enum/tasks_action_enum.dart';
 import 'package:daily_tasks/src/common/model/dependencies.dart';
-import 'package:daily_tasks/src/common/util/snackbar_utils.dart';
+import 'package:daily_tasks/src/common/util/state_listener_util.dart';
 import 'package:daily_tasks/src/feature/daily_task_rewards/widget/daily_task_rewards_indicator.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/controller/daily_tasks_controller.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/widget/daily_task_dialog.dart';
@@ -38,31 +38,12 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> with AutomaticKeepA
     super.dispose();
   }
 
-  // TODO: Moved to make default state listener
-  void _onStateChanged(
-    BuildContext context,
-    DailyTasksController controller,
-    DailyTasksState prev,
-    DailyTasksState next,
-  ) {
-    if (next.isProcessing) return;
-    if (next.error != null) {
-      SnackbarUtils.showSnackBar(
-        context,
-        SnackBar(
-          content: Text(next.error!),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return StateConsumer<DailyTasksController, DailyTasksState>(
       controller: _dailyTasksController,
-      listener: _onStateChanged,
+      listener: StateListenerUtil.defaultStateListener,
       builder: (context, state, child) => Padding(
         padding: const EdgeInsets.all(16),
         child: AnimatedOpacity(

@@ -59,8 +59,7 @@ class NoDataWidget extends StatelessWidget {
               ),
               height: MediaQuery.of(context).size.width * .5,
               width: MediaQuery.of(context).size.height * .5,
-              // FIXME: Asset not found exception
-              child: Image.asset('assets/images/empty_data.png', fit: BoxFit.contain),
+              child: Image.asset('packages/ui/assets/images/empty_data.png', fit: BoxFit.contain),
             ),
           ),
         ),

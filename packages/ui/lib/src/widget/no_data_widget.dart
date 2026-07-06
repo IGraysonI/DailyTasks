@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// TODO: Добавить LayoutBuilder для адаптивности
 /// {@template no_data_widget}
 /// Universal no data widget for the application
 /// {@endtemplate}

@@ -9,7 +9,7 @@ final class WeeklyTasksResetService {
   final WeeklyTasksDatasource _weeklyTasksDatasource;
 
   /// Check if it's a new day and reset tasks if needed
-  Future<void> resetTasksIfNewDay() async {
+  Future<void> resetTasksIfNewWeek() async {
     final lastResetDateTimestamp = await _weeklyTasksDatasource.getLastResetDate();
     final today = DateTime.now();
 

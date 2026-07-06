@@ -24,6 +24,7 @@ import 'package:daily_tasks/src/feature/weekly_task_rewards/data/weekly_task_rew
 import 'package:daily_tasks/src/feature/weekly_tasks/controller/weekly_tasks_controller.dart';
 import 'package:daily_tasks/src/feature/weekly_tasks/data/weekly_tasks_datasource.dart';
 import 'package:daily_tasks/src/feature/weekly_tasks/data/weekly_tasks_repository.dart';
+import 'package:daily_tasks/src/feature/weekly_tasks/service/weekly_tasks_reset_service.dart';
 import 'package:database/database.dart';
 import 'package:l/l.dart';
 import 'package:platform_info/platform_info.dart';
@@ -152,7 +153,6 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
       ),
     );
   },
-
   'Prepare weekly task rewards controller': (dependencies) async {
     dependencies.weeklyTaskRewardsController = WeeklyTaskRewardsController(
       weeklyTaskRewardsRepository: WeeklyTaskRewardsRepositoryImpl(
@@ -160,7 +160,17 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
       ),
     );
   },
-
+  'Prepare weekly tasks reset service': (dependencies) async {
+    final resetService = WeeklyTasksResetService(
+      weeklyTasksDatasource: WeeklyTasksDatasourceImpl(
+        SqlDatabaseSource(dependencies.database),
+        dependencies.sharedPreferences,
+      ),
+    );
+    dependencies.weeklyTasksResetService = resetService;
+    // TODO: Add ways to trigger weekly task reset on interval or when app is resumed(?)
+    await resetService.resetTasksIfNewWeek();
+  },
   'Collect logs': (dependencies) async {
     // TODO: Implement log collection
     //   await (dependencies.database.select<LogTbl, LogTblData>(dependencies.database.logTbl)

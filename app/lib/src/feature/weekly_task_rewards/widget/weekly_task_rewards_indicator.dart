@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:control/control.dart';
-import 'package:daily_tasks/src/common/enum/task_rewards_action_enum.dart';
 import 'package:daily_tasks/src/common/extensions/date_time_extension.dart';
 import 'package:daily_tasks/src/common/model/dependencies.dart';
 import 'package:daily_tasks/src/common/util/state_listener_util.dart';
@@ -215,9 +214,7 @@ class _OptionsPopupButton extends StatelessWidget {
       ),
       PopupMenuItem(
         child: const Text('Delete Reward'),
-        onTap: () => WeeklyTaskRewardsScope.controller(
-          context,
-        ).manageWeeklyTaskReward(weeklyTaskRewardModel, TaskRewardsActionEnum.delete),
+        onTap: () => WeeklyTaskRewardsScope.controller(context).deleteWeeklyTaskReward(weeklyTaskRewardModel.id),
       ),
     ],
   );

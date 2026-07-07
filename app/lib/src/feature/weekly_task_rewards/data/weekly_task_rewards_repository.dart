@@ -1,4 +1,3 @@
-import 'package:daily_tasks/src/common/enum/task_rewards_action_enum.dart';
 import 'package:daily_tasks/src/feature/weekly_task_rewards/data/weekly_task_rewards_datasource.dart';
 import 'package:database/database.dart';
 
@@ -13,7 +12,13 @@ abstract interface class WeeklyTaskRewardsRepository {
   Future<WeeklyTaskRewardModel?> getWeeklyTaskRewardById(int weeklyTaskId);
 
   /// Create the [WeeklyTaskRewardModel].
-  Future<void> manageWeeklyTaskReward(WeeklyTaskRewardModel weeklyTaskReward, TaskRewardsActionEnum action);
+  Future<void> createWeeklyTaskReward(WeeklyTaskRewardModel weeklyTaskReward);
+
+  /// Update the [WeeklyTaskRewardModel].
+  Future<void> updateWeeklyTaskReward(WeeklyTaskRewardModel weeklyTaskReward);
+
+  /// Delete the [WeeklyTaskRewardModel] from the source of truth.
+  Future<void> deleteWeeklyTaskReward(int weeklyTaskId);
 
   /// Delete all [WeeklyTaskRewardModel] from the source of truth.
   Future<void> deleteAllWeeklyTaskRewards();
@@ -36,12 +41,16 @@ final class WeeklyTaskRewardsRepositoryImpl implements WeeklyTaskRewardsReposito
       await weeklyTaskRewardsDatasource.getWeeklyTaskRewardById(weeklyTaskRewardId);
 
   @override
-  Future<void> manageWeeklyTaskReward(WeeklyTaskRewardModel weeklyTaskReward, TaskRewardsActionEnum action) =>
-      switch (action) {
-        TaskRewardsActionEnum.add => weeklyTaskRewardsDatasource.addWeeklyTaskReward(weeklyTaskReward),
-        TaskRewardsActionEnum.update => weeklyTaskRewardsDatasource.updateWeeklyTaskReward(weeklyTaskReward),
-        TaskRewardsActionEnum.delete => weeklyTaskRewardsDatasource.deleteWeeklyTaskReward(weeklyTaskReward.id),
-      };
+  Future<void> createWeeklyTaskReward(WeeklyTaskRewardModel weeklyTaskReward) =>
+      weeklyTaskRewardsDatasource.createWeeklyTaskReward(weeklyTaskReward);
+
+  @override
+  Future<void> updateWeeklyTaskReward(WeeklyTaskRewardModel weeklyTaskReward) =>
+      weeklyTaskRewardsDatasource.updateWeeklyTaskReward(weeklyTaskReward);
+
+  @override
+  Future<void> deleteWeeklyTaskReward(int weeklyTaskId) =>
+      weeklyTaskRewardsDatasource.deleteWeeklyTaskReward(weeklyTaskId);
 
   @override
   Future<void> deleteAllWeeklyTaskRewards() => weeklyTaskRewardsDatasource.deleteAllWeeklyTaskRewards();

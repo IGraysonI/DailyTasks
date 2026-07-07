@@ -1,11 +1,9 @@
 // ignore_for_file: experimental_member_use, library_private_types_in_public_api
 
-import 'package:daily_tasks/src/common/enum/task_rewards_action_enum.dart';
 import 'package:daily_tasks/src/common/util/snackbar_utils.dart';
 import 'package:daily_tasks/src/feature/daily_task_rewards/widget/daily_task_rewards_scope.dart';
 import 'package:database/database.dart';
 import 'package:flutter/material.dart';
-import 'package:l/l.dart';
 import 'package:meta/meta.dart';
 import 'package:octopus/octopus.dart';
 import 'package:ui/ui.dart';
@@ -78,28 +76,22 @@ class _DailyTaskRewardDialogState extends State<DailyTaskRewardDialog> {
       ),
       TextButton(
         onPressed: () {
-          // TODO: Maybe move and separate (?)
           if (formKey.currentState!.validate()) {
-            final dailyTaskReward = widget.dailyTaskRewardModel == null
-                ? DailyTaskRewardModel.create(
-                    title: rewardTitleController.text,
-                    description: rewardDescriptionController.text.isEmpty ? null : rewardDescriptionController.text,
-                    goalWeight: rewardGoalWeight!,
-                  )
-                : DailyTaskRewardModel(
-                    id: widget.dailyTaskRewardModel!.id,
-                    title: rewardTitleController.text,
-                    description: rewardDescriptionController.text,
-                    goalWeight: rewardGoalWeight!,
-                    createdAt: widget.dailyTaskRewardModel!.createdAt,
-                    updatedAt: DateTime.now(),
-                  );
-            DailyTaskRewardsScope.controller(context).manageDailyTaskReward(
-              dailyTaskReward,
-              widget.dailyTaskRewardModel != null ? TaskRewardsActionEnum.update : TaskRewardsActionEnum.add,
-            );
+            if (widget.dailyTaskRewardModel != null) {
+              DailyTaskRewardsScope.controller(context).updateDailyTaskReward(
+                id: widget.dailyTaskRewardModel!.id,
+                title: rewardTitleController.text,
+                description: rewardDescriptionController.text,
+                goalWeight: rewardGoalWeight!,
+              );
+            } else {
+              DailyTaskRewardsScope.controller(context).createDailyTaskReward(
+                title: rewardTitleController.text,
+                description: rewardDescriptionController.text.isEmpty ? null : rewardDescriptionController.text,
+                goalWeight: rewardGoalWeight!,
+              );
+            }
             Navigator.of(context).pop();
-            l.i('Adding task reward: $dailyTaskReward');
           } else {
             SnackbarUtils.showSnackBar(
               context,

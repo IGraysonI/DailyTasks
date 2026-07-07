@@ -1,6 +1,5 @@
 import 'package:control/control.dart';
 import 'package:daily_tasks/src/common/controller/state_base.dart';
-import 'package:daily_tasks/src/common/enum/task_rewards_action_enum.dart';
 import 'package:daily_tasks/src/feature/daily_task_rewards/data/daily_task_rewards_repository.dart';
 import 'package:database/database.dart';
 import 'package:flutter/foundation.dart';
@@ -22,27 +21,108 @@ final class DailyTaskRewardsController extends StateController<DailyTaskRewardsS
 
   final DailyTaskRewardsRepository _dailyTaskRewardsRepository;
 
-  /// Add a new [DailyTaskRewardModel]
-  void manageDailyTaskReward(
-    DailyTaskRewardModel dailyTaskReward,
-    TaskRewardsActionEnum action,
-  ) => handle(
+  /// Create new daily task reward
+  void createDailyTaskReward({
+    required String title,
+    required String? description,
+    required int goalWeight,
+  }) => handle(
     () async {
       setState(
         DailyTaskRewardsState.processing(
           dailyTaskRewards: state.dailyTaskRewards,
-          message: 'Updating daily task rewards',
+          message: 'Creating daily task reward',
         ),
       );
-      await _dailyTaskRewardsRepository.manageDailyTaskReward(dailyTaskReward, action);
-      final newDailyTasks = await _dailyTaskRewardsRepository.getDailyTaskRewards();
-      setState(DailyTaskRewardsState.idle(dailyTaskRewards: newDailyTasks, message: 'Daily task rewards updated'));
+      final dailyTaskRewardModel = DailyTaskRewardModel.create(
+        title: title,
+        description: description,
+        goalWeight: goalWeight,
+      );
+      await _dailyTaskRewardsRepository.createDailyTaskReward(dailyTaskRewardModel);
+      final newDailyTaskRewards = await _dailyTaskRewardsRepository.getDailyTaskRewards();
+      setState(
+        DailyTaskRewardsState.idle(dailyTaskRewards: newDailyTaskRewards, message: 'Daily task rewards updated'),
+      );
     },
     error: (error, _) async => setState(
       DailyTaskRewardsState.idle(
         dailyTaskRewards: state.dailyTaskRewards,
-        error: kDebugMode ? 'Error ${action.name} daily task rewards: $error' : 'Error managing daily task rewards',
+        error: 'Error creating daily task rewards: ${kDebugMode ? '$error' : ''}',
+        message: 'Failed to create daily task rewards',
+      ),
+    ),
+    done: () async => setState(
+      DailyTaskRewardsState.idle(dailyTaskRewards: state.dailyTaskRewards, message: 'Daily task rewards idle'),
+    ),
+  );
+
+  /// Update existing daily task reward
+  void updateDailyTaskReward({
+    required int id,
+    required String title,
+    required String? description,
+    required int goalWeight,
+  }) => handle(
+    () async {
+      setState(
+        DailyTaskRewardsState.processing(
+          dailyTaskRewards: state.dailyTaskRewards,
+          message: 'Updating daily task reward',
+        ),
+      );
+      final existingDailyTaskRewardModel = await _dailyTaskRewardsRepository.getDailyTaskRewardById(id);
+      if (existingDailyTaskRewardModel == null) {
+        setState(
+          DailyTaskRewardsState.idle(
+            dailyTaskRewards: state.dailyTaskRewards,
+            error: 'Error updating daily task reward: Reward with id $id not found',
+            message: 'Failed to update daily task reward',
+          ),
+        );
+        return;
+      }
+      final newDailyTaskReward = existingDailyTaskRewardModel.copyWith(
+        title: title,
+        description: description,
+        goalWeight: goalWeight,
+      );
+      await _dailyTaskRewardsRepository.updateDailyTaskReward(newDailyTaskReward);
+      final newDailyTaskRewards = await _dailyTaskRewardsRepository.getDailyTaskRewards();
+      setState(
+        DailyTaskRewardsState.idle(dailyTaskRewards: newDailyTaskRewards, message: 'Daily task rewards updated'),
+      );
+    },
+    error: (error, _) async => setState(
+      DailyTaskRewardsState.idle(
+        dailyTaskRewards: state.dailyTaskRewards,
+        error: 'Error updating daily task rewards: ${kDebugMode ? '$error' : ''}',
         message: 'Failed to update daily task rewards',
+      ),
+    ),
+    done: () async => setState(
+      DailyTaskRewardsState.idle(dailyTaskRewards: state.dailyTaskRewards, message: 'Daily task rewards idle'),
+    ),
+  );
+
+  /// Delete the existing daily task reward
+  void deleteDailyTaskReward(int id) => handle(
+    () async {
+      setState(
+        DailyTaskRewardsState.processing(
+          dailyTaskRewards: state.dailyTaskRewards,
+          message: 'Deleting daily task rewards',
+        ),
+      );
+      await _dailyTaskRewardsRepository.deleteDailyTaskReward(id);
+      final newDailyTasks = await _dailyTaskRewardsRepository.getDailyTaskRewards();
+      setState(DailyTaskRewardsState.idle(dailyTaskRewards: newDailyTasks, message: 'Daily task rewards deleted'));
+    },
+    error: (error, _) async => setState(
+      DailyTaskRewardsState.idle(
+        dailyTaskRewards: state.dailyTaskRewards,
+        error: 'Error deleting daily task rewards: ${kDebugMode ? '$error' : ''}',
+        message: 'Failed to delete daily task rewards',
       ),
     ),
     done: () async => setState(

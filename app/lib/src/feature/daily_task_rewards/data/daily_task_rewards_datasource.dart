@@ -11,7 +11,7 @@ abstract interface class DailyTaskRewardsDatasource {
   Future<DailyTaskRewardModel?> getDailyTaskRewardById(int dailyTaskRewardId);
 
   /// Add [DailyTaskRewardModel] to the local database.
-  Future<void> addDailyTaskReward(DailyTaskRewardModel dailyTaskReward);
+  Future<void> createDailyTaskReward(DailyTaskRewardModel dailyTaskReward);
 
   /// Update [DailyTaskRewardModel] in the local database.
   Future<void> updateDailyTaskReward(DailyTaskRewardModel dailyTaskReward);
@@ -40,7 +40,7 @@ final class DailyTaskRewardsDatasourceImpl implements DailyTaskRewardsDatasource
       dataSource.dao<DailyTaskRewardsDao>().getDailyRewardById(dailyTaskRewardId);
 
   @override
-  Future<void> addDailyTaskReward(DailyTaskRewardModel dailyTask) =>
+  Future<void> createDailyTaskReward(DailyTaskRewardModel dailyTask) =>
       dataSource.dao<DailyTaskRewardsDao>().insertDailyReward(dailyTask);
 
   @override

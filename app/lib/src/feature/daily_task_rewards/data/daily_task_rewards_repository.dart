@@ -1,4 +1,3 @@
-import 'package:daily_tasks/src/common/enum/task_rewards_action_enum.dart';
 import 'package:daily_tasks/src/feature/daily_task_rewards/data/daily_task_rewards_datasource.dart';
 import 'package:database/database.dart';
 
@@ -13,7 +12,13 @@ abstract interface class DailyTaskRewardsRepository {
   Future<DailyTaskRewardModel?> getDailyTaskRewardById(int dailyTaskId);
 
   /// Create the [DailyTaskRewardModel].
-  Future<void> manageDailyTaskReward(DailyTaskRewardModel dailyTaskReward, TaskRewardsActionEnum action);
+  Future<void> createDailyTaskReward(DailyTaskRewardModel dailyTaskReward);
+
+  /// Update the [DailyTaskRewardModel].
+  Future<void> updateDailyTaskReward(DailyTaskRewardModel dailyTaskReward);
+
+  /// Delete the [DailyTaskRewardModel].
+  Future<void> deleteDailyTaskReward(int dailyTaskId);
 
   /// Delete all [DailyTaskRewardModel] from the source of truth.
   Future<void> deleteAllDailyTaskRewards();
@@ -35,12 +40,15 @@ final class DailyTaskRewardsRepositoryImpl implements DailyTaskRewardsRepository
       await dailyTaskRewardsDatasource.getDailyTaskRewardById(dailyTaskRewardId);
 
   @override
-  Future<void> manageDailyTaskReward(DailyTaskRewardModel dailyTaskReward, TaskRewardsActionEnum action) =>
-      switch (action) {
-        TaskRewardsActionEnum.add => dailyTaskRewardsDatasource.addDailyTaskReward(dailyTaskReward),
-        TaskRewardsActionEnum.update => dailyTaskRewardsDatasource.updateDailyTaskReward(dailyTaskReward),
-        TaskRewardsActionEnum.delete => dailyTaskRewardsDatasource.deleteDailyTaskReward(dailyTaskReward.id),
-      };
+  Future<void> createDailyTaskReward(DailyTaskRewardModel dailyTaskReward) =>
+      dailyTaskRewardsDatasource.createDailyTaskReward(dailyTaskReward);
+
+  @override
+  Future<void> updateDailyTaskReward(DailyTaskRewardModel dailyTaskReward) =>
+      dailyTaskRewardsDatasource.updateDailyTaskReward(dailyTaskReward);
+
+  @override
+  Future<void> deleteDailyTaskReward(int dailyTaskId) => dailyTaskRewardsDatasource.deleteDailyTaskReward(dailyTaskId);
 
   @override
   Future<void> deleteAllDailyTaskRewards() => dailyTaskRewardsDatasource.deleteAllDailyTaskRewards();

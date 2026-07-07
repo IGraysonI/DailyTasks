@@ -1,11 +1,9 @@
 // ignore_for_file: experimental_member_use, library_private_types_in_public_api
 
-import 'package:daily_tasks/src/common/enum/task_rewards_action_enum.dart';
 import 'package:daily_tasks/src/common/util/snackbar_utils.dart';
 import 'package:daily_tasks/src/feature/weekly_task_rewards/widget/weekly_task_rewards_scope.dart';
 import 'package:database/database.dart';
 import 'package:flutter/material.dart';
-import 'package:l/l.dart';
 import 'package:meta/meta.dart';
 import 'package:octopus/octopus.dart';
 import 'package:ui/ui.dart';
@@ -78,28 +76,22 @@ class _WeeklyTaskRewardDialogState extends State<WeeklyTaskRewardDialog> {
       ),
       TextButton(
         onPressed: () {
-          // TODO: Maybe move and separate (?)
           if (formKey.currentState!.validate()) {
-            final weeklyTaskReward = widget.weeklyTaskRewardModel == null
-                ? WeeklyTaskRewardModel.create(
-                    title: rewardTitleController.text,
-                    description: rewardDescriptionController.text.isEmpty ? null : rewardDescriptionController.text,
-                    goalWeight: rewardGoalWeight!,
-                  )
-                : WeeklyTaskRewardModel(
-                    id: widget.weeklyTaskRewardModel!.id,
-                    title: rewardTitleController.text,
-                    description: rewardDescriptionController.text,
-                    goalWeight: rewardGoalWeight!,
-                    createdAt: widget.weeklyTaskRewardModel!.createdAt,
-                    updatedAt: DateTime.now(),
-                  );
-            WeeklyTaskRewardsScope.controller(context).manageWeeklyTaskReward(
-              weeklyTaskReward,
-              widget.weeklyTaskRewardModel != null ? TaskRewardsActionEnum.update : TaskRewardsActionEnum.add,
-            );
+            if (widget.weeklyTaskRewardModel != null) {
+              WeeklyTaskRewardsScope.controller(context).updateWeeklyTaskReward(
+                id: widget.weeklyTaskRewardModel!.id,
+                title: rewardTitleController.text,
+                description: rewardDescriptionController.text,
+                goalWeight: rewardGoalWeight!,
+              );
+            } else {
+              WeeklyTaskRewardsScope.controller(context).createWeeklyTaskReward(
+                title: rewardTitleController.text,
+                description: rewardDescriptionController.text.isNotEmpty ? rewardDescriptionController.text : null,
+                goalWeight: rewardGoalWeight!,
+              );
+            }
             Navigator.of(context).pop();
-            l.i('Adding task reward: $weeklyTaskReward');
           } else {
             SnackbarUtils.showSnackBar(
               context,

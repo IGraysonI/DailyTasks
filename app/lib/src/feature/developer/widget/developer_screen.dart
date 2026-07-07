@@ -1,3 +1,5 @@
+// ignore_for_file: experimental_member_use
+
 import 'package:daily_tasks/src/common/model/dependencies.dart';
 import 'package:daily_tasks/src/constants/pubspec.yaml.g.dart';
 import 'package:database/database.dart';

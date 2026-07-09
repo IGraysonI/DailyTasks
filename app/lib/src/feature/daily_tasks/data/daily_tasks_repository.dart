@@ -1,4 +1,3 @@
-import 'package:daily_tasks/src/common/enum/tasks_action_enum.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/data/daily_tasks_datasource.dart';
 import 'package:database/database.dart';
 
@@ -13,7 +12,16 @@ abstract interface class DailyTasksRepository {
   Future<DailyTaskModel?> getDailyTaskById(int dailyTaskId);
 
   /// Create the [DailyTaskModel].
-  Future<void> manageDailyTask(DailyTaskModel dailyTask, TasksActionEnum action);
+  Future<void> createDailyTask(DailyTaskModel dailyTask);
+
+  /// Update the [DailyTaskModel].
+  Future<void> updateDailyTask(DailyTaskModel dailyTask);
+
+  /// Delete the [DailyTaskModel] by [dailyTaskId] from the source of truth.
+  Future<void> deleteDailyTask(int dailyTaskId);
+
+  /// Toggle the completion status of a [DailyTaskModel] by [dailyTaskId].
+  Future<void> toggleTaskCompletetion(int dailyTaskId);
 
   /// Delete all [DailyTask] from the source of truth.
   Future<void> deleteAllDailyTasks();
@@ -38,12 +46,16 @@ final class DailyTasksRepositoryImpl implements DailyTasksRepository {
       await dailyTasksDatasource.getDailyTaskById(dailyTaskId);
 
   @override
-  Future<void> manageDailyTask(DailyTaskModel dailyTask, TasksActionEnum action) => switch (action) {
-    TasksActionEnum.add => dailyTasksDatasource.addDailyTask(dailyTask),
-    TasksActionEnum.update => dailyTasksDatasource.updateDailyTask(dailyTask),
-    TasksActionEnum.delete => dailyTasksDatasource.deleteDailyTask(dailyTask.id),
-    TasksActionEnum.toggleTaskCompletetion => dailyTasksDatasource.toggleTaskCompletetion(dailyTask),
-  };
+  Future<void> createDailyTask(DailyTaskModel dailyTask) => dailyTasksDatasource.createDailyTask(dailyTask);
+
+  @override
+  Future<void> updateDailyTask(DailyTaskModel dailyTask) => dailyTasksDatasource.updateDailyTask(dailyTask);
+
+  @override
+  Future<void> deleteDailyTask(int dailyTaskId) => dailyTasksDatasource.deleteDailyTask(dailyTaskId);
+
+  @override
+  Future<void> toggleTaskCompletetion(int dailyTaskId) => dailyTasksDatasource.toggleTaskCompletetion(dailyTaskId);
 
   @override
   Future<void> deleteAllDailyTasks() => dailyTasksDatasource.deleteAllDailyTasks();

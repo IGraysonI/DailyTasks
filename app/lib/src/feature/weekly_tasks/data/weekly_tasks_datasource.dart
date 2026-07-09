@@ -12,8 +12,8 @@ abstract interface class WeeklyTasksDatasource {
   /// Get the [WeeklyTaskModel] by [weeklyTaskId] from the local database.
   Future<WeeklyTaskModel?> getWeeklyTaskById(int weeklyTaskId);
 
-  /// Add [WeeklyTaskModel] to the local database.
-  Future<void> addWeeklyTask(WeeklyTaskModel weeklyTask);
+  /// Create [WeeklyTaskModel] to the local database.
+  Future<void> createWeeklyTask(WeeklyTaskModel weeklyTask);
 
   /// Update [WeeklyTaskModel] in the local database.
   Future<void> updateWeeklyTask(WeeklyTaskModel weeklyTask);
@@ -25,7 +25,7 @@ abstract interface class WeeklyTasksDatasource {
   Future<void> deleteAllWeeklyTasks();
 
   /// Mark [WeeklyTaskModel] as done in the local database.
-  Future<void> toggleTaskCompletetion(WeeklyTaskModel weeklyTask);
+  Future<void> toggleTaskCompletion(int weeklyTaskId);
 
   /// Set the all weekly tasks as not completed on new week.
   Future<void> resetWeeklyTasks();
@@ -61,7 +61,7 @@ final class WeeklyTasksDatasourceImpl implements WeeklyTasksDatasource {
       dataSource.dao<WeeklyTasksDao>().getTaskById(weeklyTaskId);
 
   @override
-  Future<void> addWeeklyTask(WeeklyTaskModel weeklyTask) => dataSource.dao<WeeklyTasksDao>().insertTask(weeklyTask);
+  Future<void> createWeeklyTask(WeeklyTaskModel weeklyTask) => dataSource.dao<WeeklyTasksDao>().insertTask(weeklyTask);
 
   @override
   Future<void> updateWeeklyTask(WeeklyTaskModel weeklyTask) => dataSource.dao<WeeklyTasksDao>().updateTask(weeklyTask);
@@ -73,8 +73,8 @@ final class WeeklyTasksDatasourceImpl implements WeeklyTasksDatasource {
   Future<void> deleteAllWeeklyTasks() => dataSource.dao<WeeklyTasksDao>().deleteAllTasks();
 
   @override
-  Future<void> toggleTaskCompletetion(WeeklyTaskModel weeklyTask) =>
-      dataSource.dao<WeeklyTasksDao>().toggleTaskCompletion(weeklyTask.id);
+  Future<void> toggleTaskCompletion(int weeklyTaskId) =>
+      dataSource.dao<WeeklyTasksDao>().toggleTaskCompletion(weeklyTaskId);
 
   @override
   Future<void> resetWeeklyTasks() => dataSource.dao<WeeklyTasksDao>().resetTasksCompletions();

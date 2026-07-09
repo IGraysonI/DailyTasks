@@ -1,5 +1,4 @@
 import 'package:control/control.dart';
-import 'package:daily_tasks/src/common/enum/tasks_action_enum.dart';
 import 'package:daily_tasks/src/common/model/dependencies.dart';
 import 'package:daily_tasks/src/common/util/state_listener_util.dart';
 import 'package:daily_tasks/src/feature/daily_task_rewards/widget/daily_task_rewards_indicator.dart';
@@ -147,8 +146,7 @@ class _DailyTaskListTile extends StatelessWidget {
 
   final DailyTaskModel dailyTaskModel;
 
-  void _onTap(BuildContext context) =>
-      DailyTasksScope.controller(context).manageDailyTask(dailyTaskModel, TasksActionEnum.toggleTaskCompletetion);
+  void _onTap(BuildContext context) => DailyTasksScope.controller(context).toggleTaskCompletion(dailyTaskModel.id);
 
   @override
   Widget build(BuildContext context) => ListTile(
@@ -198,7 +196,7 @@ class _OptionsPopupButton extends StatelessWidget {
       ),
       PopupMenuItem(
         child: const Text('Delete Task'),
-        onTap: () => DailyTasksScope.controller(context).manageDailyTask(dailyTaskModel, TasksActionEnum.delete),
+        onTap: () => DailyTasksScope.controller(context).deleteDailyTask(dailyTaskModel.id),
       ),
     ],
   );

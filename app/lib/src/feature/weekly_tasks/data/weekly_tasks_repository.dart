@@ -1,4 +1,3 @@
-import 'package:daily_tasks/src/common/enum/tasks_action_enum.dart';
 import 'package:daily_tasks/src/feature/weekly_tasks/data/weekly_tasks_datasource.dart';
 import 'package:database/database.dart';
 
@@ -13,7 +12,16 @@ abstract interface class WeeklyTasksRepository {
   Future<WeeklyTaskModel?> getWeeklyTaskById(int weeklyTaskId);
 
   /// Create the [WeeklyTaskModel].
-  Future<void> manageWeeklyTask(WeeklyTaskModel weeklyTask, TasksActionEnum action);
+  Future<void> createWeeklyTask(WeeklyTaskModel weeklyTask);
+
+  /// Update the [WeeklyTaskModel].
+  Future<void> updateWeeklyTask(WeeklyTaskModel weeklyTask);
+
+  /// Delete the [WeeklyTaskModel] by [weeklyTaskId].
+  Future<void> deleteWeeklyTask(int weeklyTaskId);
+
+  /// Toggle the completion status of a [WeeklyTaskModel] by [weeklyTaskId].
+  Future<void> toggleWeeklyTaskCompletion(int weeklyTaskId);
 
   /// Delete all [WeeklyTask] from the source of truth.
   Future<void> deleteAllWeeklyTasks();
@@ -38,12 +46,16 @@ final class WeeklyTasksRepositoryImpl implements WeeklyTasksRepository {
       await weeklyTasksDatasource.getWeeklyTaskById(weeklyTaskId);
 
   @override
-  Future<void> manageWeeklyTask(WeeklyTaskModel weeklyTask, TasksActionEnum action) => switch (action) {
-    TasksActionEnum.add => weeklyTasksDatasource.addWeeklyTask(weeklyTask),
-    TasksActionEnum.update => weeklyTasksDatasource.updateWeeklyTask(weeklyTask),
-    TasksActionEnum.delete => weeklyTasksDatasource.deleteWeeklyTask(weeklyTask.id),
-    TasksActionEnum.toggleTaskCompletetion => weeklyTasksDatasource.toggleTaskCompletetion(weeklyTask),
-  };
+  Future<void> createWeeklyTask(WeeklyTaskModel weeklyTask) => weeklyTasksDatasource.createWeeklyTask(weeklyTask);
+
+  @override
+  Future<void> updateWeeklyTask(WeeklyTaskModel weeklyTask) => weeklyTasksDatasource.updateWeeklyTask(weeklyTask);
+
+  @override
+  Future<void> deleteWeeklyTask(int weeklyTaskId) => weeklyTasksDatasource.deleteWeeklyTask(weeklyTaskId);
+
+  @override
+  Future<void> toggleWeeklyTaskCompletion(int weeklyTaskId) => weeklyTasksDatasource.toggleTaskCompletion(weeklyTaskId);
 
   @override
   Future<void> deleteAllWeeklyTasks() => weeklyTasksDatasource.deleteAllWeeklyTasks();

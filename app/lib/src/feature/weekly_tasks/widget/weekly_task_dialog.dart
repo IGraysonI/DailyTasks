@@ -1,11 +1,9 @@
 // ignore_for_file: experimental_member_use, library_private_types_in_public_api
 
-import 'package:daily_tasks/src/common/enum/tasks_action_enum.dart';
 import 'package:daily_tasks/src/common/util/snackbar_utils.dart';
 import 'package:daily_tasks/src/feature/weekly_tasks/widget/weekly_tasks_scope.dart';
 import 'package:database/database.dart';
 import 'package:flutter/material.dart';
-import 'package:l/l.dart';
 import 'package:meta/meta.dart';
 import 'package:octopus/octopus.dart';
 import 'package:ui/ui.dart';
@@ -78,29 +76,22 @@ class _WeeklyTaskDialogState extends State<WeeklyTaskDialog> {
       ),
       TextButton(
         onPressed: () {
-          // TODO: Maybe move and separate (?)
           if (formKey.currentState!.validate()) {
-            final weeklyTask = widget.weeklyTaskModel == null
-                ? WeeklyTaskModel.create(
-                    title: taskTitleController.text,
-                    description: taskDescriptionController.text.isEmpty ? null : taskDescriptionController.text,
-                    weight: taskWeight,
-                  )
-                : WeeklyTaskModel(
-                    id: widget.weeklyTaskModel!.id,
-                    title: taskTitleController.text,
-                    description: taskDescriptionController.text,
-                    weight: taskWeight,
-                    isCompleted: widget.weeklyTaskModel!.isCompleted,
-                    createdAt: widget.weeklyTaskModel!.createdAt,
-                    updatedAt: DateTime.now(),
-                  );
-            WeeklyTasksScope.controller(context).manageWeeklyTask(
-              weeklyTask,
-              widget.weeklyTaskModel != null ? TasksActionEnum.update : TasksActionEnum.add,
-            );
+            if (widget.weeklyTaskModel != null) {
+              WeeklyTasksScope.controller(context).updateWeeklyTask(
+                weeklyTaskId: widget.weeklyTaskModel!.id,
+                title: taskTitleController.text,
+                description: taskDescriptionController.text,
+                weight: taskWeight,
+              );
+            } else {
+              WeeklyTasksScope.controller(context).createWeeklyTask(
+                title: taskTitleController.text,
+                description: taskDescriptionController.text.isEmpty ? null : taskDescriptionController.text,
+                weight: taskWeight,
+              );
+            }
             Navigator.of(context).pop();
-            l.i('Adding task: $weeklyTask');
           } else {
             SnackbarUtils.showSnackBar(
               context,

@@ -12,8 +12,8 @@ abstract interface class DailyTasksDatasource {
   /// Get the [DailyTaskModel] by [dailyTaskId] from the local database.
   Future<DailyTaskModel?> getDailyTaskById(int dailyTaskId);
 
-  /// Add [DailyTaskModel] to the local database.
-  Future<void> addDailyTask(DailyTaskModel dailyTask);
+  /// Create [DailyTaskModel] to the local database.
+  Future<void> createDailyTask(DailyTaskModel dailyTask);
 
   /// Update [DailyTaskModel] in the local database.
   Future<void> updateDailyTask(DailyTaskModel dailyTask);
@@ -25,7 +25,7 @@ abstract interface class DailyTasksDatasource {
   Future<void> deleteAllDailyTasks();
 
   /// Mark [DailyTaskModel] as done in the local database.
-  Future<void> toggleTaskCompletetion(DailyTaskModel dailyTask);
+  Future<void> toggleTaskCompletetion(int dailyTaskId);
 
   /// Set the all daily tasks as not completed on new day.
   Future<void> resetDailyTasks();
@@ -60,7 +60,7 @@ final class DailyTasksDatasourceImpl implements DailyTasksDatasource {
   Future<DailyTaskModel?> getDailyTaskById(int dailyTaskId) => dataSource.dao<DailyTasksDao>().getTaskById(dailyTaskId);
 
   @override
-  Future<void> addDailyTask(DailyTaskModel dailyTask) => dataSource.dao<DailyTasksDao>().insertTask(dailyTask);
+  Future<void> createDailyTask(DailyTaskModel dailyTask) => dataSource.dao<DailyTasksDao>().insertTask(dailyTask);
 
   @override
   Future<void> updateDailyTask(DailyTaskModel dailyTask) => dataSource.dao<DailyTasksDao>().updateTask(dailyTask);
@@ -72,8 +72,8 @@ final class DailyTasksDatasourceImpl implements DailyTasksDatasource {
   Future<void> deleteAllDailyTasks() => dataSource.dao<DailyTasksDao>().deleteAllTasks();
 
   @override
-  Future<void> toggleTaskCompletetion(DailyTaskModel dailyTask) =>
-      dataSource.dao<DailyTasksDao>().toggleTaskCompletion(dailyTask.id);
+  Future<void> toggleTaskCompletetion(int dailyTaskId) =>
+      dataSource.dao<DailyTasksDao>().toggleTaskCompletion(dailyTaskId);
 
   @override
   Future<void> resetDailyTasks() => dataSource.dao<DailyTasksDao>().resetTasksCompletions();

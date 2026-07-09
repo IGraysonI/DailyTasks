@@ -1,11 +1,9 @@
 // ignore_for_file: experimental_member_use, library_private_types_in_public_api
 
-import 'package:daily_tasks/src/common/enum/tasks_action_enum.dart';
 import 'package:daily_tasks/src/common/util/snackbar_utils.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/widget/daily_tasks_scope.dart';
 import 'package:database/database.dart';
 import 'package:flutter/material.dart';
-import 'package:l/l.dart';
 import 'package:meta/meta.dart';
 import 'package:octopus/octopus.dart';
 import 'package:ui/ui.dart';
@@ -78,29 +76,22 @@ class _DailyTaskDialogState extends State<DailyTaskDialog> {
       ),
       TextButton(
         onPressed: () {
-          // TODO: Maybe move and separate (?)
           if (formKey.currentState!.validate()) {
-            final dailyTask = widget.dailyTaskModel == null
-                ? DailyTaskModel.create(
-                    title: taskTitleController.text,
-                    description: taskDescriptionController.text.isEmpty ? null : taskDescriptionController.text,
-                    weight: taskWeight,
-                  )
-                : DailyTaskModel(
-                    id: widget.dailyTaskModel!.id,
-                    title: taskTitleController.text,
-                    description: taskDescriptionController.text,
-                    weight: taskWeight,
-                    isCompleted: widget.dailyTaskModel!.isCompleted,
-                    createdAt: widget.dailyTaskModel!.createdAt,
-                    updatedAt: DateTime.now(),
-                  );
-            DailyTasksScope.controller(context).manageDailyTask(
-              dailyTask,
-              widget.dailyTaskModel != null ? TasksActionEnum.update : TasksActionEnum.add,
-            );
+            if (widget.dailyTaskModel != null) {
+              DailyTasksScope.controller(context).updateDailyTask(
+                dailyTaskId: widget.dailyTaskModel!.id,
+                title: taskTitleController.text,
+                description: taskDescriptionController.text,
+                weight: taskWeight,
+              );
+            } else {
+              DailyTasksScope.controller(context).createDailyTask(
+                title: taskTitleController.text,
+                description: taskDescriptionController.text.isEmpty ? null : taskDescriptionController.text,
+                weight: taskWeight,
+              );
+            }
             Navigator.of(context).pop();
-            l.i('Adding task: $dailyTask');
           } else {
             SnackbarUtils.showSnackBar(
               context,

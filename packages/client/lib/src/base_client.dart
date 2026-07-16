@@ -128,7 +128,7 @@ abstract class BaseClient implements Client {
       path: finalPath,
       queryParameters: {
         ...baseUri.queryParameters,
-        if (queryParams != null) ...queryParams,
+        ...?queryParams,
       },
     );
   }

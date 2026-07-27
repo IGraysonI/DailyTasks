@@ -66,8 +66,6 @@ class _WeeklyTaskRewardsIndicatorState extends State<WeeklyTaskRewardsIndicator>
               ),
               Space.sm(),
               ElevatedButton(
-                // TODO: Make sure that the reward goal already exists in database (?)
-                // TODO: Allow multiple rewards for the same reward goal (?)
                 onPressed: () => WeeklyTaskRewardDialog.show(context),
                 child: const Text('Add'),
               ),

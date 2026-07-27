@@ -46,6 +46,8 @@ class SegmentedLinearProgressIndicator extends StatelessWidget {
                 primaryColor: filledColor,
                 secondaryColor: emptyColor,
                 isRewardSegment: rewardSegments?.contains(index + 1) ?? false,
+                numberOfRewardInSegment: rewardSegments?.where((segment) => segment == index + 1).length ?? 0,
+                context: context,
               ),
             ),
           ),
@@ -61,27 +63,103 @@ class _SegmentPainter extends CustomPainter {
     required this.primaryColor,
     required this.secondaryColor,
     required this.isRewardSegment,
+    required this.numberOfRewardInSegment,
+    required this.context,
   });
 
   final bool isFilled;
   final Color primaryColor;
   final Color secondaryColor;
   final bool isRewardSegment;
+  final int numberOfRewardInSegment;
+  final BuildContext context;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = isFilled ? primaryColor : secondaryColor
-      ..style = PaintingStyle.fill;
+    Path? path;
 
-    const tiltOffset = 20.0;
-    final path = Path()
-      ..moveTo(tiltOffset, 0)
-      ..lineTo(size.width, 0)
-      ..lineTo(size.width - tiltOffset, size.height)
-      ..lineTo(0, size.height)
-      ..close();
-    canvas.drawPath(path, paint);
+    final slant = size.width * 0.2;
+    final rightEdgeGap = size.height * 0.5;
+    final bottomEdgeGap = size.width * 0.2;
+
+    if (numberOfRewardInSegment > 1) {
+      final fillPaint = Paint()
+        ..color = isFilled ? primaryColor : secondaryColor
+        ..style = PaintingStyle.fill;
+
+      final paint = Paint()
+        ..color = isFilled ? primaryColor : secondaryColor
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 3.0
+        ..strokeCap = StrokeCap.round;
+
+      final startPoint = Offset(0, size.height);
+      final topLeft = Offset(slant, 0);
+      final topRight = Offset(size.width, 0);
+      final bottomRight = Offset(size.width - slant, size.height);
+
+      final rightEdgeEnd = Offset(
+        size.width - (slant * 0.35),
+        size.height - rightEdgeGap,
+      );
+
+      final bottomEdgeEnd = Offset(
+        size.width - bottomEdgeGap,
+        size.height,
+      );
+
+      final fillPath = Path()
+        ..moveTo(startPoint.dx, startPoint.dy)
+        ..lineTo(topLeft.dx, topLeft.dy)
+        ..lineTo(topRight.dx, topRight.dy)
+        ..lineTo(bottomRight.dx, bottomRight.dy)
+        ..close();
+      canvas.drawPath(fillPath, fillPaint);
+
+      path = Path()
+        ..moveTo(startPoint.dx, startPoint.dy)
+        ..lineTo(topLeft.dx, topLeft.dy)
+        ..lineTo(topRight.dx, topRight.dy)
+        ..lineTo(rightEdgeEnd.dx, rightEdgeEnd.dy)
+        ..moveTo(bottomEdgeEnd.dx, bottomEdgeEnd.dy)
+        ..lineTo(startPoint.dx, startPoint.dy);
+      canvas.drawPath(path, paint);
+
+      final textStyle = TextStyle(
+        color: Theme.of(context).colorScheme.primary,
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+      );
+
+      final textSpan = TextSpan(
+        text: numberOfRewardInSegment.toString(),
+        style: textStyle,
+      );
+
+      final textPainter = TextPainter(
+        text: textSpan,
+        textDirection: TextDirection.ltr,
+      )..layout();
+
+      final textPosition = Offset(
+        size.width - (slant * 0.5) - (textPainter.width),
+        size.height - (rightEdgeGap / 2) - (textPainter.height / 3),
+      );
+
+      textPainter.paint(canvas, textPosition);
+    } else {
+      final paint = Paint()
+        ..color = isFilled ? primaryColor : secondaryColor
+        ..style = PaintingStyle.fill;
+
+      path = Path()
+        ..moveTo(0, size.height)
+        ..lineTo(slant, 0)
+        ..lineTo(size.width, 0)
+        ..lineTo(size.width - slant, size.height)
+        ..close();
+      canvas.drawPath(path, paint);
+    }
 
     if (isRewardSegment) {
       final borderPaint = Paint()

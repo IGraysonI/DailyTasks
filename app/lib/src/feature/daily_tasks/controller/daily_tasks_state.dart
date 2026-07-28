@@ -17,22 +17,22 @@ sealed class DailyTasksState extends _$DailyTaskStateBase {
     required List<DailyTaskModel> dailyTasks,
     String message,
     String? error,
-  }) = DailyTaskState$Idle;
+  }) = DailyTasksState$Idle;
 
   /// Processing
   /// {@macro daily_tasks_state}
   const factory DailyTasksState.processing({
     required List<DailyTaskModel> dailyTasks,
     String message,
-  }) = DailyTaskState$Processing;
+  }) = DailyTasksState$Processing;
 }
 
 /// {@template DailyTasksState$Idle}
 /// Idling state
 /// {@endtemplate}
-final class DailyTaskState$Idle extends DailyTasksState {
+final class DailyTasksState$Idle extends DailyTasksState {
   /// Idling state
-  const DailyTaskState$Idle({
+  const DailyTasksState$Idle({
     required super.dailyTasks,
     super.message = 'Idling',
     this.error,
@@ -45,9 +45,9 @@ final class DailyTaskState$Idle extends DailyTasksState {
 /// {@template DailyTasksState$Processing}
 /// Processing
 /// {@endtemplate}
-final class DailyTaskState$Processing extends DailyTasksState {
+final class DailyTasksState$Processing extends DailyTasksState {
   /// Processing
-  const DailyTaskState$Processing({
+  const DailyTasksState$Processing({
     required super.dailyTasks,
     super.message = 'Processing ',
   });
@@ -73,11 +73,11 @@ abstract base class _$DailyTaskStateBase extends StateBase<DailyTasksState> {
   /// Pattern matching for [DailyTasksState].
   @override
   R map<R>({
-    required DailyTasksStateMatch<R, DailyTaskState$Idle> idle,
-    required DailyTasksStateMatch<R, DailyTaskState$Processing> processing,
+    required DailyTasksStateMatch<R, DailyTasksState$Idle> idle,
+    required DailyTasksStateMatch<R, DailyTasksState$Processing> processing,
   }) => switch (this) {
-    final DailyTaskState$Idle s => idle(s),
-    final DailyTaskState$Processing s => processing(s),
+    final DailyTasksState$Idle s => idle(s),
+    final DailyTasksState$Processing s => processing(s),
     _ => throw AssertionError(),
   };
 
@@ -85,8 +85,8 @@ abstract base class _$DailyTaskStateBase extends StateBase<DailyTasksState> {
   @override
   R maybeMap<R>({
     required R Function() orElse,
-    DailyTasksStateMatch<R, DailyTaskState$Idle>? idle,
-    DailyTasksStateMatch<R, DailyTaskState$Processing>? processing,
+    DailyTasksStateMatch<R, DailyTasksState$Idle>? idle,
+    DailyTasksStateMatch<R, DailyTasksState$Processing>? processing,
   }) => map<R>(
     idle: idle ?? (_) => orElse(),
     processing: processing ?? (_) => orElse(),
@@ -95,8 +95,8 @@ abstract base class _$DailyTaskStateBase extends StateBase<DailyTasksState> {
   /// Pattern matching for [DailyTasksState].
   @override
   R? mapOrNull<R>({
-    DailyTasksStateMatch<R, DailyTaskState$Idle>? idle,
-    DailyTasksStateMatch<R, DailyTaskState$Processing>? processing,
+    DailyTasksStateMatch<R, DailyTasksState$Idle>? idle,
+    DailyTasksStateMatch<R, DailyTasksState$Processing>? processing,
   }) => map<R?>(
     idle: idle ?? (_) => null,
     processing: processing ?? (_) => null,

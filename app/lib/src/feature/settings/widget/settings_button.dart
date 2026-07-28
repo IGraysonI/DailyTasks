@@ -12,8 +12,6 @@ class SettingsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => IconButton(
     icon: const Icon(Icons.settings),
-    // TODO: Add localization
-    // tooltip: Localization.of(context).settings,
     tooltip: 'Settings',
     onPressed: () => Octopus.of(context).push(Routes.settings),
   );

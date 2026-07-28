@@ -6,8 +6,6 @@ import 'package:localization/localization.dart';
 import 'package:platform_info/platform_info.dart';
 import 'package:window_manager/window_manager.dart';
 
-// TODO: Slow maximizing speed
-// TODO: Minimize window not working
 /// {@template window_scope}
 /// WindowScope widget.
 /// {@endtemplate}
@@ -93,6 +91,19 @@ class _WindowTitleState extends State<_WindowTitle> with WindowListener {
     _isAlwaysOnTop.value = await windowManager.isAlwaysOnTop();
   }).ignore();
 
+  void minimize() => Future<void>(() async {
+    await windowManager.minimize();
+  }).ignore();
+
+  void setFullScreen({required bool value}) => Future<void>(() async {
+    await windowManager.setFullScreen(value);
+    _isFullScreen.value = value;
+  }).ignore();
+
+  void close() => Future<void>(() async {
+    await windowManager.close();
+  }).ignore();
+
   @override
   Widget build(BuildContext context) => SizedBox(
     height: 24,
@@ -135,6 +146,9 @@ class _WindowTitleState extends State<_WindowTitle> with WindowListener {
                 isFullScreen: _isFullScreen,
                 isAlwaysOnTop: _isAlwaysOnTop,
                 setAlwaysOnTop: setAlwaysOnTop,
+                minimize: minimize,
+                setFullScreen: (value) => setFullScreen(value: value),
+                close: close,
               ),
           ],
         ),
@@ -148,6 +162,9 @@ class _WindowButtons$Windows extends StatelessWidget {
     required ValueListenable<bool> isFullScreen,
     required ValueListenable<bool> isAlwaysOnTop,
     required this.setAlwaysOnTop,
+    required this.minimize,
+    required this.setFullScreen,
+    required this.close,
   }) : _isFullScreen = isFullScreen,
        _isAlwaysOnTop = isAlwaysOnTop;
 
@@ -155,6 +172,9 @@ class _WindowButtons$Windows extends StatelessWidget {
   final ValueListenable<bool> _isAlwaysOnTop;
 
   final ValueChanged<bool> setAlwaysOnTop;
+  final VoidCallback minimize;
+  final ValueChanged<bool> setFullScreen;
+  final VoidCallback close;
 
   @override
   Widget build(BuildContext context) => Align(
@@ -175,7 +195,7 @@ class _WindowButtons$Windows extends StatelessWidget {
 
         // Minimize
         _WindowButton(
-          onPressed: windowManager.minimize,
+          onPressed: minimize,
           icon: Icons.minimize,
         ),
 
@@ -183,14 +203,14 @@ class _WindowButtons$Windows extends StatelessWidget {
         ValueListenableBuilder<bool>(
           valueListenable: _isFullScreen,
           builder: (context, isFullScreen, _) => _WindowButton(
-            onPressed: () => windowManager.setFullScreen(!isFullScreen),
+            onPressed: () => setFullScreen(!isFullScreen),
             icon: isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen,
           ),
         ),
 
         // Close
         _WindowButton(
-          onPressed: windowManager.close,
+          onPressed: close,
           icon: Icons.close,
         ),
         const SizedBox(width: 4),

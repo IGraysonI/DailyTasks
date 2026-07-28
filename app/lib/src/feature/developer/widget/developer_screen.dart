@@ -1,3 +1,5 @@
+// ignore_for_file: experimental_member_use
+
 import 'package:daily_tasks/src/common/model/dependencies.dart';
 import 'package:daily_tasks/src/constants/pubspec.yaml.g.dart';
 import 'package:database/database.dart';
@@ -19,8 +21,6 @@ class DeveloperScreen extends StatelessWidget {
     body: CustomScrollView(
       slivers: <Widget>[
         // --- App bar --- //
-        // TODO: Add localization for the title and remove the const constructor.
-        // SliverAppBar(title: Text(Localization.of(context).developer), pinned: true, floating: true, snap: true),
         SliverAppBar(title: Text('Developer'), pinned: true, floating: true, snap: true),
 
         // --- Application information --- //

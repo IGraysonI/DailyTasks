@@ -1,18 +1,13 @@
 import 'package:control/control.dart';
-import 'package:daily_tasks/src/common/extensions/date_time_extension.dart';
 import 'package:daily_tasks/src/common/model/dependencies.dart';
-import 'package:daily_tasks/src/common/util/snackbar_utils.dart';
+import 'package:daily_tasks/src/common/util/state_listener_util.dart';
+import 'package:daily_tasks/src/feature/daily_task_rewards/widget/daily_task_rewards_indicator.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/controller/daily_tasks_controller.dart';
-import 'package:daily_tasks/src/feature/daily_tasks/enum/tasks_action_enum.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/widget/daily_task_dialog.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/widget/daily_tasks_scope.dart';
 import 'package:database/database.dart';
 import 'package:flutter/material.dart';
 import 'package:ui/ui.dart';
-
-// TODO: Добавить награды за определнные трешхолды выполненных задач.
-// Например, targetWeight = 10, если выполнено вес заполнен на 2, то одна награда, если на 5, то другая награда и т.д.
-// Добавить возможность добавления наград за определенные вес.
 
 /// {@template daily_tasks_screen}
 /// Screen that displays all daily tasks.
@@ -29,7 +24,6 @@ class DailyTasksScreen extends StatefulWidget {
 
 class _DailyTasksScreenState extends State<DailyTasksScreen> with AutomaticKeepAliveClientMixin {
   late final DailyTasksController _dailyTasksController;
-  final _todaysDate = DateTime.now();
 
   @override
   void initState() {
@@ -37,22 +31,10 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> with AutomaticKeepA
     _dailyTasksController = Dependencies.of(context).dailyTasksController..fetchDailyTasks();
   }
 
-  void _onStateChanged(
-    BuildContext context,
-    DailyTasksController controller,
-    DailyTasksState prev,
-    DailyTasksState next,
-  ) {
-    if (next.isProcessing) return;
-    if (next.error != null) {
-      SnackbarUtils.showSnackBar(
-        context,
-        SnackBar(
-          content: Text(next.error!),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
+  @override
+  void dispose() {
+    _dailyTasksController.dispose();
+    super.dispose();
   }
 
   @override
@@ -60,7 +42,7 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> with AutomaticKeepA
     super.build(context);
     return StateConsumer<DailyTasksController, DailyTasksState>(
       controller: _dailyTasksController,
-      listener: _onStateChanged,
+      listener: StateListenerUtil.defaultStateListener,
       builder: (context, state, child) => Padding(
         padding: const EdgeInsets.all(16),
         child: AnimatedOpacity(
@@ -70,6 +52,16 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> with AutomaticKeepA
             ignoring: state.isProcessing,
             child: CustomScrollView(
               slivers: [
+                const SliverToBoxAdapter(child: DailyTaskRewardsIndicator()),
+                SliverToBoxAdapter(child: Space.sm()),
+                const SliverToBoxAdapter(child: Divider()),
+                SliverToBoxAdapter(
+                  child: Text(
+                    'Список задач',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ),
+                SliverToBoxAdapter(child: Space.sm()),
                 SliverToBoxAdapter(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,7 +69,7 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> with AutomaticKeepA
                     children: [
                       ElevatedButton(
                         onPressed: () => _dailyTasksController.deleteAllDailyTasks(),
-                        child: const Text('Clear'),
+                        child: const Text('Delete all'),
                       ),
                       Space.sm(),
                       ElevatedButton(
@@ -89,17 +81,14 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> with AutomaticKeepA
                         onPressed: () => DailyTaskDialog.show(context),
                         child: const Text('Add'),
                       ),
+                      Space.sm(),
+                      ElevatedButton(
+                        onPressed: () => _dailyTasksController.resetDailyTasks(),
+                        child: const Text('Reset all'),
+                      ),
                     ],
                   ),
                 ),
-                SliverToBoxAdapter(
-                  child: Text(
-                    'Задачи за ${_todaysDate.dateOnly}',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                ),
-                SliverToBoxAdapter(child: Space.sm()),
-                const SliverToBoxAdapter(child: _SegmentedLinearProgressIndicator()),
                 SliverToBoxAdapter(child: Space.sm()),
                 const _DailyTasksListView(),
               ],
@@ -125,33 +114,6 @@ class _NoDataWidget extends StatelessWidget {
       onPressed: () => DailyTaskDialog.show(context).ignore(),
     ),
   );
-}
-
-class _SegmentedLinearProgressIndicator extends StatelessWidget {
-  const _SegmentedLinearProgressIndicator();
-
-  @override
-  Widget build(BuildContext context) {
-    final state = DailyTasksScope.controller(context).state;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SegmentedLinearProgressIndicator(
-          maxValue: state.totalWeight,
-          currentValue: state.weightOfCompletedTasks,
-          filledColor: Colors.green,
-          emptyColor: Colors.grey.shade300,
-        ),
-        Space.sm(),
-        const Divider(),
-        Text(
-          'Список задач',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        Space.sm(),
-      ],
-    );
-  }
 }
 
 class _DailyTasksListView extends StatelessWidget {
@@ -184,33 +146,58 @@ class _DailyTaskListTile extends StatelessWidget {
 
   final DailyTaskModel dailyTaskModel;
 
-  void _onTap(BuildContext context) =>
-      DailyTasksScope.controller(context).manageDailyTask(dailyTaskModel, TasksActionEnum.toggleTaskCompletetion);
+  void _onTap(BuildContext context) => DailyTasksScope.controller(context).toggleTaskCompletion(dailyTaskModel.id);
 
   @override
   Widget build(BuildContext context) => ListTile(
     title: Text(
       dailyTaskModel.title,
       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-        color: dailyTaskModel.isCompleted ? Colors.green : Colors.black,
+        color: dailyTaskModel.isCompleted ? Colors.green : Colors.white,
       ),
     ),
     subtitle: Text(dailyTaskModel.description ?? ''),
-    trailing: GestureDetector(
-      onTap: () => _onTap(context),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            '${dailyTaskModel.weight}',
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-              color: dailyTaskModel.isCompleted ? Colors.green : Colors.grey,
-            ),
+    trailing: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        GestureDetector(
+          onTap: () => _onTap(context),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '${dailyTaskModel.weight}',
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: dailyTaskModel.isCompleted ? Colors.green : Colors.grey,
+                ),
+              ),
+              Space.sm(),
+              Icon(Icons.check_circle, color: dailyTaskModel.isCompleted ? Colors.green : Colors.grey),
+            ],
           ),
-          Space.sm(),
-          Icon(Icons.check_circle, color: dailyTaskModel.isCompleted ? Colors.green : Colors.grey),
-        ],
-      ),
+        ),
+        _OptionsPopupButton(dailyTaskModel),
+      ],
     ),
+  );
+}
+
+class _OptionsPopupButton extends StatelessWidget {
+  const _OptionsPopupButton(this.dailyTaskModel);
+
+  final DailyTaskModel dailyTaskModel;
+
+  @override
+  Widget build(BuildContext context) => PopupMenuButton<void>(
+    itemBuilder: (context) => [
+      PopupMenuItem(
+        child: const Text('Edit Task'),
+        onTap: () => DailyTaskDialog.showEdit(context, dailyTaskModel),
+      ),
+      PopupMenuItem(
+        child: const Text('Delete Task'),
+        onTap: () => DailyTasksScope.controller(context).deleteDailyTask(dailyTaskModel.id),
+      ),
+    ],
   );
 }

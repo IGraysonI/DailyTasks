@@ -1,8 +1,8 @@
 import 'package:database/database.dart';
 import 'package:database/src/service/basic_dao.dart';
 
-final class DailyTaskDao extends BasicDao<DailyTasks, DailyTask, SqlDatabase> {
-  DailyTaskDao(super.db, {required super.companionType});
+final class DailyTasksDao extends BasicDao<DailyTasks, DailyTask, SqlDatabase> {
+  DailyTasksDao(super.db, {required super.companionType});
 
   @override
   TableInfo<DailyTasks, DailyTask> get table => db.dailyTasks;
@@ -54,6 +54,17 @@ final class DailyTaskDao extends BasicDao<DailyTasks, DailyTask, SqlDatabase> {
   Future<void> toggleTaskCompletion(int taskId) async {
     final task = await getTaskById(taskId);
     if (task == null) return;
-    await updateTask(task.copyWith(isCompleted: !task.isCompleted));
+    await updateTask(
+      task.copyWith(
+        isCompleted: !task.isCompleted,
+        updatedAt: DateTime.now(),
+      ),
+    );
   }
+
+  /// Set all tasks as not completed on new day
+  Future<void> resetTasksCompletions() async =>
+      await (update(table)..where((tbl) => tbl.isCompleted.equals(true))).write(
+        const DailyTasksCompanion(isCompleted: Value(false)),
+      );
 }

@@ -12,8 +12,8 @@ dependencies:
   meta: any
   l: any
 
-  drift: ^2.31.0
-  drift_flutter: ^0.2.8
+  drift: ^2.34.2
+  drift_flutter: ^0.3.1
   drift_db_viewer: ^2.1.0
 
 dev_dependencies:

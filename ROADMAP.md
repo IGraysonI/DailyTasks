@@ -1,9 +1,17 @@
 # Roadmap
-* Ежедневки
-   * Отображение прогресс бара с количеством очков по заполнению
-   * Добавление и отображение ежедневных задач вместе с количеством очков за выполнение
-   * ? Добавить награду за каждую выполненную задачу
-   * В начале дня обнулять очки и помечать задачи как не выполненные
 
-* Еженедельники
-   * Тоже самое что и у ежедневок, но с недельным периодом
+* Desktop
+   * Running in the tray
+
+* Notifications
+   * Ability to receive reminders
+   * Notification for start of the new day/week
+
+* Settings
+   * Ability to change locale
+   * Option to enable/disable notifications
+
+* UI
+   * Improved task visualization (e.g., progress bars, color coding)
+   * Customizable themes and layouts
+   * Responsive design for mobile and desktop

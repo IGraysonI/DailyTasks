@@ -1,5 +1,6 @@
 import 'package:daily_tasks/src/feature/settings/widget/application_settings_scope.dart';
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 import 'package:meta/meta.dart';
 import 'package:octopus/octopus.dart';
 import 'package:ui/ui.dart';
@@ -53,22 +54,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
   /* #endregion */
 
   @override
-  Widget build(BuildContext context) => const Scaffold(
+  Widget build(BuildContext context) => Scaffold(
     body: CustomScrollView(
       slivers: [
         // --- App bar --- //
         SliverAppBar(
           // TODO: Add localization
           // title: Text(Localization.of(context).settings),
-          title: Text('Settings'),
+          // title: Text('Settings'),
+          title: Text(Sheet1Localization.of(context).yes),
           pinned: true,
           floating: true,
           snap: true,
         ),
 
         // --- Theme --- //
-        GroupSeparator(title: 'Theme'),
-        _ThemeModeSelector(),
+        const GroupSeparator(title: 'Theme'),
+        const _ThemeModeSelector(),
+
+        // --- Locale --- //
+        const GroupSeparator(title: 'Locale'),
+        const _LocaleSelector(),
       ],
     ),
   );
@@ -136,4 +142,49 @@ class _ThemeModeSelector extends StatelessWidget {
       ),
     ),
   );
+}
+
+class _LocaleSelector extends StatefulWidget {
+  const _LocaleSelector();
+
+  @override
+  State<_LocaleSelector> createState() => _LocaleSelectorState();
+}
+
+class _LocaleSelectorState extends State<_LocaleSelector> {
+  @override
+  Widget build(BuildContext context) {
+    final applicationSettings = ApplicationSettingsScope.settingsOf(context);
+    final applicationSettingsController = ApplicationSettingsScope.controllerOf(context);
+    return SliverPadding(
+      padding: ScaffoldPadding.of(context),
+      sliver: SliverToBoxAdapter(
+        child: ListTile(
+          title: const Text('Language'),
+          subtitle: const Text(
+            'Choose your preferred language for the application.',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          trailing: DropdownButtonHideUnderline(
+            child: DropdownButton(
+              value: Sheet1Localization.of(context).localeName,
+              items: Sheet1Localization.supportedLocales
+                  .map(
+                    (locale) => DropdownMenuItem(
+                      value: locale.languageCode,
+                      onTap: () => applicationSettingsController.updateApplicationSettings(
+                        applicationSettings.copyWith(locale: locale),
+                      ),
+                      child: Text(locale.toLanguageTag()),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) => setState(() {}),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }

@@ -10,7 +10,6 @@
    * Notification for start of the new day/week
 
 * Settings
-   * Ability to change locale
    * Option to enable/disable notifications
 
 * UI

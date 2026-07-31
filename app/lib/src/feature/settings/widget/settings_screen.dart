@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 import 'package:octopus/octopus.dart';
 import 'package:ui/ui.dart';
 
+// TODO: Use either dialog or dropdown for selectable options
 /// {@template settings_screen}
 /// SettingsScreen widget.
 /// {@endtemplate}
@@ -58,11 +59,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     body: CustomScrollView(
       slivers: [
         // --- App bar --- //
-        SliverAppBar(
+        const SliverAppBar(
           // TODO: Add localization
           // title: Text(Localization.of(context).settings),
-          // title: Text('Settings'),
-          title: Text(Sheet1Localization.of(context).yes),
+          title: Text('Settings'),
           pinned: true,
           floating: true,
           snap: true,
@@ -75,6 +75,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
         // --- Locale --- //
         const GroupSeparator(title: 'Locale'),
         const _LocaleSelector(),
+        SliverPadding(
+          padding: ScaffoldPadding.of(context),
+          sliver: SliverToBoxAdapter(
+            child: ListTile(
+              title: Text('Locale test: ${Sheet1Localization.of(context).yes}'),
+            ),
+          ),
+        ),
       ],
     ),
   );
@@ -169,6 +177,7 @@ class _LocaleSelectorState extends State<_LocaleSelector> {
           trailing: DropdownButtonHideUnderline(
             child: DropdownButton(
               value: Sheet1Localization.of(context).localeName,
+              focusColor: Theme.of(context).colorScheme.surfaceContainerHighest,
               items: Sheet1Localization.supportedLocales
                   .map(
                     (locale) => DropdownMenuItem(

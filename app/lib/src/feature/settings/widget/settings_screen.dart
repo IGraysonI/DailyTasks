@@ -177,7 +177,7 @@ class _LocaleSelectorState extends State<_LocaleSelector> {
           trailing: DropdownButtonHideUnderline(
             child: DropdownButton(
               value: Sheet1Localization.of(context).localeName,
-              focusColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+              focusColor: Theme.of(context).colorScheme.surface,
               items: Sheet1Localization.supportedLocales
                   .map(
                     (locale) => DropdownMenuItem(

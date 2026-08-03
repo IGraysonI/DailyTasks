@@ -83,6 +83,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
         ),
+
+        // --- Notifications --- //
+        const GroupSeparator(title: 'Notifications'),
+        const _NotificationSettings(),
       ],
     ),
   );
@@ -196,4 +200,26 @@ class _LocaleSelectorState extends State<_LocaleSelector> {
       ),
     );
   }
+}
+
+class _NotificationSettings extends StatelessWidget {
+  const _NotificationSettings();
+
+  @override
+  Widget build(BuildContext context) => SliverPadding(
+    padding: ScaffoldPadding.of(context),
+    sliver: SliverToBoxAdapter(
+      child: ListTile(
+        title: const Text('Notifications'),
+        subtitle: const Text(
+          'TODO: Add notification settings.',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        onTap: () {
+          // Handle notification settings tap
+        },
+      ),
+    ),
+  );
 }

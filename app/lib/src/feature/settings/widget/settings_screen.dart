@@ -87,6 +87,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
         // --- Notifications --- //
         const GroupSeparator(title: 'Notifications'),
         const _NotificationSettings(),
+
+        // --- Tasks reset --- //
+        const GroupSeparator(title: 'Tasks reset'),
+        const _DailyTasksResetToggle(),
+        const _WeeklyTasksResetToggle(),
       ],
     ),
   );
@@ -222,4 +227,66 @@ class _NotificationSettings extends StatelessWidget {
       ),
     ),
   );
+}
+
+class _DailyTasksResetToggle extends StatelessWidget {
+  const _DailyTasksResetToggle();
+
+  @override
+  Widget build(BuildContext context) {
+    final applicationSettings = ApplicationSettingsScope.settingsOf(context);
+    final applicationSettingsController = ApplicationSettingsScope.controllerOf(context);
+    return SliverPadding(
+      padding: ScaffoldPadding.of(context),
+      sliver: SliverToBoxAdapter(
+        child: ListTile(
+          title: const Text('Reset Daily Tasks'),
+          subtitle: const Text(
+            'Reset daily tasks when a new day starts.',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          trailing: Switch(
+            value: applicationSettings.resetDailyTasksOnNewDayStart ?? true,
+            onChanged: (value) {
+              applicationSettingsController.updateApplicationSettings(
+                applicationSettings.copyWith(resetDailyTasksOnNewDayStart: value),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _WeeklyTasksResetToggle extends StatelessWidget {
+  const _WeeklyTasksResetToggle();
+
+  @override
+  Widget build(BuildContext context) {
+    final applicationSettings = ApplicationSettingsScope.settingsOf(context);
+    final applicationSettingsController = ApplicationSettingsScope.controllerOf(context);
+    return SliverPadding(
+      padding: ScaffoldPadding.of(context),
+      sliver: SliverToBoxAdapter(
+        child: ListTile(
+          title: const Text('Reset Weekly Tasks'),
+          subtitle: const Text(
+            'Reset weekly tasks when a new week starts.',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          trailing: Switch(
+            value: applicationSettings.resetWeeklyTasksOnNewWeekStart ?? true,
+            onChanged: (value) {
+              applicationSettingsController.updateApplicationSettings(
+                applicationSettings.copyWith(resetWeeklyTasksOnNewWeekStart: value),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
 }

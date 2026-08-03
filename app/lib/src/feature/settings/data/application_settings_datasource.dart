@@ -73,6 +73,16 @@ class AppSettingsPersistedEntry extends SharedPreferencesEntry<ApplicationSettin
     key: '$key.textScale',
   );
 
+  late final _resetDailyTasksOnNewDayStart = BoolPreferencesEntry(
+    sharedPreferences: sharedPreferences,
+    key: '$key.resetDailyTasksOnNewDayStart',
+  );
+
+  late final _resetWeeklyTasksOnNewWeekStart = BoolPreferencesEntry(
+    sharedPreferences: sharedPreferences,
+    key: '$key.resetWeeklyTasksOnNewWeekStart',
+  );
+
   static const _colorCodec = ColorCodec();
 
   @override
@@ -82,6 +92,8 @@ class AppSettingsPersistedEntry extends SharedPreferencesEntry<ApplicationSettin
     final localeLanguageCodeFuture = _localeLanguageCode.read();
     final countryCodeFuture = _localeCountryCode.read();
     final textScale = await _textScale.read();
+    final resetDailyTasksOnNewDayStart = await _resetDailyTasksOnNewDayStart.read();
+    final resetWeeklyTasksOnNewWeekStart = await _resetWeeklyTasksOnNewWeekStart.read();
     final themeMode = await themeModeFuture;
     final themeSeedColor = await themeSeedColorFuture;
     final languageCode = await localeLanguageCodeFuture;
@@ -90,7 +102,9 @@ class AppSettingsPersistedEntry extends SharedPreferencesEntry<ApplicationSettin
         themeSeedColor == null &&
         languageCode == null &&
         textScale == null &&
-        countryCode == null) {
+        countryCode == null &&
+        resetDailyTasksOnNewDayStart == null &&
+        resetWeeklyTasksOnNewWeekStart == null) {
       return null;
     }
     ApplicationTheme? applicationTheme;
@@ -106,6 +120,8 @@ class AppSettingsPersistedEntry extends SharedPreferencesEntry<ApplicationSettin
       applicationTheme: applicationTheme,
       locale: applicationLocale,
       textScale: textScale,
+      resetDailyTasksOnNewDayStart: resetDailyTasksOnNewDayStart,
+      resetWeeklyTasksOnNewWeekStart: resetWeeklyTasksOnNewWeekStart,
     );
   }
 
@@ -116,6 +132,8 @@ class AppSettingsPersistedEntry extends SharedPreferencesEntry<ApplicationSettin
     _localeLanguageCode.remove(),
     _localeCountryCode.remove(),
     _textScale.remove(),
+    _resetDailyTasksOnNewDayStart.remove(),
+    _resetWeeklyTasksOnNewWeekStart.remove(),
   ).wait;
 
   @override
@@ -133,5 +151,11 @@ class AppSettingsPersistedEntry extends SharedPreferencesEntry<ApplicationSettin
       ).wait;
     }
     if (value.textScale != null) await _textScale.set(value.textScale!);
+    if (value.resetDailyTasksOnNewDayStart != null) {
+      await _resetDailyTasksOnNewDayStart.set(value.resetDailyTasksOnNewDayStart!);
+    }
+    if (value.resetWeeklyTasksOnNewWeekStart != null) {
+      await _resetWeeklyTasksOnNewWeekStart.set(value.resetWeeklyTasksOnNewWeekStart!);
+    }
   }
 }

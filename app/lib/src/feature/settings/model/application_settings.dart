@@ -10,13 +10,21 @@ import 'package:flutter/foundation.dart';
 /// {@endtemplate}
 class ApplicationSettings with Diagnosticable {
   /// {@macro app_settings}
-  const ApplicationSettings({this.applicationTheme, this.locale, this.textScale});
+  const ApplicationSettings({
+    this.applicationTheme,
+    this.locale,
+    this.textScale,
+    this.resetDailyTasksOnNewDayStart,
+    this.resetWeeklyTasksOnNewWeekStart,
+  });
 
   /// The default application settings.
   static const defaultSettings = ApplicationSettings(
     applicationTheme: ApplicationTheme.defaultTheme,
     locale: Locale('en', 'US'),
     textScale: 1,
+    resetDailyTasksOnNewDayStart: true,
+    resetWeeklyTasksOnNewWeekStart: true,
   );
 
   /// The theme of the app,
@@ -28,15 +36,25 @@ class ApplicationSettings with Diagnosticable {
   /// The text scale of the app.
   final double? textScale;
 
+  /// Reset daily tasks on new day start.
+  final bool? resetDailyTasksOnNewDayStart;
+
+  /// Reset weekly tasks on new day start.
+  final bool? resetWeeklyTasksOnNewWeekStart;
+
   /// Copy the [ApplicationSettings] with new values.
   ApplicationSettings copyWith({
     ApplicationTheme? applicationTheme,
     Locale? locale,
     double? textScale,
+    bool? resetDailyTasksOnNewDayStart,
+    bool? resetWeeklyTasksOnNewWeekStart,
   }) => ApplicationSettings(
     applicationTheme: applicationTheme ?? this.applicationTheme,
     locale: locale ?? this.locale,
     textScale: textScale ?? this.textScale,
+    resetDailyTasksOnNewDayStart: resetDailyTasksOnNewDayStart ?? this.resetDailyTasksOnNewDayStart,
+    resetWeeklyTasksOnNewWeekStart: resetWeeklyTasksOnNewWeekStart ?? this.resetWeeklyTasksOnNewWeekStart,
   );
 
   @override

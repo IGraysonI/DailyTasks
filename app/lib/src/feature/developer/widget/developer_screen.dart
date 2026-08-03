@@ -447,26 +447,28 @@ class _ShowSharedPreferencesState extends State<_ShowSharedPreferences> {
               padding: const EdgeInsets.all(16),
               child: SizedBox(
                 width: 480,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    const Text(
-                      'Shared preferences',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                    Space.md(),
-                    ListView(
-                      shrinkWrap: true,
-                      children: [
-                        for (final key in _sharedPreferencesContent.keys)
-                          ListTile(
-                            title: Text(key),
-                            subtitle: Text(_sharedPreferencesContent[key].toString()),
-                          ),
-                      ],
-                    ),
-                    Space.md(),
-                  ],
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      const Text(
+                        'Shared preferences',
+                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      Space.md(),
+                      ListView(
+                        shrinkWrap: true,
+                        children: [
+                          for (final key in _sharedPreferencesContent.keys)
+                            ListTile(
+                              title: Text(key),
+                              subtitle: Text(_sharedPreferencesContent[key].toString()),
+                            ),
+                        ],
+                      ),
+                      Space.md(),
+                    ],
+                  ),
                 ),
               ),
             ),

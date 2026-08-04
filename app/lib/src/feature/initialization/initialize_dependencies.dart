@@ -126,15 +126,19 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
     ),
   ),
   'Initialize daily tasks reset service': (dependencies) async {
-    final resetService = DailyTasksResetService(
-      dailyTasksDatasource: DailyTasksDatasourceImpl(
-        SqlDatabaseSource(dependencies.database),
-        dependencies.sharedPreferences,
-      ),
-    );
-    dependencies.dailyTasksResetService = resetService;
-    // Start timer to reset at exactly 00:00 every day
-    resetService.startDailyResetTimer();
+    final shouldReset =
+        dependencies.applicationSettingsController.state.applicationSettings?.resetDailyTasksOnNewDayStart ?? true;
+    if (shouldReset) {
+      final resetService = DailyTasksResetService(
+        dailyTasksDatasource: DailyTasksDatasourceImpl(
+          SqlDatabaseSource(dependencies.database),
+          dependencies.sharedPreferences,
+        ),
+      );
+      dependencies.dailyTasksResetService = resetService;
+      // Start timer to reset at exactly 00:00 every day
+      resetService.startDailyResetTimer();
+    }
   },
   'Prepare daily task rewards controller': (dependencies) async {
     dependencies.dailyTaskRewardsController = DailyTaskRewardsController(
@@ -161,15 +165,19 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
     );
   },
   'Prepare weekly tasks reset service': (dependencies) async {
-    final resetService = WeeklyTasksResetService(
-      weeklyTasksDatasource: WeeklyTasksDatasourceImpl(
-        SqlDatabaseSource(dependencies.database),
-        dependencies.sharedPreferences,
-      ),
-    );
-    dependencies.weeklyTasksResetService = resetService;
-    // Start timer to reset at exactly 00:00 every monday
-    resetService.startWeeklyResetTimer();
+    final shouldReset =
+        dependencies.applicationSettingsController.state.applicationSettings?.resetWeeklyTasksOnNewWeekStart ?? true;
+    if (shouldReset) {
+      final resetService = WeeklyTasksResetService(
+        weeklyTasksDatasource: WeeklyTasksDatasourceImpl(
+          SqlDatabaseSource(dependencies.database),
+          dependencies.sharedPreferences,
+        ),
+      );
+      dependencies.weeklyTasksResetService = resetService;
+      // Start timer to reset at exactly 00:00 every monday
+      resetService.startWeeklyResetTimer();
+    }
   },
   'Collect logs': (dependencies) async {
     // TODO: Implement log collection

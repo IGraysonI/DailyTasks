@@ -133,8 +133,8 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
       ),
     );
     dependencies.dailyTasksResetService = resetService;
-    // TODO: Add ways to trigger daily task reset on interval or when app is resumed(?)
-    await resetService.resetTasksIfNewDay();
+    // Start timer to reset at exactly 00:00 every day
+    resetService.startDailyResetTimer();
   },
   'Prepare daily task rewards controller': (dependencies) async {
     dependencies.dailyTaskRewardsController = DailyTaskRewardsController(
@@ -168,8 +168,8 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
       ),
     );
     dependencies.weeklyTasksResetService = resetService;
-    // TODO: Add ways to trigger weekly task reset on interval or when app is resumed(?)
-    await resetService.resetTasksIfNewWeek();
+    // Start timer to reset at exactly 00:00 every monday
+    resetService.startWeeklyResetTimer();
   },
   'Collect logs': (dependencies) async {
     // TODO: Implement log collection

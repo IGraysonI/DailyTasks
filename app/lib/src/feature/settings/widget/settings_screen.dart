@@ -1,3 +1,4 @@
+import 'package:daily_tasks/src/common/model/dependencies.dart';
 import 'package:daily_tasks/src/feature/settings/widget/application_settings_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
@@ -236,6 +237,7 @@ class _DailyTasksResetToggle extends StatelessWidget {
   Widget build(BuildContext context) {
     final applicationSettings = ApplicationSettingsScope.settingsOf(context);
     final applicationSettingsController = ApplicationSettingsScope.controllerOf(context);
+    final dailyTaskService = Dependencies.of(context).dailyTasksResetService;
     return SliverPadding(
       padding: ScaffoldPadding.of(context),
       sliver: SliverToBoxAdapter(
@@ -252,6 +254,11 @@ class _DailyTasksResetToggle extends StatelessWidget {
               applicationSettingsController.updateApplicationSettings(
                 applicationSettings.copyWith(resetDailyTasksOnNewDayStart: value),
               );
+              if (value) {
+                dailyTaskService.startDailyResetTimer();
+              } else {
+                dailyTaskService.stopDailyResetTimer();
+              }
             },
           ),
         ),
@@ -267,6 +274,7 @@ class _WeeklyTasksResetToggle extends StatelessWidget {
   Widget build(BuildContext context) {
     final applicationSettings = ApplicationSettingsScope.settingsOf(context);
     final applicationSettingsController = ApplicationSettingsScope.controllerOf(context);
+    final weeklyTaskService = Dependencies.of(context).weeklyTasksResetService;
     return SliverPadding(
       padding: ScaffoldPadding.of(context),
       sliver: SliverToBoxAdapter(
@@ -283,6 +291,11 @@ class _WeeklyTasksResetToggle extends StatelessWidget {
               applicationSettingsController.updateApplicationSettings(
                 applicationSettings.copyWith(resetWeeklyTasksOnNewWeekStart: value),
               );
+              if (value) {
+                weeklyTaskService.startWeeklyResetTimer();
+              } else {
+                weeklyTaskService.stopWeeklyResetTimer();
+              }
             },
           ),
         ),

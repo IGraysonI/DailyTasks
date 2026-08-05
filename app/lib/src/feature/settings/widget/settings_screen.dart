@@ -3,10 +3,8 @@ import 'package:daily_tasks/src/feature/settings/widget/application_settings_sco
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
 import 'package:meta/meta.dart';
-import 'package:octopus/octopus.dart';
 import 'package:ui/ui.dart';
 
-// TODO: Use either dialog or dropdown for selectable options
 /// {@template settings_screen}
 /// SettingsScreen widget.
 /// {@endtemplate}
@@ -113,48 +111,27 @@ class _ThemeModeSelector extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        onTap: () => Octopus.of(context).showDialog<void>(
-          (context) => Dialog(
-            insetPadding: const EdgeInsets.all(64),
-            alignment: Alignment.center,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: SizedBox(
-                width: 480,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    const Text(
-                      'Theme mode',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                    Space.md(),
-                    DropdownButtonFormField<ThemeMode>(
-                      initialValue: ApplicationSettingsScope.settingsOf(context).applicationTheme!.themeMode,
-                      items: ThemeMode.values
-                          .map(
-                            (value) => DropdownMenuItem<ThemeMode>(
-                              value: value,
-                              child: Text(value.name),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (value) {
-                        final applicationSettingsController = ApplicationSettingsScope.controllerOf(context);
-                        final applicationSettings = ApplicationSettingsScope.settingsOf(context);
-                        applicationSettingsController.updateApplicationSettings(
-                          applicationSettings.copyWith(
-                            applicationTheme: applicationSettings.applicationTheme!.copyWith(themeMode: value),
-                          ),
-                        );
-                      },
-                      decoration: const InputDecoration(labelText: 'Select theme mode'),
-                    ),
-                    const SizedBox(height: 16),
-                  ],
+        trailing: DropdownButtonHideUnderline(
+          child: DropdownButton<ThemeMode>(
+            value: ApplicationSettingsScope.settingsOf(context).applicationTheme!.themeMode,
+            focusColor: Theme.of(context).colorScheme.surface,
+            items: ThemeMode.values
+                .map(
+                  (value) => DropdownMenuItem<ThemeMode>(
+                    value: value,
+                    child: Text(value.name),
+                  ),
+                )
+                .toList(),
+            onChanged: (value) {
+              final applicationSettingsController = ApplicationSettingsScope.controllerOf(context);
+              final applicationSettings = ApplicationSettingsScope.settingsOf(context);
+              applicationSettingsController.updateApplicationSettings(
+                applicationSettings.copyWith(
+                  applicationTheme: applicationSettings.applicationTheme!.copyWith(themeMode: value),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ),
       ),

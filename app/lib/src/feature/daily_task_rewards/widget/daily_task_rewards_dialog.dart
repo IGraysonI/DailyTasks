@@ -1,5 +1,3 @@
-// ignore_for_file: experimental_member_use, library_private_types_in_public_api
-
 import 'package:daily_tasks/src/common/util/snackbar_utils.dart';
 import 'package:daily_tasks/src/feature/daily_task_rewards/widget/daily_task_rewards_scope.dart';
 import 'package:database/database.dart';
@@ -22,6 +20,7 @@ class DailyTaskRewardDialog extends StatefulWidget {
 
   /// Show the daily task reward dialog
   static Future<void> show(BuildContext context) =>
+      // ignore: experimental_member_use
       Octopus.of(context).showDialog<void>((context) => const DailyTaskRewardDialog());
 
   /// Show the daily task reward dialog for editing an existing task

@@ -2,7 +2,6 @@ import 'package:daily_tasks/src/common/model/dependencies.dart';
 import 'package:daily_tasks/src/feature/settings/widget/application_settings_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
-import 'package:meta/meta.dart';
 import 'package:ui/ui.dart';
 
 /// {@template settings_screen}
@@ -13,12 +12,6 @@ class SettingsScreen extends StatefulWidget {
   const SettingsScreen({
     super.key, // ignore: unused_element
   });
-
-  /// The state from the closest instance of this class
-  /// that encloses the given context, if any.
-  @internal
-  // ignore: library_private_types_in_public_api
-  static _SettingsScreenState? maybeOf(BuildContext context) => context.findAncestorStateOfType<_SettingsScreenState>();
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();

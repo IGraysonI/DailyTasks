@@ -128,14 +128,14 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
   'Initialize daily tasks reset service': (dependencies) async {
     final shouldReset =
         dependencies.applicationSettingsController.state.applicationSettings?.resetDailyTasksOnNewDayStart ?? true;
+    final resetService = DailyTasksResetService(
+      dailyTasksDatasource: DailyTasksDatasourceImpl(
+        SqlDatabaseSource(dependencies.database),
+        dependencies.sharedPreferences,
+      ),
+    );
+    dependencies.dailyTasksResetService = resetService;
     if (shouldReset) {
-      final resetService = DailyTasksResetService(
-        dailyTasksDatasource: DailyTasksDatasourceImpl(
-          SqlDatabaseSource(dependencies.database),
-          dependencies.sharedPreferences,
-        ),
-      );
-      dependencies.dailyTasksResetService = resetService;
       // Start timer to reset at exactly 00:00 every day
       resetService.startDailyResetTimer();
     }
@@ -167,14 +167,14 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
   'Prepare weekly tasks reset service': (dependencies) async {
     final shouldReset =
         dependencies.applicationSettingsController.state.applicationSettings?.resetWeeklyTasksOnNewWeekStart ?? true;
+    final resetService = WeeklyTasksResetService(
+      weeklyTasksDatasource: WeeklyTasksDatasourceImpl(
+        SqlDatabaseSource(dependencies.database),
+        dependencies.sharedPreferences,
+      ),
+    );
+    dependencies.weeklyTasksResetService = resetService;
     if (shouldReset) {
-      final resetService = WeeklyTasksResetService(
-        weeklyTasksDatasource: WeeklyTasksDatasourceImpl(
-          SqlDatabaseSource(dependencies.database),
-          dependencies.sharedPreferences,
-        ),
-      );
-      dependencies.weeklyTasksResetService = resetService;
       // Start timer to reset at exactly 00:00 every monday
       resetService.startWeeklyResetTimer();
     }

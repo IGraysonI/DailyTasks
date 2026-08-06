@@ -17,6 +17,7 @@ const List<Type> _driftTables = <Type>[
   DailyTasks,
   WeeklyTaskRewards,
   WeeklyTasks,
+  Logs,
 ];
 
 @DriftDatabase(tables: _driftTables)

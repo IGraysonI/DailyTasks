@@ -13,6 +13,7 @@ class LogModel {
     required this.timestamp,
     required this.level,
     required this.message,
+    required this.stackTrace,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -23,6 +24,7 @@ class LogModel {
     required this.timestamp,
     required this.level,
     required this.message,
+    required this.stackTrace,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) : id = 0,
@@ -35,6 +37,7 @@ class LogModel {
     timestamp: data.timestamp,
     level: data.level,
     message: data.message,
+    stackTrace: data.stackTrace,
     createdAt: data.createdAt,
     updatedAt: data.updatedAt,
   );
@@ -45,6 +48,7 @@ class LogModel {
     'timestamp': timestamp.millisecondsSinceEpoch ~/ 1000,
     'level': level,
     'message': message,
+    'stackTrace': stackTrace,
     'createdAt': createdAt.millisecondsSinceEpoch ~/ 1000,
     'updatedAt': updatedAt.millisecondsSinceEpoch ~/ 1000,
   };
@@ -55,6 +59,7 @@ class LogModel {
     DateTime? timestamp,
     int? level,
     String? message,
+    String? stackTrace,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) => LogModel(
@@ -62,6 +67,7 @@ class LogModel {
     timestamp: timestamp ?? this.timestamp,
     level: level ?? this.level,
     message: message ?? this.message,
+    stackTrace: stackTrace ?? this.stackTrace,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
   );
@@ -77,6 +83,9 @@ class LogModel {
 
   /// The message of the log entry.
   final String message;
+
+  /// The stack trace of the log entry (if available).
+  final String? stackTrace;
 
   /// The creation date of the log entry.
   final DateTime createdAt;

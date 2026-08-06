@@ -9,7 +9,11 @@ final class LogsDao extends BasicDao<Logs, Log, SqlDatabase> {
 
   /// Get all tasks and return as a list of [LogModel]
   Future<List<LogModel>> getAllLogs() async {
-    final logs = await select(table).get();
+    final logs =
+        await (select(table)
+              ..orderBy([(tbl) => OrderingTerm(expression: tbl.timestamp, mode: OrderingMode.desc)])
+              ..limit(10000))
+            .get();
     return logs.map(LogModel.fromTable).toList();
   }
 
@@ -25,10 +29,28 @@ final class LogsDao extends BasicDao<Logs, Log, SqlDatabase> {
       timestamp: logModel.timestamp,
       level: logModel.level,
       message: logModel.message,
+      stackTrace: Value(logModel.stackTrace),
       createdAt: logModel.createdAt,
       updatedAt: logModel.updatedAt,
     ),
   );
+
+  /// Insert multiple logs into the database
+  Future<void> insertAllLogs(List<LogModel> logModels) async => batch((batch) {
+    batch.insertAll(
+      table,
+      logModels.map(
+        (logModel) => LogsCompanion.insert(
+          timestamp: logModel.timestamp,
+          level: logModel.level,
+          message: logModel.message,
+          stackTrace: Value(logModel.stackTrace),
+          createdAt: logModel.createdAt,
+          updatedAt: logModel.updatedAt,
+        ),
+      ),
+    );
+  }).ignore();
 
   /// Update a log in the database
   Future<void> updateLog(LogModel log) async => await update(table).replace(
@@ -37,6 +59,7 @@ final class LogsDao extends BasicDao<Logs, Log, SqlDatabase> {
       timestamp: Value(log.timestamp),
       level: Value(log.level),
       message: Value(log.message),
+      stackTrace: Value(log.stackTrace),
       createdAt: Value(log.createdAt),
       updatedAt: Value(log.updatedAt),
     ),

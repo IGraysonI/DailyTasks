@@ -11,4 +11,6 @@ class Logs extends BaseSchema {
   IntColumn get level => integer()();
 
   TextColumn get message => text()();
+
+  TextColumn get stackTrace => text().nullable()();
 }

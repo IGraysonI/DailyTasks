@@ -4,6 +4,7 @@ import 'package:control/control.dart';
 import 'package:daily_tasks/src/common/controller/controller_observer.dart';
 import 'package:daily_tasks/src/common/model/app_metadata.dart';
 import 'package:daily_tasks/src/common/model/dependencies.dart';
+import 'package:daily_tasks/src/common/util/log_buffer.dart';
 import 'package:daily_tasks/src/common/util/screen_util.dart';
 import 'package:daily_tasks/src/constants/pubspec.yaml.g.dart';
 import 'package:daily_tasks/src/feature/daily_task_rewards/controller/daily_task_rewards_controller.dart';
@@ -28,6 +29,7 @@ import 'package:daily_tasks/src/feature/weekly_tasks/service/weekly_tasks_reset_
 import 'package:database/database.dart';
 import 'package:l/l.dart';
 import 'package:platform_info/platform_info.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 typedef _InitializationStep = FutureOr<void> Function(Dependencies dependencies);
@@ -180,53 +182,52 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
     }
   },
   'Collect logs': (dependencies) async {
-    // TODO: Implement log collection
-    //   await (dependencies.database.select<LogTbl, LogTblData>(dependencies.database.logTbl)
-    //         ..orderBy([(tbl) => OrderingTerm(expression: tbl.time, mode: OrderingMode.desc)])
-    //         ..limit(LogBuffer.bufferLimit))
-    //       .get()
-    //       .then<List<LogMessage>>(
-    //         (logs) => logs
-    //             .map<LogMessage>(
-    //               (l) => l.stack != null
-    //                   ? LogMessageError(
-    //                       timestamp: DateTime.fromMillisecondsSinceEpoch(l.time * 1000),
-    //                       level: LogLevel.fromValue(l.level),
-    //                       message: l.message,
-    //                       stackTrace: StackTrace.fromString(l.stack!),
-    //                     )
-    //                   : LogMessageVerbose(
-    //                       timestamp: DateTime.fromMillisecondsSinceEpoch(l.time * 1000),
-    //                       level: LogLevel.fromValue(l.level),
-    //                       message: l.message,
-    //                     ),
-    //             )
-    //             .toList(growable: false),
-    //       )
-    //       .then<void>(LogBuffer.instance.addAll);
-    //   l
-    //       .bufferTime(const Duration(seconds: 1))
-    //       .where((logs) => logs.isNotEmpty)
-    //       .listen(LogBuffer.instance.addAll, cancelOnError: false);
-    //   l
-    //       .map<LogTblCompanion>(
-    //         (log) => LogTblCompanion.insert(
-    //           level: log.level.level,
-    //           message: log.message.toString(),
-    //           time: Value<int>(log.timestamp.millisecondsSinceEpoch ~/ 1000),
-    //           stack: Value<String?>(switch (log) {
-    //             LogMessageError l => l.stackTrace.toString(),
-    //             _ => null,
-    //           }),
-    //         ),
-    //       )
-    //       .bufferTime(const Duration(seconds: 5))
-    //       .where((logs) => logs.isNotEmpty)
-    //       .listen(
-    //         (logs) =>
-    //             dependencies.database.batch((batch) => batch.insertAll(dependencies.database.logTbl, logs)).ignore(),
-    //         cancelOnError: false,
-    //       );
+    // TODO: Change log collection implementation (?)
+    final sqlDatabaseSource = SqlDatabaseSource(dependencies.database);
+    await sqlDatabaseSource
+        .dao<LogsDao>()
+        .getAllLogs()
+        .then<List<LogMessage>>(
+          (logs) => logs
+              .map<LogMessage>(
+                (l) => l.stackTrace != null
+                    ? LogMessageError(
+                        timestamp: l.timestamp,
+                        level: LogLevel.fromValue(l.level),
+                        message: l.message,
+                        stackTrace: StackTrace.fromString(l.stackTrace!),
+                      )
+                    : LogMessageVerbose(
+                        timestamp: l.timestamp,
+                        level: LogLevel.fromValue(l.level),
+                        message: l.message,
+                      ),
+              )
+              .toList(growable: false),
+        )
+        .then<void>(LogBuffer.instance.addAll);
+    l
+        .bufferTime(const Duration(seconds: 1))
+        .where((logs) => logs.isNotEmpty)
+        .listen(LogBuffer.instance.addAll, cancelOnError: false);
+    l
+        .map<LogModel>(
+          (log) => LogModel.create(
+            level: log.level.level,
+            message: log.message.toString(),
+            timestamp: log.timestamp,
+            stackTrace: switch (log) {
+              LogMessageError l => l.stackTrace.toString(),
+              _ => null,
+            },
+          ),
+        )
+        .bufferTime(const Duration(seconds: 5))
+        .where((logs) => logs.isNotEmpty)
+        .listen(
+          (logs) => sqlDatabaseSource.dao<LogsDao>().insertAllLogs(logs),
+          cancelOnError: false,
+        );
   },
   'Log app initialized': (_) {},
 };

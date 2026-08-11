@@ -101,7 +101,22 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
     // });
     // if (DateTime.now().second % 10 == 0) await dependencies.database.customStatement('VACUUM;');
   },
+
   // 'Migrate app from previous version': (dependencies) => AppMigrator.migrate(dependencies.database),
+  'Initialize daily tasks reset service': (dependencies) async =>
+      dependencies.dailyTasksResetService = DailyTasksResetService(
+        dailyTasksDatasource: DailyTasksDatasourceImpl(
+          SqlDatabaseSource(dependencies.database),
+          dependencies.sharedPreferences,
+        ),
+      ),
+  'Prepare weekly tasks reset service': (dependencies) async =>
+      dependencies.weeklyTasksResetService = WeeklyTasksResetService(
+        weeklyTasksDatasource: WeeklyTasksDatasourceImpl(
+          SqlDatabaseSource(dependencies.database),
+          dependencies.sharedPreferences,
+        ),
+      ),
   'Prepare application settings controller': (dependencies) async {
     final applicationSettingsRepository = ApplicationSettingsRepositoryImpl(
       ApplicationSettingsDatasourceImpl(dependencies.sharedPreferences),
@@ -115,9 +130,11 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
     }
     final initialState = ApplicationSettingsState.idle(applicationSettings: applicationSettings);
     dependencies.applicationSettingsController = ApplicationSettingsController(
-      applicaitonSettingsRepository: applicationSettingsRepository,
+      applicationSettingsRepository: applicationSettingsRepository,
       initialState: initialState,
-    );
+      dailyTasksResetService: dependencies.dailyTasksResetService,
+      weeklyTasksResetService: dependencies.weeklyTasksResetService,
+    )..fetchServiceStatuses(applicationSettings);
   },
   'Prepare daily tasks controller': (dependencies) => dependencies.dailyTasksController = DailyTasksController(
     dailyTasksRepository: DailyTasksRepositoryImpl(
@@ -127,21 +144,6 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
       ),
     ),
   ),
-  'Initialize daily tasks reset service': (dependencies) async {
-    final shouldReset =
-        dependencies.applicationSettingsController.state.applicationSettings?.resetDailyTasksOnNewDayStart ?? true;
-    final resetService = DailyTasksResetService(
-      dailyTasksDatasource: DailyTasksDatasourceImpl(
-        SqlDatabaseSource(dependencies.database),
-        dependencies.sharedPreferences,
-      ),
-    );
-    dependencies.dailyTasksResetService = resetService;
-    if (shouldReset) {
-      // Start timer to reset at exactly 00:00 every day
-      resetService.startDailyResetTimer();
-    }
-  },
   'Prepare daily task rewards controller': (dependencies) async {
     dependencies.dailyTaskRewardsController = DailyTaskRewardsController(
       dailyTaskRewardsRepository: DailyTaskRewardsRepositoryImpl(
@@ -165,21 +167,6 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
         WeeklyTaskRewardsDatasourceImpl(SqlDatabaseSource(dependencies.database)),
       ),
     );
-  },
-  'Prepare weekly tasks reset service': (dependencies) async {
-    final shouldReset =
-        dependencies.applicationSettingsController.state.applicationSettings?.resetWeeklyTasksOnNewWeekStart ?? true;
-    final resetService = WeeklyTasksResetService(
-      weeklyTasksDatasource: WeeklyTasksDatasourceImpl(
-        SqlDatabaseSource(dependencies.database),
-        dependencies.sharedPreferences,
-      ),
-    );
-    dependencies.weeklyTasksResetService = resetService;
-    if (shouldReset) {
-      // Start timer to reset at exactly 00:00 every monday
-      resetService.startWeeklyResetTimer();
-    }
   },
   'Collect logs': (dependencies) async {
     // TODO: Change log collection implementation (?)

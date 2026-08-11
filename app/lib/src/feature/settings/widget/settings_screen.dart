@@ -1,4 +1,3 @@
-import 'package:daily_tasks/src/common/model/dependencies.dart';
 import 'package:daily_tasks/src/feature/settings/widget/application_settings_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
@@ -93,43 +92,43 @@ class _ThemeModeSelector extends StatelessWidget {
   const _ThemeModeSelector();
 
   @override
-  Widget build(BuildContext context) => SliverPadding(
-    padding: ScaffoldPadding.of(context),
-    sliver: SliverToBoxAdapter(
-      child: ListTile(
-        title: const Text('Theme mode'),
-        subtitle: Text(
-          // MaterialLocalizations.of(context).licensesPageTitle,
-          'Selected theme mode: ${Theme.of(context).brightness.name}',
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        trailing: DropdownButtonHideUnderline(
-          child: DropdownButton<ThemeMode>(
-            value: ApplicationSettingsScope.settingsOf(context).applicationTheme!.themeMode,
-            focusColor: Theme.of(context).colorScheme.surface,
-            items: ThemeMode.values
-                .map(
-                  (value) => DropdownMenuItem<ThemeMode>(
-                    value: value,
-                    child: Text(value.name),
-                  ),
-                )
-                .toList(),
-            onChanged: (value) {
-              final applicationSettingsController = ApplicationSettingsScope.controllerOf(context);
-              final applicationSettings = ApplicationSettingsScope.settingsOf(context);
-              applicationSettingsController.updateApplicationSettings(
+  Widget build(BuildContext context) {
+    final applicationSettings = ApplicationSettingsScope.settingsOf(context);
+    final applicationSettingsController = ApplicationSettingsScope.controllerOf(context);
+    return SliverPadding(
+      padding: ScaffoldPadding.of(context),
+      sliver: SliverToBoxAdapter(
+        child: ListTile(
+          title: const Text('Theme mode'),
+          subtitle: Text(
+            // MaterialLocalizations.of(context).licensesPageTitle,
+            'Selected theme mode: ${Theme.of(context).brightness.name}',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          trailing: DropdownButtonHideUnderline(
+            child: DropdownButton<ThemeMode>(
+              value: ApplicationSettingsScope.settingsOf(context).applicationTheme!.themeMode,
+              focusColor: Theme.of(context).colorScheme.surface,
+              items: ThemeMode.values
+                  .map(
+                    (value) => DropdownMenuItem<ThemeMode>(
+                      value: value,
+                      child: Text(value.name),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) => applicationSettingsController.updateApplicationSettings(
                 applicationSettings.copyWith(
                   applicationTheme: applicationSettings.applicationTheme!.copyWith(themeMode: value),
                 ),
-              );
-            },
+              ),
+            ),
           ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 class _LocaleSelector extends StatefulWidget {
@@ -207,7 +206,6 @@ class _DailyTasksResetToggle extends StatelessWidget {
   Widget build(BuildContext context) {
     final applicationSettings = ApplicationSettingsScope.settingsOf(context);
     final applicationSettingsController = ApplicationSettingsScope.controllerOf(context);
-    final dailyTaskService = Dependencies.of(context).dailyTasksResetService;
     return SliverPadding(
       padding: ScaffoldPadding.of(context),
       sliver: SliverToBoxAdapter(
@@ -224,11 +222,6 @@ class _DailyTasksResetToggle extends StatelessWidget {
               applicationSettingsController.updateApplicationSettings(
                 applicationSettings.copyWith(resetDailyTasksOnNewDayStart: value),
               );
-              if (value) {
-                dailyTaskService.startDailyResetTimer();
-              } else {
-                dailyTaskService.stopDailyResetTimer();
-              }
             },
           ),
         ),
@@ -244,7 +237,6 @@ class _WeeklyTasksResetToggle extends StatelessWidget {
   Widget build(BuildContext context) {
     final applicationSettings = ApplicationSettingsScope.settingsOf(context);
     final applicationSettingsController = ApplicationSettingsScope.controllerOf(context);
-    final weeklyTaskService = Dependencies.of(context).weeklyTasksResetService;
     return SliverPadding(
       padding: ScaffoldPadding.of(context),
       sliver: SliverToBoxAdapter(
@@ -261,11 +253,6 @@ class _WeeklyTasksResetToggle extends StatelessWidget {
               applicationSettingsController.updateApplicationSettings(
                 applicationSettings.copyWith(resetWeeklyTasksOnNewWeekStart: value),
               );
-              if (value) {
-                weeklyTaskService.startWeeklyResetTimer();
-              } else {
-                weeklyTaskService.stopWeeklyResetTimer();
-              }
             },
           ),
         ),

@@ -2,6 +2,7 @@
 
 import 'package:daily_tasks/src/common/model/dependencies.dart';
 import 'package:daily_tasks/src/constants/pubspec.yaml.g.dart';
+import 'package:daily_tasks/src/feature/developer/widget/logs_dialog.dart';
 import 'package:database/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -279,10 +280,7 @@ class _ShowLogsScreenTile extends StatelessWidget {
       child: ListTile(
         title: const Text('Logs'),
         subtitle: const Text('Show logs.', maxLines: 1, overflow: TextOverflow.ellipsis),
-        // onTap: () => LogsDialog.show(context).ignore(),
-        onTap: () {
-          // TODO: Restore
-        },
+        onTap: () => LogsDialog.show(context).ignore(),
       ),
     ),
   );

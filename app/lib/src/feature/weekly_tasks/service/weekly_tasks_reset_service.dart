@@ -11,6 +11,16 @@ final class WeeklyTasksResetService {
   final WeeklyTasksDatasource _weeklyTasksDatasource;
   Timer? _weeklyResetTimer;
 
+  /// Handles the weekly tasks reset service based on settings
+  Future<void> handleService({required bool shouldReset}) async {
+    if (shouldReset) {
+      await resetTasksIfNewWeek();
+      startWeeklyResetTimer();
+    } else {
+      stopWeeklyResetTimer();
+    }
+  }
+
   /// Check if it's a new day and reset tasks if needed
   Future<void> resetTasksIfNewWeek() async {
     final lastResetDateTimestamp = await _weeklyTasksDatasource.getLastResetDate();
@@ -50,11 +60,11 @@ final class WeeklyTasksResetService {
     final initialDelay = nextMonday.difference(now);
 
     // First reset at the next monday midnight
-    _weeklyResetTimer = Timer(initialDelay, () async {
-      await resetTasksIfNewWeek();
+    _weeklyResetTimer = Timer(initialDelay, () {
+      resetTasksIfNewWeek().ignore();
       // Then reset every 7 days
-      _weeklyResetTimer = Timer.periodic(const Duration(days: 7), (_) async {
-        await resetTasksIfNewWeek();
+      _weeklyResetTimer = Timer.periodic(const Duration(days: 7), (_) {
+        resetTasksIfNewWeek().ignore();
       });
     });
   }

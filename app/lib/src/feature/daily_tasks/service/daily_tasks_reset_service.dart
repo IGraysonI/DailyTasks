@@ -11,6 +11,16 @@ final class DailyTasksResetService {
   final DailyTasksDatasource _dailyTasksDatasource;
   Timer? _dailyResetTimer;
 
+  /// Handles the daily tasks reset service based on settings
+  Future<void> handleService({required bool shouldReset}) async {
+    if (shouldReset) {
+      await resetTasksIfNewDay();
+      startDailyResetTimer();
+    } else {
+      stopDailyResetTimer();
+    }
+  }
+
   /// Check if it's a new day and reset tasks if needed
   Future<void> resetTasksIfNewDay() async {
     final lastResetDateTimestamp = await _dailyTasksDatasource.getLastResetDate();
@@ -49,11 +59,11 @@ final class DailyTasksResetService {
     final initialDelay = tomorrow.difference(now);
 
     // First reset at the next midnight
-    _dailyResetTimer = Timer(initialDelay, () async {
-      await resetTasksIfNewDay();
+    _dailyResetTimer = Timer(initialDelay, () {
+      resetTasksIfNewDay().ignore();
       // Then reset every 24 hours
-      _dailyResetTimer = Timer.periodic(const Duration(hours: 24), (_) async {
-        await resetTasksIfNewDay();
+      _dailyResetTimer = Timer.periodic(const Duration(hours: 24), (_) {
+        resetTasksIfNewDay().ignore();
       });
     });
   }

@@ -39,8 +39,14 @@ final class ApplicationSettingsController extends StateController<ApplicationSet
           message: 'Fetching service statuses',
         ),
       );
-      _handleDailyTasksResetService(applicationSettings);
-      _handleWeeklyTasksResetService(applicationSettings);
+
+      await _dailyTasksResetService.handleService(
+        shouldReset: applicationSettings.resetDailyTasksOnNewDayStart ?? true,
+      );
+      await _weeklyTasksResetService.handleService(
+        shouldReset: applicationSettings.resetWeeklyTasksOnNewWeekStart ?? true,
+      );
+
       setState(
         ApplicationSettingsState.idle(
           applicationSettings: applicationSettings,
@@ -67,11 +73,12 @@ final class ApplicationSettingsController extends StateController<ApplicationSet
         ),
       );
 
-      // Handle daily tasks reset service
-      _handleDailyTasksResetService(applicationSettings);
-
-      // Handle weekly tasks reset service
-      _handleWeeklyTasksResetService(applicationSettings);
+      await _dailyTasksResetService.handleService(
+        shouldReset: applicationSettings.resetDailyTasksOnNewDayStart ?? true,
+      );
+      await _weeklyTasksResetService.handleService(
+        shouldReset: applicationSettings.resetWeeklyTasksOnNewWeekStart ?? true,
+      );
 
       await _applicationSettingsRepository.setApplicationSettings(applicationSettings);
       setState(
@@ -89,24 +96,4 @@ final class ApplicationSettingsController extends StateController<ApplicationSet
       ),
     ),
   );
-
-  /// Handles the daily tasks reset service based on settings
-  void _handleDailyTasksResetService(ApplicationSettings applicationSettings) {
-    final shouldResetDaily = applicationSettings.resetDailyTasksOnNewDayStart ?? true;
-    if (shouldResetDaily) {
-      _dailyTasksResetService.startDailyResetTimer();
-    } else {
-      _dailyTasksResetService.stopDailyResetTimer();
-    }
-  }
-
-  /// Handles the weekly tasks reset service based on settings
-  void _handleWeeklyTasksResetService(ApplicationSettings applicationSettings) {
-    final shouldResetWeekly = applicationSettings.resetWeeklyTasksOnNewWeekStart ?? true;
-    if (shouldResetWeekly) {
-      _weeklyTasksResetService.startWeeklyResetTimer();
-    } else {
-      _weeklyTasksResetService.stopWeeklyResetTimer();
-    }
-  }
 }

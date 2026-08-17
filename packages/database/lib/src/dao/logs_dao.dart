@@ -70,4 +70,16 @@ final class LogsDao extends BasicDao<Logs, Log, SqlDatabase> {
 
   /// Delete all logs from the database
   Future<void> deleteAllLogs() async => await delete(table).go();
+
+  /// Delete logs older than most recent log
+  Future<void> deleteOldLogs() async {
+    final mostRecentLog =
+        await (select(table)
+              ..orderBy([(tbl) => OrderingTerm(expression: tbl.id, mode: OrderingMode.desc)])
+              ..limit(1, offset: 1000))
+            .getSingleOrNull();
+    if (mostRecentLog != null) {
+      await (delete(table)..where((tbl) => tbl.timestamp.isSmallerOrEqualValue(mostRecentLog.timestamp))).go();
+    }
+  }
 }

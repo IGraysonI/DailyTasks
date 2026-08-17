@@ -85,20 +85,9 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
       // (dependencies.database = Config.inMemoryDatabase ? Database.memory() : Database.lazy()).refresh(),
       dependencies.database = SqlDatabase.defaults(),
   'Shrink database': (dependencies) async {
-    // TODO: Implement database shrinking
-    // await dependencies.database.customStatement('VACUUM;');
-    // await dependencies.database.transaction(() async {
-    //   final log =
-    //       await (dependencies.database.select<LogTbl, LogTblData>(dependencies.database.logTbl)
-    //             ..orderBy([(tbl) => OrderingTerm(expression: tbl.id, mode: OrderingMode.desc)])
-    //             ..limit(1, offset: 1000))
-    //           .getSingleOrNull();
-    //   if (log != null) {
-    //     await (dependencies.database.delete(
-    //       dependencies.database.logTbl,
-    //     )..where((tbl) => tbl.time.isSmallerOrEqualValue(log.time))).go();
-    //   }
-    // });
+    // await dependencies.database.customStatement('VACUUM;');\
+    await SqlDatabaseSource(dependencies.database).dao<LogsDao>().deleteOldLogs();
+    // TODO: Implement database shrinking in SqlDatabase core file
     // if (DateTime.now().second % 10 == 0) await dependencies.database.customStatement('VACUUM;');
   },
 

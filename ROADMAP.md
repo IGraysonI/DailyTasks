@@ -1,7 +1,5 @@
 # Roadmap
 
-* Add logging
-
 * Desktop
    * Running in the tray
 

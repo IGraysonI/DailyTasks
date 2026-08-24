@@ -1,10 +1,9 @@
-// ignore_for_file: experimental_member_use, library_private_types_in_public_api
+// ignore_for_file: experimental_member_use
 
 import 'package:daily_tasks/src/common/util/snackbar_utils.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/widget/daily_tasks_scope.dart';
 import 'package:database/database.dart';
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:octopus/octopus.dart';
 import 'package:ui/ui.dart';
 
@@ -30,8 +29,7 @@ class DailyTaskDialog extends StatefulWidget {
 
   /// The state from the closest instance of this class
   /// that encloses the given context, if any.
-  @internal
-  static _DailyTaskDialogState? maybeOf(BuildContext context) =>
+  static _DailyTaskDialogState? _maybeOf(BuildContext context) =>
       context.findAncestorStateOfType<_DailyTaskDialogState>();
 
   @override
@@ -110,11 +108,11 @@ class _DialogBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formKey = DailyTaskDialog.maybeOf(context)?.formKey;
-    final taskTitleController = DailyTaskDialog.maybeOf(context)?.taskTitleController;
-    final taskDescriptionController = DailyTaskDialog.maybeOf(context)?.taskDescriptionController;
-    final setTaskWeight = DailyTaskDialog.maybeOf(context)?.setTaskWeight;
-    var taskWeight = DailyTaskDialog.maybeOf(context)?.taskWeight;
+    final formKey = DailyTaskDialog._maybeOf(context)?.formKey;
+    final taskTitleController = DailyTaskDialog._maybeOf(context)?.taskTitleController;
+    final taskDescriptionController = DailyTaskDialog._maybeOf(context)?.taskDescriptionController;
+    final setTaskWeight = DailyTaskDialog._maybeOf(context)?.setTaskWeight;
+    var taskWeight = DailyTaskDialog._maybeOf(context)?.taskWeight;
     return Form(
       key: formKey,
       child: Column(

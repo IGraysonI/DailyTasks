@@ -2,6 +2,7 @@
 
 import 'package:daily_tasks/src/common/model/dependencies.dart';
 import 'package:daily_tasks/src/constants/pubspec.yaml.g.dart';
+import 'package:daily_tasks/src/feature/developer/widget/logs_dialog.dart';
 import 'package:database/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -279,10 +280,7 @@ class _ShowLogsScreenTile extends StatelessWidget {
       child: ListTile(
         title: const Text('Logs'),
         subtitle: const Text('Show logs.', maxLines: 1, overflow: TextOverflow.ellipsis),
-        // onTap: () => LogsDialog.show(context).ignore(),
-        onTap: () {
-          // TODO: Restore
-        },
+        onTap: () => LogsDialog.show(context).ignore(),
       ),
     ),
   );
@@ -447,26 +445,28 @@ class _ShowSharedPreferencesState extends State<_ShowSharedPreferences> {
               padding: const EdgeInsets.all(16),
               child: SizedBox(
                 width: 480,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    const Text(
-                      'Shared preferences',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                    Space.md(),
-                    ListView(
-                      shrinkWrap: true,
-                      children: [
-                        for (final key in _sharedPreferencesContent.keys)
-                          ListTile(
-                            title: Text(key),
-                            subtitle: Text(_sharedPreferencesContent[key].toString()),
-                          ),
-                      ],
-                    ),
-                    Space.md(),
-                  ],
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      const Text(
+                        'Shared preferences',
+                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      Space.md(),
+                      ListView(
+                        shrinkWrap: true,
+                        children: [
+                          for (final key in _sharedPreferencesContent.keys)
+                            ListTile(
+                              title: Text(key),
+                              subtitle: Text(_sharedPreferencesContent[key].toString()),
+                            ),
+                        ],
+                      ),
+                      Space.md(),
+                    ],
+                  ),
                 ),
               ),
             ),

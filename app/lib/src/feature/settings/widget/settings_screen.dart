@@ -1,7 +1,6 @@
 import 'package:daily_tasks/src/feature/settings/widget/application_settings_scope.dart';
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
-import 'package:octopus/octopus.dart';
+import 'package:localization/localization.dart';
 import 'package:ui/ui.dart';
 
 /// {@template settings_screen}
@@ -12,12 +11,6 @@ class SettingsScreen extends StatefulWidget {
   const SettingsScreen({
     super.key, // ignore: unused_element
   });
-
-  /// The state from the closest instance of this class
-  /// that encloses the given context, if any.
-  @internal
-  // ignore: library_private_types_in_public_api
-  static _SettingsScreenState? maybeOf(BuildContext context) => context.findAncestorStateOfType<_SettingsScreenState>();
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -53,11 +46,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   /* #endregion */
 
   @override
-  Widget build(BuildContext context) => const Scaffold(
+  Widget build(BuildContext context) => Scaffold(
     body: CustomScrollView(
       slivers: [
         // --- App bar --- //
-        SliverAppBar(
+        const SliverAppBar(
           // TODO: Add localization
           // title: Text(Localization.of(context).settings),
           title: Text('Settings'),
@@ -67,8 +60,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
 
         // --- Theme --- //
-        GroupSeparator(title: 'Theme'),
-        _ThemeModeSelector(),
+        const GroupSeparator(title: 'Theme'),
+        const _ThemeModeSelector(),
+
+        // --- Locale --- //
+        const GroupSeparator(title: 'Locale'),
+        const _LocaleSelector(),
+        SliverPadding(
+          padding: ScaffoldPadding.of(context),
+          sliver: SliverToBoxAdapter(
+            child: ListTile(
+              title: Text('Locale test: ${Sheet1Localization.of(context).yes}'),
+            ),
+          ),
+        ),
+
+        // --- Notifications --- //
+        const GroupSeparator(title: 'Notifications'),
+        const _NotificationSettings(),
+
+        // --- Tasks reset --- //
+        const GroupSeparator(title: 'Tasks reset'),
+        const _DailyTasksResetToggle(),
+        const _WeeklyTasksResetToggle(),
       ],
     ),
   );
@@ -78,62 +92,171 @@ class _ThemeModeSelector extends StatelessWidget {
   const _ThemeModeSelector();
 
   @override
-  Widget build(BuildContext context) => SliverPadding(
-    padding: ScaffoldPadding.of(context),
-    sliver: SliverToBoxAdapter(
-      child: ListTile(
-        title: const Text('Theme mode'),
-        subtitle: Text(
-          // MaterialLocalizations.of(context).licensesPageTitle,
-          'Selected theme mode: ${Theme.of(context).brightness.name}',
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        onTap: () => Octopus.of(context).showDialog<void>(
-          (context) => Dialog(
-            insetPadding: const EdgeInsets.all(64),
-            alignment: Alignment.center,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: SizedBox(
-                width: 480,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    const Text(
-                      'Theme mode',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+  Widget build(BuildContext context) {
+    final applicationSettings = ApplicationSettingsScope.settingsOf(context);
+    final applicationSettingsController = ApplicationSettingsScope.controllerOf(context);
+    return SliverPadding(
+      padding: ScaffoldPadding.of(context),
+      sliver: SliverToBoxAdapter(
+        child: ListTile(
+          title: const Text('Theme mode'),
+          subtitle: Text(
+            // MaterialLocalizations.of(context).licensesPageTitle,
+            'Selected theme mode: ${Theme.of(context).brightness.name}',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          trailing: DropdownButtonHideUnderline(
+            child: DropdownButton<ThemeMode>(
+              value: ApplicationSettingsScope.settingsOf(context).applicationTheme!.themeMode,
+              focusColor: Theme.of(context).colorScheme.surface,
+              items: ThemeMode.values
+                  .map(
+                    (value) => DropdownMenuItem<ThemeMode>(
+                      value: value,
+                      child: Text(value.name),
                     ),
-                    Space.md(),
-                    DropdownButtonFormField<ThemeMode>(
-                      initialValue: ApplicationSettingsScope.settingsOf(context).applicationTheme!.themeMode,
-                      items: ThemeMode.values
-                          .map(
-                            (value) => DropdownMenuItem<ThemeMode>(
-                              value: value,
-                              child: Text(value.name),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (value) {
-                        final applicationSettingsController = ApplicationSettingsScope.controllerOf(context);
-                        final applicationSettings = ApplicationSettingsScope.settingsOf(context);
-                        applicationSettingsController.updateApplicationSettings(
-                          applicationSettings.copyWith(
-                            applicationTheme: applicationSettings.applicationTheme!.copyWith(themeMode: value),
-                          ),
-                        );
-                      },
-                      decoration: const InputDecoration(labelText: 'Select theme mode'),
-                    ),
-                    const SizedBox(height: 16),
-                  ],
+                  )
+                  .toList(),
+              onChanged: (value) => applicationSettingsController.updateApplicationSettings(
+                applicationSettings.copyWith(
+                  applicationTheme: applicationSettings.applicationTheme!.copyWith(themeMode: value),
                 ),
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _LocaleSelector extends StatefulWidget {
+  const _LocaleSelector();
+
+  @override
+  State<_LocaleSelector> createState() => _LocaleSelectorState();
+}
+
+class _LocaleSelectorState extends State<_LocaleSelector> {
+  @override
+  Widget build(BuildContext context) {
+    final applicationSettings = ApplicationSettingsScope.settingsOf(context);
+    final applicationSettingsController = ApplicationSettingsScope.controllerOf(context);
+    return SliverPadding(
+      padding: ScaffoldPadding.of(context),
+      sliver: SliverToBoxAdapter(
+        child: ListTile(
+          title: const Text('Language'),
+          subtitle: const Text(
+            'Choose your preferred language for the application.',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          trailing: DropdownButtonHideUnderline(
+            child: DropdownButton(
+              value: Sheet1Localization.of(context).localeName,
+              focusColor: Theme.of(context).colorScheme.surface,
+              items: Sheet1Localization.supportedLocales
+                  .map(
+                    (locale) => DropdownMenuItem(
+                      value: locale.languageCode,
+                      onTap: () => applicationSettingsController.updateApplicationSettings(
+                        applicationSettings.copyWith(locale: locale),
+                      ),
+                      child: Text(locale.toLanguageTag()),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) => setState(() {}),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _NotificationSettings extends StatelessWidget {
+  const _NotificationSettings();
+
+  @override
+  Widget build(BuildContext context) => SliverPadding(
+    padding: ScaffoldPadding.of(context),
+    sliver: SliverToBoxAdapter(
+      child: ListTile(
+        title: const Text('Notifications'),
+        subtitle: const Text(
+          'TODO: Add notification settings.',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        onTap: () {
+          // Handle notification settings tap
+        },
+      ),
     ),
   );
+}
+
+class _DailyTasksResetToggle extends StatelessWidget {
+  const _DailyTasksResetToggle();
+
+  @override
+  Widget build(BuildContext context) {
+    final applicationSettings = ApplicationSettingsScope.settingsOf(context);
+    final applicationSettingsController = ApplicationSettingsScope.controllerOf(context);
+    return SliverPadding(
+      padding: ScaffoldPadding.of(context),
+      sliver: SliverToBoxAdapter(
+        child: ListTile(
+          title: const Text('Reset Daily Tasks'),
+          subtitle: const Text(
+            'Reset daily tasks when a new day starts.',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          trailing: Switch(
+            value: applicationSettings.resetDailyTasksOnNewDayStart ?? true,
+            onChanged: (value) {
+              applicationSettingsController.updateApplicationSettings(
+                applicationSettings.copyWith(resetDailyTasksOnNewDayStart: value),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _WeeklyTasksResetToggle extends StatelessWidget {
+  const _WeeklyTasksResetToggle();
+
+  @override
+  Widget build(BuildContext context) {
+    final applicationSettings = ApplicationSettingsScope.settingsOf(context);
+    final applicationSettingsController = ApplicationSettingsScope.controllerOf(context);
+    return SliverPadding(
+      padding: ScaffoldPadding.of(context),
+      sliver: SliverToBoxAdapter(
+        child: ListTile(
+          title: const Text('Reset Weekly Tasks'),
+          subtitle: const Text(
+            'Reset weekly tasks when a new week starts.',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          trailing: Switch(
+            value: applicationSettings.resetWeeklyTasksOnNewWeekStart ?? true,
+            onChanged: (value) {
+              applicationSettingsController.updateApplicationSettings(
+                applicationSettings.copyWith(resetWeeklyTasksOnNewWeekStart: value),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
 }

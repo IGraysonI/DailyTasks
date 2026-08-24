@@ -1,10 +1,9 @@
-// ignore_for_file: experimental_member_use, library_private_types_in_public_api
+// ignore_for_file: experimental_member_use
 
 import 'package:daily_tasks/src/common/util/snackbar_utils.dart';
 import 'package:daily_tasks/src/feature/weekly_task_rewards/widget/weekly_task_rewards_scope.dart';
 import 'package:database/database.dart';
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:octopus/octopus.dart';
 import 'package:ui/ui.dart';
 
@@ -30,8 +29,7 @@ class WeeklyTaskRewardDialog extends StatefulWidget {
 
   /// The state from the closest instance of this class
   /// that encloses the given context, if any.
-  @internal
-  static _WeeklyTaskRewardDialogState? maybeOf(BuildContext context) =>
+  static _WeeklyTaskRewardDialogState? _maybeOf(BuildContext context) =>
       context.findAncestorStateOfType<_WeeklyTaskRewardDialogState>();
 
   @override
@@ -110,11 +108,11 @@ class _DialogBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formKey = WeeklyTaskRewardDialog.maybeOf(context)?.formKey;
-    final rewardTitleController = WeeklyTaskRewardDialog.maybeOf(context)?.rewardTitleController;
-    final rewardDescriptionController = WeeklyTaskRewardDialog.maybeOf(context)?.rewardDescriptionController;
-    final setTaskRewardWeight = WeeklyTaskRewardDialog.maybeOf(context)?.setTaskRewardWeight;
-    var rewardGoalWeight = WeeklyTaskRewardDialog.maybeOf(context)?.rewardGoalWeight;
+    final formKey = WeeklyTaskRewardDialog._maybeOf(context)?.formKey;
+    final rewardTitleController = WeeklyTaskRewardDialog._maybeOf(context)?.rewardTitleController;
+    final rewardDescriptionController = WeeklyTaskRewardDialog._maybeOf(context)?.rewardDescriptionController;
+    final setTaskRewardWeight = WeeklyTaskRewardDialog._maybeOf(context)?.setTaskRewardWeight;
+    var rewardGoalWeight = WeeklyTaskRewardDialog._maybeOf(context)?.rewardGoalWeight;
     return Form(
       key: formKey,
       child: Column(

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:daily_tasks/src/feature/daily_tasks/data/daily_tasks_datasource.dart';
 
 /// Service responsible for resetting daily tasks on new day
@@ -7,6 +9,17 @@ final class DailyTasksResetService {
   }) : _dailyTasksDatasource = dailyTasksDatasource;
 
   final DailyTasksDatasource _dailyTasksDatasource;
+  Timer? _dailyResetTimer;
+
+  /// Handles the daily tasks reset service based on settings
+  Future<void> handleService({required bool shouldReset}) async {
+    if (shouldReset) {
+      await resetTasksIfNewDay();
+      startDailyResetTimer();
+    } else {
+      stopDailyResetTimer();
+    }
+  }
 
   /// Check if it's a new day and reset tasks if needed
   Future<void> resetTasksIfNewDay() async {
@@ -34,4 +47,33 @@ final class DailyTasksResetService {
     await _dailyTasksDatasource.resetDailyTasks();
     await _dailyTasksDatasource.setLastResetDate(DateTime.now().millisecondsSinceEpoch);
   }
+
+  /// Start a periodic timer that resets tasks at exactly 00:00 every day
+  void startDailyResetTimer() {
+    // Cancel any existing timer
+    _dailyResetTimer?.cancel();
+
+    // Calculate initial delay until next midnight
+    final now = DateTime.now();
+    final tomorrow = DateTime(now.year, now.month, now.day + 1);
+    final initialDelay = tomorrow.difference(now);
+
+    // First reset at the next midnight
+    _dailyResetTimer = Timer(initialDelay, () {
+      resetTasksIfNewDay().ignore();
+      // Then reset every 24 hours
+      _dailyResetTimer = Timer.periodic(const Duration(hours: 24), (_) {
+        resetTasksIfNewDay().ignore();
+      });
+    });
+  }
+
+  /// Stop the daily reset timer
+  void stopDailyResetTimer() {
+    _dailyResetTimer?.cancel();
+    _dailyResetTimer = null;
+  }
+
+  /// Dispose of resources
+  void dispose() => stopDailyResetTimer();
 }

@@ -2,6 +2,7 @@ import 'package:daily_tasks/src/common/util/persisted_entry.dart';
 import 'package:database/database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// TODO(?): Remove datasources and use repositories to access data
 /// {@template daily_tasks_datasource}
 /// [DailyTasksDatasource] is responsible for managing daily tasks data.
 /// {@endtemplate}

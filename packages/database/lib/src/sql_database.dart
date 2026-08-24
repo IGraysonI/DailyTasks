@@ -17,6 +17,7 @@ const List<Type> _driftTables = <Type>[
   DailyTasks,
   WeeklyTaskRewards,
   WeeklyTasks,
+  Logs,
 ];
 
 @DriftDatabase(tables: _driftTables)
@@ -33,7 +34,7 @@ class SqlDatabase extends _$SqlDatabase {
 
   /// Version of the database schema
   @override
-  int get schemaVersion => 13;
+  int get schemaVersion => 14;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(

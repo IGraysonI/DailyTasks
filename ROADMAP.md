@@ -15,6 +15,9 @@
    * Customizable themes and layouts
    * Responsive design for mobile and desktop
 
+* Logic
+   * Allow more than 3 weights for tasks
+
 * Testing
    * Unit tests for all features
    * Integration tests for critical user flows

@@ -77,7 +77,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
         // --- Notifications --- //
         const GroupSeparator(title: 'Notifications'),
-        const _NotificationSettings(),
+        const _DailyNotificationSettings(),
+        const _WeeklyNotificationSettings(),
 
         // --- Tasks reset --- //
         const GroupSeparator(title: 'Tasks reset'),
@@ -177,23 +178,51 @@ class _LocaleSelectorState extends State<_LocaleSelector> {
   }
 }
 
-class _NotificationSettings extends StatelessWidget {
-  const _NotificationSettings();
+class _DailyNotificationSettings extends StatelessWidget {
+  const _DailyNotificationSettings();
 
   @override
   Widget build(BuildContext context) => SliverPadding(
     padding: ScaffoldPadding.of(context),
     sliver: SliverToBoxAdapter(
       child: ListTile(
-        title: const Text('Notifications'),
+        title: const Text('Daily Notifications'),
         subtitle: const Text(
-          'TODO: Add notification settings.',
+          'Receive notifications for daily tasks (e.g., reminders, tasks reset).',
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        onTap: () {
-          // Handle notification settings tap
-        },
+        trailing: Switch(
+          value: true,
+          onChanged: (value) {
+            // Handle daily notifications toggle
+          },
+        ),
+      ),
+    ),
+  );
+}
+
+class _WeeklyNotificationSettings extends StatelessWidget {
+  const _WeeklyNotificationSettings();
+
+  @override
+  Widget build(BuildContext context) => SliverPadding(
+    padding: ScaffoldPadding.of(context),
+    sliver: SliverToBoxAdapter(
+      child: ListTile(
+        title: const Text('Weekly Notifications'),
+        subtitle: const Text(
+          'Receive notifications for weekly tasks (e.g., reminders, tasks reset).',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        trailing: Switch(
+          value: true,
+          onChanged: (value) {
+            // Handle daily notifications toggle
+          },
+        ),
       ),
     ),
   );

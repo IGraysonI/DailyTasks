@@ -16,6 +16,8 @@ class ApplicationSettings with Diagnosticable {
     this.textScale,
     this.resetDailyTasksOnNewDayStart,
     this.resetWeeklyTasksOnNewWeekStart,
+    this.enableDailyTasksNotifications,
+    this.enableWeeklyTasksNotifications,
   });
 
   /// The default application settings.
@@ -25,6 +27,8 @@ class ApplicationSettings with Diagnosticable {
     textScale: 1,
     resetDailyTasksOnNewDayStart: true,
     resetWeeklyTasksOnNewWeekStart: true,
+    enableDailyTasksNotifications: true,
+    enableWeeklyTasksNotifications: true,
   );
 
   /// The theme of the app,
@@ -42,6 +46,12 @@ class ApplicationSettings with Diagnosticable {
   /// Reset weekly tasks on new day start.
   final bool? resetWeeklyTasksOnNewWeekStart;
 
+  /// Enable daily tasks notifications.
+  final bool? enableDailyTasksNotifications;
+
+  /// Enable weekly tasks notifications.
+  final bool? enableWeeklyTasksNotifications;
+
   /// Copy the [ApplicationSettings] with new values.
   ApplicationSettings copyWith({
     ApplicationTheme? applicationTheme,
@@ -49,12 +59,16 @@ class ApplicationSettings with Diagnosticable {
     double? textScale,
     bool? resetDailyTasksOnNewDayStart,
     bool? resetWeeklyTasksOnNewWeekStart,
+    bool? enableDailyTasksNotifications,
+    bool? enableWeeklyTasksNotifications,
   }) => ApplicationSettings(
     applicationTheme: applicationTheme ?? this.applicationTheme,
     locale: locale ?? this.locale,
     textScale: textScale ?? this.textScale,
     resetDailyTasksOnNewDayStart: resetDailyTasksOnNewDayStart ?? this.resetDailyTasksOnNewDayStart,
     resetWeeklyTasksOnNewWeekStart: resetWeeklyTasksOnNewWeekStart ?? this.resetWeeklyTasksOnNewWeekStart,
+    enableDailyTasksNotifications: enableDailyTasksNotifications ?? this.enableDailyTasksNotifications,
+    enableWeeklyTasksNotifications: enableWeeklyTasksNotifications ?? this.enableWeeklyTasksNotifications,
   );
 
   @override
@@ -63,18 +77,34 @@ class ApplicationSettings with Diagnosticable {
     return other is ApplicationSettings &&
         other.applicationTheme == applicationTheme &&
         other.locale == locale &&
-        other.textScale == textScale;
+        other.textScale == textScale &&
+        other.resetDailyTasksOnNewDayStart == resetDailyTasksOnNewDayStart &&
+        other.resetWeeklyTasksOnNewWeekStart == resetWeeklyTasksOnNewWeekStart &&
+        other.enableDailyTasksNotifications == enableDailyTasksNotifications &&
+        other.enableWeeklyTasksNotifications == enableWeeklyTasksNotifications;
   }
 
   @override
-  int get hashCode => Object.hash(applicationTheme, locale, textScale);
+  int get hashCode => Object.hash(
+    applicationTheme,
+    locale,
+    textScale,
+    resetDailyTasksOnNewDayStart,
+    resetWeeklyTasksOnNewWeekStart,
+    enableDailyTasksNotifications,
+    enableWeeklyTasksNotifications,
+  );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties
       ..add(DiagnosticsProperty<ApplicationTheme>('appTheme', applicationTheme))
       ..add(DiagnosticsProperty<Locale>('locale', locale))
-      ..add(DoubleProperty('textScale', textScale));
+      ..add(DoubleProperty('textScale', textScale))
+      ..add(FlagProperty('resetDailyTasksOnNewDayStart', value: resetDailyTasksOnNewDayStart))
+      ..add(FlagProperty('resetWeeklyTasksOnNewWeekStart', value: resetWeeklyTasksOnNewWeekStart))
+      ..add(FlagProperty('enableDailyTasksNotifications', value: enableDailyTasksNotifications))
+      ..add(FlagProperty('enableWeeklyTasksNotifications', value: enableWeeklyTasksNotifications));
     super.debugFillProperties(properties);
   }
 }

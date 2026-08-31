@@ -182,50 +182,58 @@ class _DailyNotificationSettings extends StatelessWidget {
   const _DailyNotificationSettings();
 
   @override
-  Widget build(BuildContext context) => SliverPadding(
-    padding: ScaffoldPadding.of(context),
-    sliver: SliverToBoxAdapter(
-      child: ListTile(
-        title: const Text('Daily Notifications'),
-        subtitle: const Text(
-          'Receive notifications for daily tasks (e.g., reminders, tasks reset).',
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        trailing: Switch(
-          value: true,
-          onChanged: (value) {
-            // Handle daily notifications toggle
-          },
+  Widget build(BuildContext context) {
+    final applicationSettings = ApplicationSettingsScope.settingsOf(context);
+    final applicationSettingsController = ApplicationSettingsScope.controllerOf(context);
+    return SliverPadding(
+      padding: ScaffoldPadding.of(context),
+      sliver: SliverToBoxAdapter(
+        child: ListTile(
+          title: const Text('Daily Notifications'),
+          subtitle: const Text(
+            'Receive notifications for daily tasks (e.g., reminders, tasks reset).',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          trailing: Switch(
+            value: applicationSettings.enableDailyTasksNotifications ?? true,
+            onChanged: (value) => applicationSettingsController.updateApplicationSettings(
+              applicationSettings.copyWith(enableDailyTasksNotifications: value),
+            ),
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 class _WeeklyNotificationSettings extends StatelessWidget {
   const _WeeklyNotificationSettings();
 
   @override
-  Widget build(BuildContext context) => SliverPadding(
-    padding: ScaffoldPadding.of(context),
-    sliver: SliverToBoxAdapter(
-      child: ListTile(
-        title: const Text('Weekly Notifications'),
-        subtitle: const Text(
-          'Receive notifications for weekly tasks (e.g., reminders, tasks reset).',
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        trailing: Switch(
-          value: true,
-          onChanged: (value) {
-            // Handle daily notifications toggle
-          },
+  Widget build(BuildContext context) {
+    final applicationSettings = ApplicationSettingsScope.settingsOf(context);
+    final applicationSettingsController = ApplicationSettingsScope.controllerOf(context);
+    return SliverPadding(
+      padding: ScaffoldPadding.of(context),
+      sliver: SliverToBoxAdapter(
+        child: ListTile(
+          title: const Text('Weekly Notifications'),
+          subtitle: const Text(
+            'Receive notifications for weekly tasks (e.g., reminders, tasks reset).',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          trailing: Switch(
+            value: applicationSettings.enableWeeklyTasksNotifications ?? true,
+            onChanged: (value) => applicationSettingsController.updateApplicationSettings(
+              applicationSettings.copyWith(enableWeeklyTasksNotifications: value),
+            ),
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 class _DailyTasksResetToggle extends StatelessWidget {

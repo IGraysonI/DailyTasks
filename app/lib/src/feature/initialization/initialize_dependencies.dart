@@ -27,10 +27,12 @@ import 'package:daily_tasks/src/feature/weekly_tasks/data/weekly_tasks_datasourc
 import 'package:daily_tasks/src/feature/weekly_tasks/data/weekly_tasks_repository.dart';
 import 'package:daily_tasks/src/feature/weekly_tasks/service/weekly_tasks_reset_service.dart';
 import 'package:database/database.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:l/l.dart';
 import 'package:platform_info/platform_info.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ui/ui.dart';
 
 typedef _InitializationStep = FutureOr<void> Function(Dependencies dependencies);
 
@@ -155,6 +157,25 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
       weeklyTaskRewardsRepository: WeeklyTaskRewardsRepositoryImpl(
         WeeklyTaskRewardsDatasourceImpl(SqlDatabaseSource(dependencies.database)),
       ),
+    );
+  },
+  'Prepare local notifications service': (dependencies) async {
+    dependencies.flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    const initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
+    const initializationSettingsWindows = WindowsInitializationSettings(
+      appName: 'Daily Tasks',
+      appUserModelId: 'Com.DailyTasks.App',
+      guid: Config.windowsGuid,
+    );
+    const initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      windows: initializationSettingsWindows,
+    );
+    await dependencies.flutterLocalNotificationsPlugin.initialize(
+      settings: initializationSettings,
+      // TODO: Add notification tap handling
+      // onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
+      // onDidReceiveBackgroundNotificationResponse: onDidReceiveBackgroundNotificationResponse,
     );
   },
   'Collect logs': (dependencies) async {

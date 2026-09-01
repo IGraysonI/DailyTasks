@@ -57,5 +57,9 @@ node_modules/
 packages/localization/credentials.json
 pubspec.lock
 
+# Config files
+packages/ui/lib/src/constant/config.dart
+
 # GitHub
 .github
+

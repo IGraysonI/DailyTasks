@@ -77,6 +77,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
         // --- Notifications --- //
         const GroupSeparator(title: 'Notifications'),
+        const _NotificationTest(),
         const _DailyNotificationSettings(),
         const _WeeklyNotificationSettings(),
 
@@ -234,6 +235,13 @@ class _WeeklyNotificationSettings extends StatelessWidget {
       ),
     );
   }
+}
+
+class _NotificationTest extends StatelessWidget {
+  const _NotificationTest();
+
+  @override
+  Widget build(BuildContext context) => const Placeholder();
 }
 
 class _DailyTasksResetToggle extends StatelessWidget {

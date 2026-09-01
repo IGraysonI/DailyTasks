@@ -255,13 +255,11 @@ class _NotificationTest extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           trailing: ElevatedButton(
-            onPressed: () async {
-              await notificationService.show(
-                id: 1,
-                title: 'Test Notification',
-                body: 'This is a test notification from the Daily Tasks app.',
-              );
-            },
+            onPressed: () async => await notificationService.show(
+              id: 1,
+              title: 'Test Notification',
+              body: 'This is a test notification from the Daily Tasks app.',
+            ),
             child: const Text('Send Test'),
           ),
         ),

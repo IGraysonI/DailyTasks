@@ -1,3 +1,4 @@
+import 'package:daily_tasks/src/common/model/dependencies.dart';
 import 'package:daily_tasks/src/feature/settings/widget/application_settings_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
@@ -241,7 +242,32 @@ class _NotificationTest extends StatelessWidget {
   const _NotificationTest();
 
   @override
-  Widget build(BuildContext context) => const Placeholder();
+  Widget build(BuildContext context) {
+    final notificationService = Dependencies.of(context).flutterLocalNotificationsPlugin;
+    return SliverPadding(
+      padding: ScaffoldPadding.of(context),
+      sliver: SliverToBoxAdapter(
+        child: ListTile(
+          title: const Text('Test Notification'),
+          subtitle: const Text(
+            'Send a test notification to verify the notification system is working correctly.',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          trailing: ElevatedButton(
+            onPressed: () async {
+              await notificationService.show(
+                id: 1,
+                title: 'Test Notification',
+                body: 'This is a test notification from the Daily Tasks app.',
+              );
+            },
+            child: const Text('Send Test'),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _DailyTasksResetToggle extends StatelessWidget {

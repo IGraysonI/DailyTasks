@@ -18,3 +18,8 @@
 * Testing
    * Unit tests for all features
    * Integration tests for critical user flows
+
+* Publishing
+   * Change applicationId in build.gradle.kts
+   * Support for publishing to app stores (e.g., Google Play, Microsoft Store)
+   * Generate release notes automatically

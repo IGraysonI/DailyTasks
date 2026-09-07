@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:daily_tasks/src/common/model/dependencies.dart';
 import 'package:daily_tasks/src/feature/settings/widget/application_settings_scope.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:localization/localization.dart';
 import 'package:ui/ui.dart';
 
@@ -79,6 +82,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         // --- Notifications --- //
         const GroupSeparator(title: 'Notifications'),
         const _NotificationTest(),
+        if (Platform.isAndroid) const _AndroidNotificationStatusAndPermissions(),
         const _DailyNotificationSettings(),
         const _WeeklyNotificationSettings(),
 
@@ -266,6 +270,81 @@ class _NotificationTest extends StatelessWidget {
       ),
     );
   }
+}
+
+// TODO: Test implementation of the status and permissions. Implement the actual logic.
+class _AndroidNotificationStatusAndPermissions extends StatefulWidget {
+  const _AndroidNotificationStatusAndPermissions();
+
+  @override
+  State<_AndroidNotificationStatusAndPermissions> createState() => _AndroidNotificationStatusAndPermissionsState();
+}
+
+class _AndroidNotificationStatusAndPermissionsState extends State<_AndroidNotificationStatusAndPermissions> {
+  @override
+  Widget build(BuildContext context) => SliverPadding(
+    padding: ScaffoldPadding.of(context),
+    sliver: SliverList(
+      delegate: SliverChildListDelegate(
+        [
+          FutureBuilder(
+            future: Dependencies.of(context).flutterLocalNotificationsPlugin
+                .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+                ?.areNotificationsEnabled(),
+            builder: (context, snapshot) {
+              final isPermissionGranted = snapshot.data ?? false;
+              return ListTile(
+                title: const Text('Android Notification Current Status'),
+                subtitle: Text(
+                  'Current Status: ${isPermissionGranted ? "Granted" : "Denied"}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('Request Notification Permission'),
+            subtitle: const Text(
+              'Request permission to send notifications on Android devices.',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            trailing: ElevatedButton(
+              onPressed: () async {
+                if (!context.mounted) return;
+                final androidImplementation = Dependencies.of(context).flutterLocalNotificationsPlugin
+                    .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+
+                final grantedNotificationPermission = await androidImplementation?.requestNotificationsPermission();
+                if (grantedNotificationPermission == null) {
+                  ScaffoldMessenger.of(context)
+                    ..removeCurrentSnackBar()
+                    ..showSnackBar(
+                      const SnackBar(content: Text('Failed to request notification permission.')),
+                    );
+                } else if (!grantedNotificationPermission) {
+                  ScaffoldMessenger.of(context)
+                    ..removeCurrentSnackBar()
+                    ..showSnackBar(
+                      const SnackBar(content: Text('Notification permission denied.')),
+                    );
+                } else {
+                  ScaffoldMessenger.of(context)
+                    ..removeCurrentSnackBar()
+                    ..showSnackBar(
+                      const SnackBar(content: Text('Notification permission granted.')),
+                    );
+                }
+                setState(() {});
+              },
+              child: const Text('Request'),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }
 
 class _DailyTasksResetToggle extends StatelessWidget {

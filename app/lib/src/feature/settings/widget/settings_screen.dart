@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:localization/localization.dart';
 import 'package:ui/ui.dart';
+import 'package:uuid/uuid.dart';
 
 /// {@template settings_screen}
 /// SettingsScreen widget.
@@ -259,11 +260,25 @@ class _NotificationTest extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           trailing: ElevatedButton(
-            onPressed: () async => await notificationService.show(
-              id: 1,
-              title: 'Test Notification',
-              body: 'This is a test notification from the Daily Tasks app.',
-            ),
+            onPressed: () async {
+              // TODO: Implement test notification logic
+              const androidNotificationDetails = AndroidNotificationDetails(
+                'your channel id',
+                'your channel name',
+                channelDescription: 'your channel description',
+                importance: Importance.max,
+                priority: Priority.high,
+                ticker: 'ticker',
+              );
+              const notificationDetails = NotificationDetails(android: androidNotificationDetails);
+              await notificationService.show(
+                id: const Uuid().v4().hashCode,
+                title: 'Test Notification',
+                body: 'This is a test notification from the Daily Tasks app.',
+                notificationDetails: notificationDetails,
+                payload: 'item x',
+              );
+            },
             child: const Text('Send Test'),
           ),
         ),

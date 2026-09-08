@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:control/control.dart';
 import 'package:daily_tasks/src/common/model/dependencies.dart';
+import 'package:daily_tasks/src/feature/notification/controller/notification_permissions_controller.dart';
 import 'package:daily_tasks/src/feature/notification/widget/notifications_scope.dart';
 import 'package:daily_tasks/src/feature/settings/widget/application_settings_scope.dart';
 import 'package:flutter/material.dart';
@@ -285,12 +287,9 @@ class _AndroidNotificationStatusAndPermissionsState extends State<_AndroidNotifi
     sliver: SliverList(
       delegate: SliverChildListDelegate(
         [
-          FutureBuilder(
-            future: Dependencies.of(context).flutterLocalNotificationsPlugin
-                .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-                ?.areNotificationsEnabled(),
-            builder: (context, snapshot) {
-              final isPermissionGranted = snapshot.data ?? false;
+          StateConsumer<NotificationPermissionsController, NotificationPermissionsState>(
+            builder: (context, state, child) {
+              final isPermissionGranted = state.isAndroidPermissionGranted;
               return ListTile(
                 title: const Text('Android Notification Current Status'),
                 subtitle: Text(

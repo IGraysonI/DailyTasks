@@ -1,6 +1,7 @@
 import 'package:control/control.dart';
 import 'package:daily_tasks/src/common/controller/state_base.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 part 'notification_permissions_state.dart';
 
@@ -11,15 +12,17 @@ final class NotificationPermissionsController extends StateController<Notificati
     with DroppableControllerHandler {
   /// {@macro notification_permissions_controller}
   NotificationPermissionsController({
+    required FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
     // required DailyTasksRepository dailyTasksRepository,
     super.initialState = const NotificationPermissionsState.idle(
       isAndroidPermissionGranted: false,
       message: 'Initializing notification permissions',
     ),
-  });
+  }) : _flutterLocalNotificationsPlugin = flutterLocalNotificationsPlugin;
   //  : _dailyTasksRepository = dailyTasksRepository;
 
   // final DailyTasksRepository _dailyTasksRepository;
+  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
 
   /// Check the notification permission statuses
   void checkNotificationPermissions() => handle(
@@ -30,11 +33,14 @@ final class NotificationPermissionsController extends StateController<Notificati
           message: 'Checking notification permissions',
         ),
       );
-      // Simulate checking notification permissions
-      await Future.delayed(const Duration(seconds: 1));
+      final androidPermissionGranted =
+          await _flutterLocalNotificationsPlugin
+              .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+              ?.areNotificationsEnabled() ??
+          false;
       setState(
         NotificationPermissionsState.idle(
-          isAndroidPermissionGranted: state.isAndroidPermissionGranted,
+          isAndroidPermissionGranted: androidPermissionGranted,
           message: 'Notification permissions checked',
         ),
       );

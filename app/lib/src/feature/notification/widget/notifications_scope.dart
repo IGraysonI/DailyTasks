@@ -1,4 +1,6 @@
+import 'package:control/control.dart';
 import 'package:daily_tasks/src/common/model/dependencies.dart';
+import 'package:daily_tasks/src/feature/notification/controller/notification_permissions_controller.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:uuid/uuid.dart';
@@ -35,14 +37,17 @@ class NotificationsScope extends StatefulWidget {
 class _NotificationsScopeState extends State<NotificationsScope> {
   late final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
   late final NotificationDetails _notificationDetails;
+  late final NotificationPermissionsController _notificationPermissionsController;
 
   /* #region Lifecycle */
   @override
   void initState() {
     super.initState();
     _flutterLocalNotificationsPlugin = Dependencies.of(context).flutterLocalNotificationsPlugin;
-    final androidNotificationDetails = _setUpAndroidNotificationDetails();
-    _notificationDetails = NotificationDetails(android: androidNotificationDetails);
+
+    _setUpNotificationDetails();
+
+    _notificationPermissionsController = Dependencies.of(context).notificationPermissionsController;
   }
 
   @override
@@ -60,10 +65,15 @@ class _NotificationsScopeState extends State<NotificationsScope> {
 
   @override
   void dispose() {
-    // Permanent removal of a tree structure
+    _notificationPermissionsController.dispose();
     super.dispose();
   }
   /* #endregion */
+
+  void _setUpNotificationDetails() {
+    final androidNotificationDetails = _setUpAndroidNotificationDetails();
+    _notificationDetails = NotificationDetails(android: androidNotificationDetails);
+  }
 
   AndroidNotificationDetails _setUpAndroidNotificationDetails() => const AndroidNotificationDetails(
     'your channel id',
@@ -75,10 +85,13 @@ class _NotificationsScopeState extends State<NotificationsScope> {
   );
 
   @override
-  Widget build(BuildContext context) => _InheritedNotifications(
-    flutterLocalNotificationsPlugin: _flutterLocalNotificationsPlugin,
-    notificationDetails: _notificationDetails,
-    child: widget.child,
+  Widget build(BuildContext context) => StateConsumer<NotificationPermissionsController, NotificationPermissionsState>(
+    controller: _notificationPermissionsController,
+    builder: (context, state, child) => _InheritedNotifications(
+      flutterLocalNotificationsPlugin: _flutterLocalNotificationsPlugin,
+      notificationDetails: _notificationDetails,
+      child: widget.child,
+    ),
   );
 }
 

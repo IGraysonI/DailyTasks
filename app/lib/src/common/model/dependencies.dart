@@ -2,6 +2,7 @@ import 'package:daily_tasks/src/common/model/app_metadata.dart';
 import 'package:daily_tasks/src/feature/daily_task_rewards/controller/daily_task_rewards_controller.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/controller/daily_tasks_controller.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/service/daily_tasks_reset_service.dart';
+import 'package:daily_tasks/src/feature/notification/controller/notification_permissions_controller.dart';
 import 'package:daily_tasks/src/feature/settings/controller/application_settings_controller.dart';
 import 'package:daily_tasks/src/feature/weekly_task_rewards/controller/weekly_task_rewards_controller.dart';
 import 'package:daily_tasks/src/feature/weekly_tasks/controller/weekly_tasks_controller.dart';
@@ -58,6 +59,9 @@ class Dependencies {
 
   /// Local Notification Plugin
   late final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
+  /// Notification Permissions Controller
+  late final NotificationPermissionsController notificationPermissionsController;
 
   @override
   String toString() => 'Dependencies{}';

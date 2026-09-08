@@ -15,6 +15,7 @@ import 'package:daily_tasks/src/feature/daily_tasks/data/daily_tasks_datasource.
 import 'package:daily_tasks/src/feature/daily_tasks/data/daily_tasks_repository.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/service/daily_tasks_reset_service.dart';
 import 'package:daily_tasks/src/feature/initialization/platform/platform_initialization.dart';
+import 'package:daily_tasks/src/feature/notification/controller/notification_permissions_controller.dart';
 import 'package:daily_tasks/src/feature/settings/controller/application_settings_controller.dart';
 import 'package:daily_tasks/src/feature/settings/data/application_settings_datasource.dart';
 import 'package:daily_tasks/src/feature/settings/data/application_settings_repository.dart';
@@ -178,6 +179,10 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
       // onDidReceiveBackgroundNotificationResponse: onDidReceiveBackgroundNotificationResponse,
     );
   },
+  'Prepare notification permissions controller': (dependencies) async =>
+      dependencies.notificationPermissionsController = NotificationPermissionsController(
+        flutterLocalNotificationsPlugin: dependencies.flutterLocalNotificationsPlugin,
+      ),
   'Collect logs': (dependencies) async {
     // TODO: Change log collection implementation (?)
     final sqlDatabaseSource = SqlDatabaseSource(dependencies.database);

@@ -2,6 +2,7 @@ import 'package:daily_tasks/src/common/router/router_state_mixin.dart';
 import 'package:daily_tasks/src/common/widget/window_scope.dart';
 import 'package:daily_tasks/src/feature/daily_task_rewards/widget/daily_task_rewards_scope.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/widget/daily_tasks_scope.dart';
+import 'package:daily_tasks/src/feature/notification/widget/notifications_scope.dart';
 import 'package:daily_tasks/src/feature/settings/widget/application_settings_scope.dart';
 import 'package:daily_tasks/src/feature/weekly_task_rewards/widget/weekly_task_rewards_scope.dart';
 import 'package:daily_tasks/src/feature/weekly_tasks/widget/weekly_tasks_scope.dart';
@@ -62,11 +63,13 @@ class _ApplicationState extends State<Application> with RouterStateMixin {
         child: WindowScope(
           title: Sheet1Localization.of(context).title,
           child: OctopusTools(
-            child: DailyTasksScope(
-              child: DailyTaskRewardsScope(
-                child: WeeklyTasksScope(
-                  child: WeeklyTaskRewardsScope(
-                    child: child ?? const SizedBox.shrink(),
+            child: NotificationsScope(
+              child: DailyTasksScope(
+                child: DailyTaskRewardsScope(
+                  child: WeeklyTasksScope(
+                    child: WeeklyTaskRewardsScope(
+                      child: child ?? const SizedBox.shrink(),
+                    ),
                   ),
                 ),
               ),

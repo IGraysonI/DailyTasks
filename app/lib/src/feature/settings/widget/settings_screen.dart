@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:daily_tasks/src/common/model/dependencies.dart';
+import 'package:daily_tasks/src/feature/notification/widget/notifications_scope.dart';
 import 'package:daily_tasks/src/feature/settings/widget/application_settings_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:localization/localization.dart';
 import 'package:ui/ui.dart';
-import 'package:uuid/uuid.dart';
 
 /// {@template settings_screen}
 /// SettingsScreen widget.
@@ -247,44 +247,27 @@ class _NotificationTest extends StatelessWidget {
   const _NotificationTest();
 
   @override
-  Widget build(BuildContext context) {
-    final notificationService = Dependencies.of(context).flutterLocalNotificationsPlugin;
-    return SliverPadding(
-      padding: ScaffoldPadding.of(context),
-      sliver: SliverToBoxAdapter(
-        child: ListTile(
-          title: const Text('Test Notification'),
-          subtitle: const Text(
-            'Send a test notification to verify the notification system is working correctly.',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+  Widget build(BuildContext context) => SliverPadding(
+    padding: ScaffoldPadding.of(context),
+    sliver: SliverToBoxAdapter(
+      child: ListTile(
+        title: const Text('Test Notification'),
+        subtitle: const Text(
+          'Send a test notification to verify the notification system is working correctly.',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        trailing: ElevatedButton(
+          onPressed: () async => NotificationsScope.showNotification(
+            context,
+            title: 'Test Notification',
+            body: 'This is a test notification from the Daily Tasks app.',
           ),
-          trailing: ElevatedButton(
-            onPressed: () async {
-              // TODO: Implement test notification logic
-              const androidNotificationDetails = AndroidNotificationDetails(
-                'your channel id',
-                'your channel name',
-                channelDescription: 'your channel description',
-                importance: Importance.max,
-                priority: Priority.high,
-                ticker: 'ticker',
-              );
-              const notificationDetails = NotificationDetails(android: androidNotificationDetails);
-              await notificationService.show(
-                id: const Uuid().v4().hashCode,
-                title: 'Test Notification',
-                body: 'This is a test notification from the Daily Tasks app.',
-                notificationDetails: notificationDetails,
-                payload: 'item x',
-              );
-            },
-            child: const Text('Send Test'),
-          ),
+          child: const Text('Send Test'),
         ),
       ),
-    );
-  }
+    ),
+  );
 }
 
 // TODO: Test implementation of the status and permissions. Implement the actual logic.

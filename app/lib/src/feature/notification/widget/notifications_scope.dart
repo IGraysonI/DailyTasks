@@ -29,6 +29,15 @@ class NotificationsScope extends StatefulWidget {
     );
   }
 
+  /// Request notification permissions
+  static Future<bool> requestNotificationPermissions(BuildContext context) async {
+    final state = context.getInheritedWidgetOfExactType<_InheritedNotifications>();
+    return await state?.flutterLocalNotificationsPlugin
+            .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+            ?.requestNotificationsPermission() ??
+        false;
+  }
+
   @override
   State<NotificationsScope> createState() => _NotificationsScopeState();
 }

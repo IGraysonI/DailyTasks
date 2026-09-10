@@ -59,4 +59,42 @@ final class NotificationPermissionsController extends StateController<Notificati
       ),
     ),
   );
+
+  /// Request notification permissions
+  /// Current supported platforms:
+  /// - Android
+  void requestNotificationPermissions() => handle(
+    () async {
+      setState(
+        NotificationPermissionsState.processing(
+          isAndroidPermissionGranted: state.isAndroidPermissionGranted,
+          message: 'Requesting notification permissions',
+        ),
+      );
+      final androidPermissionGranted =
+          await _flutterLocalNotificationsPlugin
+              .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+              ?.requestNotificationsPermission() ??
+          false;
+      setState(
+        NotificationPermissionsState.idle(
+          isAndroidPermissionGranted: androidPermissionGranted,
+          message: 'Notification permissions requested',
+        ),
+      );
+    },
+    error: (error, _) async => setState(
+      NotificationPermissionsState.idle(
+        isAndroidPermissionGranted: state.isAndroidPermissionGranted,
+        error: 'Error requesting notification permissions: ${kDebugMode ? '$error' : ''}',
+        message: 'Failed to request notification permissions',
+      ),
+    ),
+    done: () async => setState(
+      NotificationPermissionsState.idle(
+        isAndroidPermissionGranted: state.isAndroidPermissionGranted,
+        message: 'Daily tasks idle',
+      ),
+    ),
+  );
 }

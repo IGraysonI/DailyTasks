@@ -1,12 +1,10 @@
 import 'dart:io';
 
 import 'package:control/control.dart';
-import 'package:daily_tasks/src/common/model/dependencies.dart';
 import 'package:daily_tasks/src/feature/notification/controller/notification_permissions_controller.dart';
 import 'package:daily_tasks/src/feature/notification/widget/notifications_scope.dart';
 import 'package:daily_tasks/src/feature/settings/widget/application_settings_scope.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:localization/localization.dart';
 import 'package:ui/ui.dart';
 
@@ -309,30 +307,7 @@ class _AndroidNotificationStatusAndPermissionsState extends State<_AndroidNotifi
             ),
             trailing: ElevatedButton(
               onPressed: () async {
-                if (!context.mounted) return;
-                final androidImplementation = Dependencies.of(context).flutterLocalNotificationsPlugin
-                    .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
-
-                final grantedNotificationPermission = await androidImplementation?.requestNotificationsPermission();
-                if (grantedNotificationPermission == null) {
-                  ScaffoldMessenger.of(context)
-                    ..removeCurrentSnackBar()
-                    ..showSnackBar(
-                      const SnackBar(content: Text('Failed to request notification permission.')),
-                    );
-                } else if (!grantedNotificationPermission) {
-                  ScaffoldMessenger.of(context)
-                    ..removeCurrentSnackBar()
-                    ..showSnackBar(
-                      const SnackBar(content: Text('Notification permission denied.')),
-                    );
-                } else {
-                  ScaffoldMessenger.of(context)
-                    ..removeCurrentSnackBar()
-                    ..showSnackBar(
-                      const SnackBar(content: Text('Notification permission granted.')),
-                    );
-                }
+                await NotificationsScope.requestNotificationPermissions(context);
                 setState(() {});
               },
               child: const Text('Request'),

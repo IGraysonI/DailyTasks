@@ -270,7 +270,6 @@ class _NotificationTest extends StatelessWidget {
   );
 }
 
-// TODO: Test implementation of the status and permissions. Implement the actual logic.
 class _AndroidNotificationStatusAndPermissions extends StatefulWidget {
   const _AndroidNotificationStatusAndPermissions();
 

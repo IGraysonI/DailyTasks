@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:control/control.dart';
 import 'package:daily_tasks/src/feature/notification/controller/notification_permissions_controller.dart';
+import 'package:daily_tasks/src/feature/notification/widget/notification_request_dialog.dart';
 import 'package:daily_tasks/src/feature/notification/widget/notifications_scope.dart';
 import 'package:daily_tasks/src/feature/settings/widget/application_settings_scope.dart';
 import 'package:flutter/material.dart';
@@ -84,6 +85,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         const GroupSeparator(title: 'Notifications'),
         const _NotificationTest(),
         if (Platform.isAndroid) const _AndroidNotificationStatusAndPermissions(),
+        const _NotificationRequestDialog(),
         const _DailyNotificationSettings(),
         const _WeeklyNotificationSettings(),
 
@@ -281,38 +283,44 @@ class _AndroidNotificationStatusAndPermissionsState extends State<_AndroidNotifi
   @override
   Widget build(BuildContext context) => SliverPadding(
     padding: ScaffoldPadding.of(context),
-    sliver: SliverList(
-      delegate: SliverChildListDelegate(
-        [
-          StateConsumer<NotificationPermissionsController, NotificationPermissionsState>(
-            builder: (context, state, child) {
-              final isPermissionGranted = state.isAndroidPermissionGranted;
-              return ListTile(
-                title: const Text('Android Notification Current Status'),
-                subtitle: Text(
-                  'Current Status: ${isPermissionGranted ? "Granted" : "Denied"}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              );
-            },
-          ),
-          ListTile(
-            title: const Text('Request Notification Permission'),
-            subtitle: const Text(
-              'Request permission to send notifications on Android devices.',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+    sliver: SliverToBoxAdapter(
+      child: StateConsumer<NotificationPermissionsController, NotificationPermissionsState>(
+        controller: NotificationsScope.controller(context),
+        builder: (context, state, child) {
+          final isPermissionGranted = state.isAndroidPermissionGranted;
+          return ListTile(
+            title: const Text('Android Notification Current Status'),
+            trailing: Text(
+              isPermissionGranted ? 'Granted' : 'Denied',
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(color: isPermissionGranted ? Colors.green : Colors.red),
             ),
-            trailing: ElevatedButton(
-              onPressed: () async {
-                await NotificationsScope.requestNotificationPermissions(context);
-                setState(() {});
-              },
-              child: const Text('Request'),
-            ),
-          ),
-        ],
+          );
+        },
+      ),
+    ),
+  );
+}
+
+class _NotificationRequestDialog extends StatelessWidget {
+  const _NotificationRequestDialog();
+
+  @override
+  Widget build(BuildContext context) => SliverPadding(
+    padding: ScaffoldPadding.of(context),
+    sliver: SliverToBoxAdapter(
+      child: ListTile(
+        title: const Text('Request Notification Permission Dialog'),
+        subtitle: const Text(
+          'Show a dialog to request notification permissions from the user.',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        trailing: ElevatedButton(
+          onPressed: () async => await NotificationRequestDialog.show(context),
+          child: const Text('Show Dialog'),
+        ),
       ),
     ),
   );

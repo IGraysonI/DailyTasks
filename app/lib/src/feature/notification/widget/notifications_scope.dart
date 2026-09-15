@@ -18,6 +18,11 @@ class NotificationsScope extends StatefulWidget {
   /// The child widget
   final Widget child;
 
+  /// Get the [NotificationPermissionsController] instance.
+  static NotificationPermissionsController controller(BuildContext context, {bool listen = true}) =>
+      _InheritedNotifications.maybeOf(context, listen: listen)?.controller ??
+      Dependencies.of(context).notificationPermissionsController;
+
   /// Show Notification
   static void showNotification(BuildContext context, {required String title, required String body}) {
     final state = context.getInheritedWidgetOfExactType<_InheritedNotifications>();
@@ -99,6 +104,7 @@ class _NotificationsScopeState extends State<NotificationsScope> {
     builder: (context, state, child) => _InheritedNotifications(
       flutterLocalNotificationsPlugin: _flutterLocalNotificationsPlugin,
       notificationDetails: _notificationDetails,
+      controller: _notificationPermissionsController,
       child: widget.child,
     ),
   );
@@ -112,12 +118,18 @@ class _InheritedNotifications extends InheritedWidget {
   const _InheritedNotifications({
     required this.flutterLocalNotificationsPlugin,
     required this.notificationDetails,
+    required this.controller,
     required super.child,
     super.key, // ignore: unused_element_parameter
   });
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   final NotificationDetails notificationDetails;
+  final NotificationPermissionsController controller;
+
+  static _InheritedNotifications? maybeOf(BuildContext context, {bool listen = true}) => listen
+      ? context.dependOnInheritedWidgetOfExactType<_InheritedNotifications>()
+      : context.getInheritedWidgetOfExactType<_InheritedNotifications>();
 
   @override
   bool updateShouldNotify(covariant _InheritedNotifications oldWidget) =>

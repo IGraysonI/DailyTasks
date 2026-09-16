@@ -6,6 +6,8 @@
 * Notifications
    * Ability to receive reminders
    * Notification for start of the new day/week
+   * Check for notification permissions when notifications are turned on
+   * Ask for notification permissions on app first launch
 
 * UI
    * Improved task visualization (e.g., progress bars, color coding)

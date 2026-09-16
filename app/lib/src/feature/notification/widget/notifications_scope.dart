@@ -89,6 +89,7 @@ class _NotificationsScopeState extends State<NotificationsScope> {
     _notificationDetails = NotificationDetails(android: androidNotificationDetails);
   }
 
+  // TODO: Add channel details
   AndroidNotificationDetails _setUpAndroidNotificationDetails() => const AndroidNotificationDetails(
     'your channel id',
     'your channel name',

@@ -1,5 +1,6 @@
 import 'package:control/control.dart';
 import 'package:daily_tasks/src/common/controller/state_base.dart';
+import 'package:daily_tasks/src/feature/notification/data/notification_settings_datasource.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -13,17 +14,17 @@ final class NotificationSettingsController extends StateController<NotificationS
   /// {@macro notification_settings_controller}
   NotificationSettingsController({
     required FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
-    // required DailyTasksRepository dailyTasksRepository,
+    required NotificationSettingsDatasource notificationSettingsDatasource,
     super.initialState = const NotificationSettingsState.idle(
       isAndroidPermissionGranted: false,
       shouldRequestPermission: false,
       message: 'Initializing notification permissions',
     ),
-  }) : _flutterLocalNotificationsPlugin = flutterLocalNotificationsPlugin;
-  //  : _dailyTasksRepository = dailyTasksRepository;
+  }) : _flutterLocalNotificationsPlugin = flutterLocalNotificationsPlugin,
+       _notificationSettingsDatasource = notificationSettingsDatasource;
 
-  // final DailyTasksRepository _dailyTasksRepository;
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
+  final NotificationSettingsDatasource _notificationSettingsDatasource;
 
   /// Check the notification permission statuses
   void checkNotificationPermissions() => handle(

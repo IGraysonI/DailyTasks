@@ -16,6 +16,7 @@ import 'package:daily_tasks/src/feature/daily_tasks/data/daily_tasks_repository.
 import 'package:daily_tasks/src/feature/daily_tasks/service/daily_tasks_reset_service.dart';
 import 'package:daily_tasks/src/feature/initialization/platform/platform_initialization.dart';
 import 'package:daily_tasks/src/feature/notification/controller/notification_settings_controller.dart';
+import 'package:daily_tasks/src/feature/notification/data/notification_settings_datasource.dart';
 import 'package:daily_tasks/src/feature/settings/controller/application_settings_controller.dart';
 import 'package:daily_tasks/src/feature/settings/data/application_settings_datasource.dart';
 import 'package:daily_tasks/src/feature/settings/data/application_settings_repository.dart';
@@ -182,6 +183,7 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
   'Prepare notification settings controller': (dependencies) async =>
       dependencies.notificationSettingsController = NotificationSettingsController(
         flutterLocalNotificationsPlugin: dependencies.flutterLocalNotificationsPlugin,
+        notificationSettingsDatasource: NotificationSettingsDatasourceImpl(dependencies.sharedPreferences),
       ),
   'Collect logs': (dependencies) async {
     // TODO: Change log collection implementation (?)

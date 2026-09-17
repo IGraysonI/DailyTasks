@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:control/control.dart';
-import 'package:daily_tasks/src/feature/notification/controller/notification_permissions_controller.dart';
+import 'package:daily_tasks/src/feature/notification/controller/notification_settings_controller.dart';
 import 'package:daily_tasks/src/feature/notification/widget/notification_request_dialog.dart';
 import 'package:daily_tasks/src/feature/notification/widget/notifications_scope.dart';
 import 'package:daily_tasks/src/feature/settings/widget/application_settings_scope.dart';
@@ -284,7 +284,7 @@ class _AndroidNotificationStatusAndPermissionsState extends State<_AndroidNotifi
   Widget build(BuildContext context) => SliverPadding(
     padding: ScaffoldPadding.of(context),
     sliver: SliverToBoxAdapter(
-      child: StateConsumer<NotificationPermissionsController, NotificationPermissionsState>(
+      child: StateConsumer<NotificationSettingsController, NotificationSettingsState>(
         controller: NotificationsScope.controller(context),
         builder: (context, state, child) {
           final isPermissionGranted = state.isAndroidPermissionGranted;

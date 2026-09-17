@@ -1,41 +1,41 @@
-part of 'notification_permissions_controller.dart';
+part of 'notification_settings_controller.dart';
 
-/// Pattern matching for [NotificationPermissionsState].
-typedef NotificationPermissionsStateMatch<R, S extends NotificationPermissionsState> = R Function(S state);
+/// Pattern matching for [NotificationSettingsState].
+typedef NotificationSettingsStateMatch<R, S extends NotificationSettingsState> = R Function(S state);
 
-/// NotificationPermissionsState.
-sealed class NotificationPermissionsState extends _$NotificationPermissionsStateBase {
-  /// {@macro notification_permissions_state}
-  const NotificationPermissionsState({
+/// NotificationSettingsState.
+sealed class NotificationSettingsState extends _$NotificationSettingsStateBase {
+  /// {@macro notification_settings_state}
+  const NotificationSettingsState({
     required super.isAndroidPermissionGranted,
     required super.shouldRequestPermission,
     required super.message,
   });
 
   /// Idling state
-  /// {@macro notification_permissions_state}
-  const factory NotificationPermissionsState.idle({
+  /// {@macro notification_settings_state}
+  const factory NotificationSettingsState.idle({
     required bool isAndroidPermissionGranted,
     required bool shouldRequestPermission,
     String message,
     String? error,
-  }) = NotificationPermissionsState$Idle;
+  }) = NotificationSettingsState$Idle;
 
   /// Processing
-  /// {@macro notification_permissions_state}
-  const factory NotificationPermissionsState.processing({
+  /// {@macro notification_settings_state}
+  const factory NotificationSettingsState.processing({
     required bool isAndroidPermissionGranted,
     required bool shouldRequestPermission,
     String message,
-  }) = NotificationPermissionsState$Processing;
+  }) = NotificationSettingsState$Processing;
 }
 
-/// {@template NotificationPermissionsState$Idle}
+/// {@template NotificationSettingsState$Idle}
 /// Idling state
 /// {@endtemplate}
-final class NotificationPermissionsState$Idle extends NotificationPermissionsState {
+final class NotificationSettingsState$Idle extends NotificationSettingsState {
   /// Idling state
-  const NotificationPermissionsState$Idle({
+  const NotificationSettingsState$Idle({
     required super.isAndroidPermissionGranted,
     required super.shouldRequestPermission,
     super.message = 'Idling',
@@ -46,12 +46,12 @@ final class NotificationPermissionsState$Idle extends NotificationPermissionsSta
   final String? error;
 }
 
-/// {@template NotificationPermissionsState$Processing}
+/// {@template NotificationSettingsState$Processing}
 /// Processing
 /// {@endtemplate}
-final class NotificationPermissionsState$Processing extends NotificationPermissionsState {
+final class NotificationSettingsState$Processing extends NotificationSettingsState {
   /// Processing
-  const NotificationPermissionsState$Processing({
+  const NotificationSettingsState$Processing({
     required super.isAndroidPermissionGranted,
     required super.shouldRequestPermission,
     super.message = 'Processing ',
@@ -62,8 +62,8 @@ final class NotificationPermissionsState$Processing extends NotificationPermissi
 }
 
 @immutable
-abstract base class _$NotificationPermissionsStateBase extends StateBase<NotificationPermissionsState> {
-  const _$NotificationPermissionsStateBase({
+abstract base class _$NotificationSettingsStateBase extends StateBase<NotificationSettingsState> {
+  const _$NotificationSettingsStateBase({
     required this.isAndroidPermissionGranted,
     required this.shouldRequestPermission,
     required super.message,
@@ -77,41 +77,41 @@ abstract base class _$NotificationPermissionsStateBase extends StateBase<Notific
   @nonVirtual
   final bool shouldRequestPermission;
 
-  /// Pattern matching for [NotificationPermissionsState].
+  /// Pattern matching for [NotificationSettingsState].
   @override
   R map<R>({
-    required NotificationPermissionsStateMatch<R, NotificationPermissionsState$Idle> idle,
-    required NotificationPermissionsStateMatch<R, NotificationPermissionsState$Processing> processing,
+    required NotificationSettingsStateMatch<R, NotificationSettingsState$Idle> idle,
+    required NotificationSettingsStateMatch<R, NotificationSettingsState$Processing> processing,
   }) => switch (this) {
-    final NotificationPermissionsState$Idle s => idle(s),
-    final NotificationPermissionsState$Processing s => processing(s),
+    final NotificationSettingsState$Idle s => idle(s),
+    final NotificationSettingsState$Processing s => processing(s),
     _ => throw AssertionError(),
   };
 
-  /// Pattern matching for [NotificationPermissionsState].
+  /// Pattern matching for [NotificationSettingsState].
   @override
   R maybeMap<R>({
     required R Function() orElse,
-    NotificationPermissionsStateMatch<R, NotificationPermissionsState$Idle>? idle,
-    NotificationPermissionsStateMatch<R, NotificationPermissionsState$Processing>? processing,
+    NotificationSettingsStateMatch<R, NotificationSettingsState$Idle>? idle,
+    NotificationSettingsStateMatch<R, NotificationSettingsState$Processing>? processing,
   }) => map<R>(
     idle: idle ?? (_) => orElse(),
     processing: processing ?? (_) => orElse(),
   );
 
-  /// Pattern matching for [NotificationPermissionsState].
+  /// Pattern matching for [NotificationSettingsState].
   @override
   R? mapOrNull<R>({
-    NotificationPermissionsStateMatch<R, NotificationPermissionsState$Idle>? idle,
-    NotificationPermissionsStateMatch<R, NotificationPermissionsState$Processing>? processing,
+    NotificationSettingsStateMatch<R, NotificationSettingsState$Idle>? idle,
+    NotificationSettingsStateMatch<R, NotificationSettingsState$Processing>? processing,
   }) => map<R?>(
     idle: idle ?? (_) => null,
     processing: processing ?? (_) => null,
   );
 
-  /// Copy with method for [NotificationPermissionsState].
+  /// Copy with method for [NotificationSettingsState].
   @override
-  NotificationPermissionsState copyWith({
+  NotificationSettingsState copyWith({
     bool? isAndroidPermissionGranted,
     String? message,
     String? error,
@@ -129,7 +129,7 @@ abstract base class _$NotificationPermissionsStateBase extends StateBase<Notific
   @override
   String toString() {
     final buffer = StringBuffer()
-      ..write('NotificationPermissionsState(')
+      ..write('NotificationSettingsState(')
       ..write('isAndroidPermissionGranted: $isAndroidPermissionGranted')
       ..write(')');
     return buffer.toString();

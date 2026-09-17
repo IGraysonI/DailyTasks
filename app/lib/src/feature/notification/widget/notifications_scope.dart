@@ -1,6 +1,6 @@
 import 'package:control/control.dart';
 import 'package:daily_tasks/src/common/model/dependencies.dart';
-import 'package:daily_tasks/src/feature/notification/controller/notification_permissions_controller.dart';
+import 'package:daily_tasks/src/feature/notification/controller/notification_settings_controller.dart';
 import 'package:daily_tasks/src/feature/notification/widget/notification_request_dialog.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -19,10 +19,10 @@ class NotificationsScope extends StatefulWidget {
   /// The child widget
   final Widget child;
 
-  /// Get the [NotificationPermissionsController] instance.
-  static NotificationPermissionsController controller(BuildContext context, {bool listen = true}) =>
+  /// Get the [NotificationSettingsController] instance.
+  static NotificationSettingsController controller(BuildContext context, {bool listen = true}) =>
       _InheritedNotifications.maybeOf(context, listen: listen)?.controller ??
-      Dependencies.of(context).notificationPermissionsController;
+      Dependencies.of(context).notificationSettingsController;
 
   /// Show Notification
   static void showNotification(BuildContext context, {required String title, required String body}) {
@@ -52,7 +52,7 @@ class NotificationsScope extends StatefulWidget {
 class _NotificationsScopeState extends State<NotificationsScope> {
   late final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
   late final NotificationDetails _notificationDetails;
-  late final NotificationPermissionsController _notificationPermissionsController;
+  late final NotificationSettingsController _notificationSettingsController;
 
   /* #region Lifecycle */
   @override
@@ -60,7 +60,7 @@ class _NotificationsScopeState extends State<NotificationsScope> {
     super.initState();
     _flutterLocalNotificationsPlugin = Dependencies.of(context).flutterLocalNotificationsPlugin;
     _setUpNotificationDetails();
-    _notificationPermissionsController = Dependencies.of(context).notificationPermissionsController;
+    _notificationSettingsController = Dependencies.of(context).notificationSettingsController;
   }
 
   @override
@@ -78,7 +78,7 @@ class _NotificationsScopeState extends State<NotificationsScope> {
 
   @override
   void dispose() {
-    _notificationPermissionsController.dispose();
+    _notificationSettingsController.dispose();
     super.dispose();
   }
   /* #endregion */
@@ -99,15 +99,15 @@ class _NotificationsScopeState extends State<NotificationsScope> {
   );
 
   @override
-  Widget build(BuildContext context) => StateConsumer<NotificationPermissionsController, NotificationPermissionsState>(
-    controller: _notificationPermissionsController,
+  Widget build(BuildContext context) => StateConsumer<NotificationSettingsController, NotificationSettingsState>(
+    controller: _notificationSettingsController,
     listener: (context, controller, previous, current) {
       if (current.shouldRequestPermission) NotificationRequestDialog.show(context);
     },
     builder: (context, state, child) => _InheritedNotifications(
       flutterLocalNotificationsPlugin: _flutterLocalNotificationsPlugin,
       notificationDetails: _notificationDetails,
-      controller: _notificationPermissionsController,
+      controller: _notificationSettingsController,
       child: widget.child,
     ),
   );
@@ -128,7 +128,7 @@ class _InheritedNotifications extends InheritedWidget {
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   final NotificationDetails notificationDetails;
-  final NotificationPermissionsController controller;
+  final NotificationSettingsController controller;
 
   static _InheritedNotifications? maybeOf(BuildContext context, {bool listen = true}) => listen
       ? context.dependOnInheritedWidgetOfExactType<_InheritedNotifications>()

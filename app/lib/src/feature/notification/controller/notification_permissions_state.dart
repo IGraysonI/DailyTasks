@@ -8,6 +8,7 @@ sealed class NotificationPermissionsState extends _$NotificationPermissionsState
   /// {@macro notification_permissions_state}
   const NotificationPermissionsState({
     required super.isAndroidPermissionGranted,
+    required super.shouldRequestPermission,
     required super.message,
   });
 
@@ -15,6 +16,7 @@ sealed class NotificationPermissionsState extends _$NotificationPermissionsState
   /// {@macro notification_permissions_state}
   const factory NotificationPermissionsState.idle({
     required bool isAndroidPermissionGranted,
+    required bool shouldRequestPermission,
     String message,
     String? error,
   }) = NotificationPermissionsState$Idle;
@@ -23,6 +25,7 @@ sealed class NotificationPermissionsState extends _$NotificationPermissionsState
   /// {@macro notification_permissions_state}
   const factory NotificationPermissionsState.processing({
     required bool isAndroidPermissionGranted,
+    required bool shouldRequestPermission,
     String message,
   }) = NotificationPermissionsState$Processing;
 }
@@ -34,6 +37,7 @@ final class NotificationPermissionsState$Idle extends NotificationPermissionsSta
   /// Idling state
   const NotificationPermissionsState$Idle({
     required super.isAndroidPermissionGranted,
+    required super.shouldRequestPermission,
     super.message = 'Idling',
     this.error,
   });
@@ -49,6 +53,7 @@ final class NotificationPermissionsState$Processing extends NotificationPermissi
   /// Processing
   const NotificationPermissionsState$Processing({
     required super.isAndroidPermissionGranted,
+    required super.shouldRequestPermission,
     super.message = 'Processing ',
   });
 
@@ -60,12 +65,17 @@ final class NotificationPermissionsState$Processing extends NotificationPermissi
 abstract base class _$NotificationPermissionsStateBase extends StateBase<NotificationPermissionsState> {
   const _$NotificationPermissionsStateBase({
     required this.isAndroidPermissionGranted,
+    required this.shouldRequestPermission,
     required super.message,
   });
 
   /// State of Android notification permission
   @nonVirtual
   final bool isAndroidPermissionGranted;
+
+  /// Should application request notification permission?
+  @nonVirtual
+  final bool shouldRequestPermission;
 
   /// Pattern matching for [NotificationPermissionsState].
   @override

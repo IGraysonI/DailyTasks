@@ -16,6 +16,7 @@ final class NotificationPermissionsController extends StateController<Notificati
     // required DailyTasksRepository dailyTasksRepository,
     super.initialState = const NotificationPermissionsState.idle(
       isAndroidPermissionGranted: false,
+      shouldRequestPermission: false,
       message: 'Initializing notification permissions',
     ),
   }) : _flutterLocalNotificationsPlugin = flutterLocalNotificationsPlugin;
@@ -30,6 +31,7 @@ final class NotificationPermissionsController extends StateController<Notificati
       setState(
         NotificationPermissionsState.processing(
           isAndroidPermissionGranted: state.isAndroidPermissionGranted,
+          shouldRequestPermission: state.shouldRequestPermission,
           message: 'Checking notification permissions',
         ),
       );
@@ -41,6 +43,7 @@ final class NotificationPermissionsController extends StateController<Notificati
       setState(
         NotificationPermissionsState.idle(
           isAndroidPermissionGranted: androidPermissionGranted,
+          shouldRequestPermission: state.shouldRequestPermission,
           message: 'Notification permissions checked',
         ),
       );
@@ -48,6 +51,7 @@ final class NotificationPermissionsController extends StateController<Notificati
     error: (error, _) async => setState(
       NotificationPermissionsState.idle(
         isAndroidPermissionGranted: state.isAndroidPermissionGranted,
+        shouldRequestPermission: state.shouldRequestPermission,
         error: 'Error checking notification permissions: ${kDebugMode ? '$error' : ''}',
         message: 'Failed to check notification permissions',
       ),
@@ -55,6 +59,7 @@ final class NotificationPermissionsController extends StateController<Notificati
     done: () async => setState(
       NotificationPermissionsState.idle(
         isAndroidPermissionGranted: state.isAndroidPermissionGranted,
+        shouldRequestPermission: state.shouldRequestPermission,
         message: 'Daily tasks idle',
       ),
     ),
@@ -68,6 +73,7 @@ final class NotificationPermissionsController extends StateController<Notificati
       setState(
         NotificationPermissionsState.processing(
           isAndroidPermissionGranted: state.isAndroidPermissionGranted,
+          shouldRequestPermission: state.shouldRequestPermission,
           message: 'Requesting notification permissions',
         ),
       );
@@ -79,6 +85,7 @@ final class NotificationPermissionsController extends StateController<Notificati
       setState(
         NotificationPermissionsState.idle(
           isAndroidPermissionGranted: androidPermissionGranted,
+          shouldRequestPermission: state.shouldRequestPermission,
           message: 'Notification permissions requested',
         ),
       );
@@ -86,6 +93,7 @@ final class NotificationPermissionsController extends StateController<Notificati
     error: (error, _) async => setState(
       NotificationPermissionsState.idle(
         isAndroidPermissionGranted: state.isAndroidPermissionGranted,
+        shouldRequestPermission: state.shouldRequestPermission,
         error: 'Error requesting notification permissions: ${kDebugMode ? '$error' : ''}',
         message: 'Failed to request notification permissions',
       ),
@@ -93,6 +101,7 @@ final class NotificationPermissionsController extends StateController<Notificati
     done: () async => setState(
       NotificationPermissionsState.idle(
         isAndroidPermissionGranted: state.isAndroidPermissionGranted,
+        shouldRequestPermission: state.shouldRequestPermission,
         message: 'Daily tasks idle',
       ),
     ),

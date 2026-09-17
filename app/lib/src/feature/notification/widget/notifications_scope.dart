@@ -1,6 +1,7 @@
 import 'package:control/control.dart';
 import 'package:daily_tasks/src/common/model/dependencies.dart';
 import 'package:daily_tasks/src/feature/notification/controller/notification_permissions_controller.dart';
+import 'package:daily_tasks/src/feature/notification/widget/notification_request_dialog.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:uuid/uuid.dart';
@@ -58,9 +59,7 @@ class _NotificationsScopeState extends State<NotificationsScope> {
   void initState() {
     super.initState();
     _flutterLocalNotificationsPlugin = Dependencies.of(context).flutterLocalNotificationsPlugin;
-
     _setUpNotificationDetails();
-
     _notificationPermissionsController = Dependencies.of(context).notificationPermissionsController;
   }
 
@@ -102,6 +101,9 @@ class _NotificationsScopeState extends State<NotificationsScope> {
   @override
   Widget build(BuildContext context) => StateConsumer<NotificationPermissionsController, NotificationPermissionsState>(
     controller: _notificationPermissionsController,
+    listener: (context, controller, previous, current) {
+      if (current.shouldRequestPermission) NotificationRequestDialog.show(context);
+    },
     builder: (context, state, child) => _InheritedNotifications(
       flutterLocalNotificationsPlugin: _flutterLocalNotificationsPlugin,
       notificationDetails: _notificationDetails,

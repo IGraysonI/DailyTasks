@@ -83,16 +83,6 @@ class AppSettingsPersistedEntry extends SharedPreferencesEntry<ApplicationSettin
     key: '$key.resetWeeklyTasksOnNewWeekStart',
   );
 
-  late final _enableDailyTasksNotifications = BoolPreferencesEntry(
-    sharedPreferences: sharedPreferences,
-    key: '$key.enableDailyTasksNotifications',
-  );
-
-  late final _enableWeeklyTasksNotifications = BoolPreferencesEntry(
-    sharedPreferences: sharedPreferences,
-    key: '$key.enableWeeklyTasksNotifications',
-  );
-
   static const _colorCodec = ColorCodec();
 
   @override
@@ -104,8 +94,6 @@ class AppSettingsPersistedEntry extends SharedPreferencesEntry<ApplicationSettin
     final textScale = await _textScale.read();
     final resetDailyTasksOnNewDayStart = await _resetDailyTasksOnNewDayStart.read();
     final resetWeeklyTasksOnNewWeekStart = await _resetWeeklyTasksOnNewWeekStart.read();
-    final enableDailyTasksNotifications = await _enableDailyTasksNotifications.read();
-    final enableWeeklyTasksNotifications = await _enableWeeklyTasksNotifications.read();
     final themeMode = await themeModeFuture;
     final themeSeedColor = await themeSeedColorFuture;
     final languageCode = await localeLanguageCodeFuture;
@@ -116,9 +104,7 @@ class AppSettingsPersistedEntry extends SharedPreferencesEntry<ApplicationSettin
         textScale == null &&
         countryCode == null &&
         resetDailyTasksOnNewDayStart == null &&
-        resetWeeklyTasksOnNewWeekStart == null &&
-        enableDailyTasksNotifications == null &&
-        enableWeeklyTasksNotifications == null) {
+        resetWeeklyTasksOnNewWeekStart == null) {
       return null;
     }
     ApplicationTheme? applicationTheme;
@@ -136,8 +122,6 @@ class AppSettingsPersistedEntry extends SharedPreferencesEntry<ApplicationSettin
       textScale: textScale,
       resetDailyTasksOnNewDayStart: resetDailyTasksOnNewDayStart,
       resetWeeklyTasksOnNewWeekStart: resetWeeklyTasksOnNewWeekStart,
-      enableDailyTasksNotifications: enableDailyTasksNotifications,
-      enableWeeklyTasksNotifications: enableWeeklyTasksNotifications,
     );
   }
 
@@ -150,8 +134,6 @@ class AppSettingsPersistedEntry extends SharedPreferencesEntry<ApplicationSettin
     _textScale.remove(),
     _resetDailyTasksOnNewDayStart.remove(),
     _resetWeeklyTasksOnNewWeekStart.remove(),
-    _enableDailyTasksNotifications.remove(),
-    _enableWeeklyTasksNotifications.remove(),
   ).wait;
 
   @override
@@ -174,12 +156,6 @@ class AppSettingsPersistedEntry extends SharedPreferencesEntry<ApplicationSettin
     }
     if (value.resetWeeklyTasksOnNewWeekStart != null) {
       await _resetWeeklyTasksOnNewWeekStart.set(value.resetWeeklyTasksOnNewWeekStart!);
-    }
-    if (value.enableDailyTasksNotifications != null) {
-      await _enableDailyTasksNotifications.set(value.enableDailyTasksNotifications!);
-    }
-    if (value.enableWeeklyTasksNotifications != null) {
-      await _enableWeeklyTasksNotifications.set(value.enableWeeklyTasksNotifications!);
     }
   }
 }

@@ -196,20 +196,20 @@ class _DailyNotificationSettings extends StatelessWidget {
     final applicationSettingsController = ApplicationSettingsScope.controllerOf(context);
     return SliverPadding(
       padding: ScaffoldPadding.of(context),
-      sliver: SliverToBoxAdapter(
+      sliver: const SliverToBoxAdapter(
         child: ListTile(
-          title: const Text('Daily Notifications'),
-          subtitle: const Text(
+          title: Text('Daily Notifications'),
+          subtitle: Text(
             'Receive notifications for daily tasks (e.g., reminders, tasks reset).',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          trailing: Switch(
-            value: applicationSettings.enableDailyTasksNotifications ?? true,
-            onChanged: (value) => applicationSettingsController.updateApplicationSettings(
-              applicationSettings.copyWith(enableDailyTasksNotifications: value),
-            ),
-          ),
+          // trailing: Switch(
+          //   value: applicationSettings.enableDailyTasksNotifications ?? true,
+          //   onChanged: (value) => applicationSettingsController.updateApplicationSettings(
+          //     applicationSettings.copyWith(enableDailyTasksNotifications: value),
+          //   ),
+          // ),
         ),
       ),
     );
@@ -225,20 +225,20 @@ class _WeeklyNotificationSettings extends StatelessWidget {
     final applicationSettingsController = ApplicationSettingsScope.controllerOf(context);
     return SliverPadding(
       padding: ScaffoldPadding.of(context),
-      sliver: SliverToBoxAdapter(
+      sliver: const SliverToBoxAdapter(
         child: ListTile(
-          title: const Text('Weekly Notifications'),
-          subtitle: const Text(
+          title: Text('Weekly Notifications'),
+          subtitle: Text(
             'Receive notifications for weekly tasks (e.g., reminders, tasks reset).',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          trailing: Switch(
-            value: applicationSettings.enableWeeklyTasksNotifications ?? true,
-            onChanged: (value) => applicationSettingsController.updateApplicationSettings(
-              applicationSettings.copyWith(enableWeeklyTasksNotifications: value),
-            ),
-          ),
+          // trailing: Switch(
+          //   value: applicationSettings.enableWeeklyTasksNotifications ?? true,
+          //   onChanged: (value) => applicationSettingsController.updateApplicationSettings(
+          //     applicationSettings.copyWith(enableWeeklyTasksNotifications: value),
+          //   ),
+          // ),
         ),
       ),
     );

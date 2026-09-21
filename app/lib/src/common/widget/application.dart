@@ -63,6 +63,7 @@ class _ApplicationState extends State<Application> with RouterStateMixin {
         child: WindowScope(
           title: Sheet1Localization.of(context).title,
           child: OctopusTools(
+            octopus: router,
             child: NotificationsScope(
               child: DailyTasksScope(
                 child: DailyTaskRewardsScope(

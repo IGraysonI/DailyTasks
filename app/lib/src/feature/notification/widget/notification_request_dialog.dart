@@ -13,7 +13,7 @@ class NotificationRequestDialog extends StatelessWidget {
   });
 
   static Future<void> show(BuildContext context) =>
-      Octopus.of(context).showDialog<void>((context) => const NotificationRequestDialog());
+      Octopus.instance.showDialog<void>((context) => const NotificationRequestDialog());
 
   @override
   Widget build(BuildContext context) => const Dialog(

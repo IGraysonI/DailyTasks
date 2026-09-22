@@ -41,10 +41,12 @@ final class NotificationSettingsController extends StateController<NotificationS
               .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
               ?.areNotificationsEnabled() ??
           false;
+      final shouldRequestPermission = await _notificationSettingsDatasource.shouldRequestNotificationPermissions();
       setState(
         NotificationSettingsState.idle(
           isAndroidPermissionGranted: androidPermissionGranted,
-          shouldRequestPermission: state.shouldRequestPermission,
+          shouldRequestPermission:
+              !(shouldRequestPermission == true && androidPermissionGranted == true) && shouldRequestPermission,
           message: 'Notification permissions checked',
         ),
       );

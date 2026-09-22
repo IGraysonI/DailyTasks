@@ -11,6 +11,13 @@ abstract interface class NotificationSettingsDatasource {
 
   /// Load [NotificationSettings] from the source of truth.
   Future<NotificationSettings?> getNotificationSettings();
+
+  /// Bool value is application should request permission
+  /// If the value off the [requestInitialPermissions] is true, then we request it and change it to false. Using it as
+  /// a first launch flag
+  /// If the values of the [enableDailyTasksNotifications] or [enableWeeklyTasksNotifications] are true, then we
+  /// request notifications and return true.
+  Future<bool> shouldRequestNotificationPermissions();
 }
 
 /// {@macro notification_settings_datasource}
@@ -32,6 +39,19 @@ final class NotificationSettingsDatasourceImpl implements NotificationSettingsDa
   @override
   Future<void> setNotificationSettings(NotificationSettings notificationSettings) =>
       _notificationSettings.set(notificationSettings);
+
+  @override
+  Future<bool> shouldRequestNotificationPermissions() async {
+    final initialRequest = await _notificationSettings._requestInitialPermissions.read();
+    if (initialRequest == true) {
+      await _notificationSettings._requestInitialPermissions.set(false);
+      return true;
+    }
+    final enableDailyTasksNotifications = await _notificationSettings._enableDailyTasksNotifications.read();
+    final enableWeeklyTasksNotifications = await _notificationSettings._enableWeeklyTasksNotifications.read();
+    if (enableDailyTasksNotifications == true || enableWeeklyTasksNotifications == true) return true;
+    return false;
+  }
 }
 
 /// Persisted entry for [NotificationSettings]

@@ -4,7 +4,6 @@ import 'package:daily_tasks/src/feature/notification/controller/notification_set
 import 'package:daily_tasks/src/feature/notification/widget/notification_request_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:l/l.dart';
 import 'package:uuid/uuid.dart';
 
 /// {@template notifications_scope}
@@ -104,8 +103,7 @@ class _NotificationsScopeState extends State<NotificationsScope> {
   Widget build(BuildContext context) => StateConsumer<NotificationSettingsController, NotificationSettingsState>(
     controller: _notificationSettingsController,
     listener: (context, controller, previous, current) {
-      if (current.isIdle && !current.shouldRequestPermission) l.e('Requesting notification permission...');
-      if (current.isIdle && !current.shouldRequestPermission) NotificationRequestDialog.show(this.context);
+      if (current.isIdle && current.shouldRequestPermission) NotificationRequestDialog.show(this.context);
     },
     builder: (context, state, child) => _InheritedNotifications(
       flutterLocalNotificationsPlugin: _flutterLocalNotificationsPlugin,

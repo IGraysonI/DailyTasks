@@ -103,7 +103,10 @@ class _NotificationsScopeState extends State<NotificationsScope> {
   Widget build(BuildContext context) => StateConsumer<NotificationSettingsController, NotificationSettingsState>(
     controller: _notificationSettingsController,
     listener: (context, controller, previous, current) {
-      if (current.isIdle && current.shouldRequestPermission) NotificationRequestDialog.show(this.context);
+      if (current.isIdle &&
+          (current.notificationSettings.shouldRequestPermission != null &&
+              current.notificationSettings.shouldRequestPermission!))
+        NotificationRequestDialog.show(this.context);
     },
     builder: (context, state, child) => _InheritedNotifications(
       flutterLocalNotificationsPlugin: _flutterLocalNotificationsPlugin,

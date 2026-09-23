@@ -7,16 +7,14 @@ typedef NotificationSettingsStateMatch<R, S extends NotificationSettingsState> =
 sealed class NotificationSettingsState extends _$NotificationSettingsStateBase {
   /// {@macro notification_settings_state}
   const NotificationSettingsState({
-    required super.isAndroidPermissionGranted,
-    required super.shouldRequestPermission,
+    required super.notificationSettings,
     required super.message,
   });
 
   /// Idling state
   /// {@macro notification_settings_state}
   const factory NotificationSettingsState.idle({
-    required bool isAndroidPermissionGranted,
-    required bool shouldRequestPermission,
+    required NotificationSettings notificationSettings,
     String message,
     String? error,
   }) = NotificationSettingsState$Idle;
@@ -24,8 +22,7 @@ sealed class NotificationSettingsState extends _$NotificationSettingsStateBase {
   /// Processing
   /// {@macro notification_settings_state}
   const factory NotificationSettingsState.processing({
-    required bool isAndroidPermissionGranted,
-    required bool shouldRequestPermission,
+    required NotificationSettings notificationSettings,
     String message,
   }) = NotificationSettingsState$Processing;
 }
@@ -36,8 +33,7 @@ sealed class NotificationSettingsState extends _$NotificationSettingsStateBase {
 final class NotificationSettingsState$Idle extends NotificationSettingsState {
   /// Idling state
   const NotificationSettingsState$Idle({
-    required super.isAndroidPermissionGranted,
-    required super.shouldRequestPermission,
+    required super.notificationSettings,
     super.message = 'Idling',
     this.error,
   });
@@ -52,8 +48,7 @@ final class NotificationSettingsState$Idle extends NotificationSettingsState {
 final class NotificationSettingsState$Processing extends NotificationSettingsState {
   /// Processing
   const NotificationSettingsState$Processing({
-    required super.isAndroidPermissionGranted,
-    required super.shouldRequestPermission,
+    required super.notificationSettings,
     super.message = 'Processing ',
   });
 
@@ -64,18 +59,13 @@ final class NotificationSettingsState$Processing extends NotificationSettingsSta
 @immutable
 abstract base class _$NotificationSettingsStateBase extends StateBase<NotificationSettingsState> {
   const _$NotificationSettingsStateBase({
-    required this.isAndroidPermissionGranted,
-    required this.shouldRequestPermission,
+    required this.notificationSettings,
     required super.message,
   });
 
-  /// State of Android notification permission
+  /// Notification settings
   @nonVirtual
-  final bool isAndroidPermissionGranted;
-
-  /// Should application request notification permission?
-  @nonVirtual
-  final bool shouldRequestPermission;
+  final NotificationSettings notificationSettings;
 
   /// Pattern matching for [NotificationSettingsState].
   @override
@@ -112,17 +102,19 @@ abstract base class _$NotificationSettingsStateBase extends StateBase<Notificati
   /// Copy with method for [NotificationSettingsState].
   @override
   NotificationSettingsState copyWith({
-    bool? isAndroidPermissionGranted,
+    NotificationSettings? notificationSettings,
     String? message,
     String? error,
   }) => map(
     idle: (s) => s.copyWith(
-      isAndroidPermissionGranted: isAndroidPermissionGranted ?? s.isAndroidPermissionGranted,
+      notificationSettings: notificationSettings ?? s.notificationSettings,
       message: message ?? s.message,
+      error: error ?? s.error,
     ),
     processing: (s) => s.copyWith(
-      isAndroidPermissionGranted: isAndroidPermissionGranted ?? s.isAndroidPermissionGranted,
+      notificationSettings: notificationSettings ?? s.notificationSettings,
       message: message ?? s.message,
+      error: error ?? s.error,
     ),
   );
 
@@ -130,7 +122,7 @@ abstract base class _$NotificationSettingsStateBase extends StateBase<Notificati
   String toString() {
     final buffer = StringBuffer()
       ..write('NotificationSettingsState(')
-      ..write('isAndroidPermissionGranted: $isAndroidPermissionGranted')
+      ..write('notificationSettings: $notificationSettings')
       ..write(')');
     return buffer.toString();
   }

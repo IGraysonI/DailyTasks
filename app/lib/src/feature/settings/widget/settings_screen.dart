@@ -287,7 +287,8 @@ class _AndroidNotificationStatusAndPermissionsState extends State<_AndroidNotifi
       child: StateConsumer<NotificationSettingsController, NotificationSettingsState>(
         controller: NotificationsScope.controller(context),
         builder: (context, state, child) {
-          final isPermissionGranted = state.isAndroidPermissionGranted;
+          // final isPermissionGranted = state.isAndroidPermissionGranted;
+          final isPermissionGranted = state.notificationSettings.isAndroidPermissionGranted ?? false;
           return ListTile(
             title: const Text('Android Notification Current Status'),
             trailing: Text(

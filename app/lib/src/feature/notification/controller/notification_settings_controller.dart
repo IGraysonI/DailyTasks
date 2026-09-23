@@ -1,6 +1,7 @@
 import 'package:control/control.dart';
 import 'package:daily_tasks/src/common/controller/state_base.dart';
 import 'package:daily_tasks/src/feature/notification/data/notification_settings_datasource.dart';
+import 'package:daily_tasks/src/feature/notification/model/notification_settings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -16,8 +17,7 @@ final class NotificationSettingsController extends StateController<NotificationS
     required FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
     required NotificationSettingsDatasource notificationSettingsDatasource,
     super.initialState = const NotificationSettingsState.idle(
-      isAndroidPermissionGranted: false,
-      shouldRequestPermission: false,
+      notificationSettings: NotificationSettings.defaultSettings,
       message: 'Initializing notification permissions',
     ),
   }) : _flutterLocalNotificationsPlugin = flutterLocalNotificationsPlugin,
@@ -31,8 +31,7 @@ final class NotificationSettingsController extends StateController<NotificationS
     () async {
       setState(
         NotificationSettingsState.processing(
-          isAndroidPermissionGranted: state.isAndroidPermissionGranted,
-          shouldRequestPermission: state.shouldRequestPermission,
+          notificationSettings: state.notificationSettings,
           message: 'Checking notification permissions',
         ),
       );
@@ -42,28 +41,23 @@ final class NotificationSettingsController extends StateController<NotificationS
               ?.areNotificationsEnabled() ??
           false;
       final shouldRequestPermission = await _notificationSettingsDatasource.shouldRequestNotificationPermissions();
+      final notificationSettings = state.notificationSettings.copyWith(
+        isAndroidPermissionGranted: androidPermissionGranted,
+        shouldRequestPermission:
+            !(shouldRequestPermission == true && androidPermissionGranted == true) && shouldRequestPermission,
+      );
       setState(
         NotificationSettingsState.idle(
-          isAndroidPermissionGranted: androidPermissionGranted,
-          shouldRequestPermission:
-              !(shouldRequestPermission == true && androidPermissionGranted == true) && shouldRequestPermission,
+          notificationSettings: notificationSettings,
           message: 'Notification permissions checked',
         ),
       );
     },
     error: (error, _) async => setState(
       NotificationSettingsState.idle(
-        isAndroidPermissionGranted: state.isAndroidPermissionGranted,
-        shouldRequestPermission: state.shouldRequestPermission,
+        notificationSettings: state.notificationSettings,
         error: 'Error checking notification permissions: ${kDebugMode ? '$error' : ''}',
         message: 'Failed to check notification permissions',
-      ),
-    ),
-    done: () async => setState(
-      NotificationSettingsState.idle(
-        isAndroidPermissionGranted: state.isAndroidPermissionGranted,
-        shouldRequestPermission: state.shouldRequestPermission,
-        message: 'Daily tasks idle',
       ),
     ),
   );
@@ -75,8 +69,7 @@ final class NotificationSettingsController extends StateController<NotificationS
     () async {
       setState(
         NotificationSettingsState.processing(
-          isAndroidPermissionGranted: state.isAndroidPermissionGranted,
-          shouldRequestPermission: state.shouldRequestPermission,
+          notificationSettings: state.notificationSettings,
           message: 'Requesting notification permissions',
         ),
       );
@@ -87,25 +80,46 @@ final class NotificationSettingsController extends StateController<NotificationS
           false;
       setState(
         NotificationSettingsState.idle(
-          isAndroidPermissionGranted: androidPermissionGranted,
-          shouldRequestPermission: state.shouldRequestPermission,
+          notificationSettings: state.notificationSettings.copyWith(
+            isAndroidPermissionGranted: androidPermissionGranted,
+          ),
           message: 'Notification permissions requested',
         ),
       );
     },
     error: (error, _) async => setState(
       NotificationSettingsState.idle(
-        isAndroidPermissionGranted: state.isAndroidPermissionGranted,
-        shouldRequestPermission: state.shouldRequestPermission,
+        notificationSettings: state.notificationSettings,
         error: 'Error requesting notification permissions: ${kDebugMode ? '$error' : ''}',
         message: 'Failed to request notification permissions',
       ),
     ),
-    done: () async => setState(
+  );
+
+  /// Sets the new Notification settings
+  /// [enableDailyTasksNotifications] Whether to enable daily tasks notifications
+  /// [enableWeeklyTasksNotifications] Whether to enable weekly tasks notifications
+  void updateNotificationSettings(NotificationSettings notificationSettings) => handle(
+    () async {
+      setState(
+        NotificationSettingsState.processing(
+          notificationSettings: state.notificationSettings,
+          message: 'Updating settings',
+        ),
+      );
+      await _notificationSettingsDatasource.setNotificationSettings(notificationSettings);
+      setState(
+        NotificationSettingsState.idle(
+          notificationSettings: notificationSettings,
+          message: 'Settings updated',
+        ),
+      );
+    },
+    error: (error, _) async => setState(
       NotificationSettingsState.idle(
-        isAndroidPermissionGranted: state.isAndroidPermissionGranted,
-        shouldRequestPermission: state.shouldRequestPermission,
-        message: 'Daily tasks idle',
+        notificationSettings: state.notificationSettings,
+        error: kDebugMode ? 'Failed to update settings: $error' : 'Failed to update settings',
+        message: 'Failed to update settings',
       ),
     ),
   );

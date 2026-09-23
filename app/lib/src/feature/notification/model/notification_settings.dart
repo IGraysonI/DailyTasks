@@ -11,6 +11,8 @@ class NotificationSettings with Diagnosticable {
     this.enableDailyTasksNotifications,
     this.enableWeeklyTasksNotifications,
     this.requestInitialPermissions,
+    this.isAndroidPermissionGranted,
+    this.shouldRequestPermission,
   });
 
   /// The default notification settings.
@@ -18,6 +20,8 @@ class NotificationSettings with Diagnosticable {
     enableDailyTasksNotifications: true,
     enableWeeklyTasksNotifications: true,
     requestInitialPermissions: true,
+    isAndroidPermissionGranted: false,
+    shouldRequestPermission: true,
   );
 
   /// Enable daily tasks notifications.
@@ -29,15 +33,25 @@ class NotificationSettings with Diagnosticable {
   /// Request initial notification permissions.
   final bool? requestInitialPermissions;
 
+  /// Is android permission granted.
+  final bool? isAndroidPermissionGranted;
+
+  /// Should the application request notification permissions.
+  final bool? shouldRequestPermission;
+
   /// Copy the [NotificationSettings] with new values.
   NotificationSettings copyWith({
     bool? enableDailyTasksNotifications,
     bool? enableWeeklyTasksNotifications,
     bool? requestInitialPermissions,
+    bool? isAndroidPermissionGranted,
+    bool? shouldRequestPermission,
   }) => NotificationSettings(
     enableDailyTasksNotifications: enableDailyTasksNotifications ?? this.enableDailyTasksNotifications,
     enableWeeklyTasksNotifications: enableWeeklyTasksNotifications ?? this.enableWeeklyTasksNotifications,
     requestInitialPermissions: requestInitialPermissions ?? this.requestInitialPermissions,
+    isAndroidPermissionGranted: isAndroidPermissionGranted ?? this.isAndroidPermissionGranted,
+    shouldRequestPermission: shouldRequestPermission ?? this.shouldRequestPermission,
   );
 
   @override
@@ -46,7 +60,9 @@ class NotificationSettings with Diagnosticable {
     return other is NotificationSettings &&
         other.enableDailyTasksNotifications == enableDailyTasksNotifications &&
         other.enableWeeklyTasksNotifications == enableWeeklyTasksNotifications &&
-        other.requestInitialPermissions == requestInitialPermissions;
+        other.requestInitialPermissions == requestInitialPermissions &&
+        other.isAndroidPermissionGranted == isAndroidPermissionGranted &&
+        other.shouldRequestPermission == shouldRequestPermission;
   }
 
   @override
@@ -54,6 +70,8 @@ class NotificationSettings with Diagnosticable {
     enableDailyTasksNotifications,
     enableWeeklyTasksNotifications,
     requestInitialPermissions,
+    isAndroidPermissionGranted,
+    shouldRequestPermission,
   );
 
   @override
@@ -61,7 +79,9 @@ class NotificationSettings with Diagnosticable {
     properties
       ..add(FlagProperty('enableDailyTasksNotifications', value: enableDailyTasksNotifications))
       ..add(FlagProperty('enableWeeklyTasksNotifications', value: enableWeeklyTasksNotifications))
-      ..add(FlagProperty('requestInitialPermissions', value: requestInitialPermissions));
+      ..add(FlagProperty('requestInitialPermissions', value: requestInitialPermissions))
+      ..add(FlagProperty('isAndroidPermissionGranted', value: isAndroidPermissionGranted))
+      ..add(FlagProperty('shouldRequestPermission', value: shouldRequestPermission));
     super.debugFillProperties(properties);
   }
 }

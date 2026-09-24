@@ -1,6 +1,7 @@
 import 'package:control/control.dart';
 import 'package:daily_tasks/src/common/model/dependencies.dart';
 import 'package:daily_tasks/src/feature/notification/controller/notification_settings_controller.dart';
+import 'package:daily_tasks/src/feature/notification/model/notification_settings.dart';
 import 'package:daily_tasks/src/feature/notification/widget/notification_request_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -20,9 +21,14 @@ class NotificationsScope extends StatefulWidget {
   final Widget child;
 
   /// Get the [NotificationSettingsController] instance.
-  static NotificationSettingsController controller(BuildContext context, {bool listen = true}) =>
+  static NotificationSettingsController controllerOf(BuildContext context, {bool listen = true}) =>
       _InheritedNotifications.maybeOf(context, listen: listen)?.controller ??
       Dependencies.of(context).notificationSettingsController;
+
+  /// Get the [NotificationSettings] instance.
+  static NotificationSettings settingsOf(BuildContext context, {bool listen = true}) =>
+      _InheritedNotifications.maybeOf(context, listen: listen)?.notificationSettings ??
+      Dependencies.of(context).notificationSettingsController.state.notificationSettings;
 
   /// Show Notification
   static void showNotification(BuildContext context, {required String title, required String body}) {
@@ -112,6 +118,7 @@ class _NotificationsScopeState extends State<NotificationsScope> {
       flutterLocalNotificationsPlugin: _flutterLocalNotificationsPlugin,
       notificationDetails: _notificationDetails,
       controller: _notificationSettingsController,
+      notificationSettings: state.notificationSettings,
       child: widget.child,
     ),
   );
@@ -126,6 +133,7 @@ class _InheritedNotifications extends InheritedWidget {
     required this.flutterLocalNotificationsPlugin,
     required this.notificationDetails,
     required this.controller,
+    required this.notificationSettings,
     required super.child,
     super.key, // ignore: unused_element_parameter
   });
@@ -133,6 +141,7 @@ class _InheritedNotifications extends InheritedWidget {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   final NotificationDetails notificationDetails;
   final NotificationSettingsController controller;
+  final NotificationSettings notificationSettings;
 
   static _InheritedNotifications? maybeOf(BuildContext context, {bool listen = true}) => listen
       ? context.dependOnInheritedWidgetOfExactType<_InheritedNotifications>()

@@ -192,24 +192,24 @@ class _DailyNotificationSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final applicationSettings = ApplicationSettingsScope.settingsOf(context);
-    final applicationSettingsController = ApplicationSettingsScope.controllerOf(context);
+    final notificationSettings = NotificationsScope.settingsOf(context);
+    final notificationSettingsController = NotificationsScope.controllerOf(context);
     return SliverPadding(
       padding: ScaffoldPadding.of(context),
-      sliver: const SliverToBoxAdapter(
+      sliver: SliverToBoxAdapter(
         child: ListTile(
-          title: Text('Daily Notifications'),
-          subtitle: Text(
+          title: const Text('Daily Notifications'),
+          subtitle: const Text(
             'Receive notifications for daily tasks (e.g., reminders, tasks reset).',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          // trailing: Switch(
-          //   value: applicationSettings.enableDailyTasksNotifications ?? true,
-          //   onChanged: (value) => applicationSettingsController.updateApplicationSettings(
-          //     applicationSettings.copyWith(enableDailyTasksNotifications: value),
-          //   ),
-          // ),
+          trailing: Switch(
+            value: notificationSettings.enableDailyTasksNotifications ?? true,
+            onChanged: (value) => notificationSettingsController.updateNotificationSettings(
+              notificationSettings.copyWith(enableDailyTasksNotifications: value),
+            ),
+          ),
         ),
       ),
     );
@@ -221,24 +221,24 @@ class _WeeklyNotificationSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final applicationSettings = ApplicationSettingsScope.settingsOf(context);
-    final applicationSettingsController = ApplicationSettingsScope.controllerOf(context);
+    final notificationSettings = NotificationsScope.settingsOf(context);
+    final notificationSettingsController = NotificationsScope.controllerOf(context);
     return SliverPadding(
       padding: ScaffoldPadding.of(context),
-      sliver: const SliverToBoxAdapter(
+      sliver: SliverToBoxAdapter(
         child: ListTile(
-          title: Text('Weekly Notifications'),
-          subtitle: Text(
+          title: const Text('Weekly Notifications'),
+          subtitle: const Text(
             'Receive notifications for weekly tasks (e.g., reminders, tasks reset).',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          // trailing: Switch(
-          //   value: applicationSettings.enableWeeklyTasksNotifications ?? true,
-          //   onChanged: (value) => applicationSettingsController.updateApplicationSettings(
-          //     applicationSettings.copyWith(enableWeeklyTasksNotifications: value),
-          //   ),
-          // ),
+          trailing: Switch(
+            value: notificationSettings.enableWeeklyTasksNotifications ?? true,
+            onChanged: (value) => notificationSettingsController.updateNotificationSettings(
+              notificationSettings.copyWith(enableWeeklyTasksNotifications: value),
+            ),
+          ),
         ),
       ),
     );
@@ -285,7 +285,7 @@ class _AndroidNotificationStatusAndPermissionsState extends State<_AndroidNotifi
     padding: ScaffoldPadding.of(context),
     sliver: SliverToBoxAdapter(
       child: StateConsumer<NotificationSettingsController, NotificationSettingsState>(
-        controller: NotificationsScope.controller(context),
+        controller: NotificationsScope.controllerOf(context),
         builder: (context, state, child) {
           // final isPermissionGranted = state.isAndroidPermissionGranted;
           final isPermissionGranted = state.notificationSettings.isAndroidPermissionGranted ?? false;

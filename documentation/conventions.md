@@ -1,5 +1,10 @@
 # Code Conventions — DailyTasks
 
+## Dart rules
+
+- Follow the official Dart style guide: https://dart.dev/guides/language/effective-dart.
+- Make sure that dart editor ruler is set appropriately for line length of 120.
+
 ## General Principles
 
 **SOLID** — design principles that help create flexible and maintainable code.

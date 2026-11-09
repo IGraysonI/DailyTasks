@@ -63,18 +63,28 @@ class ApplicationSettings with Diagnosticable {
     return other is ApplicationSettings &&
         other.applicationTheme == applicationTheme &&
         other.locale == locale &&
-        other.textScale == textScale;
+        other.textScale == textScale &&
+        other.resetDailyTasksOnNewDayStart == resetDailyTasksOnNewDayStart &&
+        other.resetWeeklyTasksOnNewWeekStart == resetWeeklyTasksOnNewWeekStart;
   }
 
   @override
-  int get hashCode => Object.hash(applicationTheme, locale, textScale);
+  int get hashCode => Object.hash(
+    applicationTheme,
+    locale,
+    textScale,
+    resetDailyTasksOnNewDayStart,
+    resetWeeklyTasksOnNewWeekStart,
+  );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties
       ..add(DiagnosticsProperty<ApplicationTheme>('appTheme', applicationTheme))
       ..add(DiagnosticsProperty<Locale>('locale', locale))
-      ..add(DoubleProperty('textScale', textScale));
+      ..add(DoubleProperty('textScale', textScale))
+      ..add(FlagProperty('resetDailyTasksOnNewDayStart', value: resetDailyTasksOnNewDayStart))
+      ..add(FlagProperty('resetWeeklyTasksOnNewWeekStart', value: resetWeeklyTasksOnNewWeekStart));
     super.debugFillProperties(properties);
   }
 }

@@ -2,12 +2,14 @@ import 'package:daily_tasks/src/common/model/app_metadata.dart';
 import 'package:daily_tasks/src/feature/daily_task_rewards/controller/daily_task_rewards_controller.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/controller/daily_tasks_controller.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/service/daily_tasks_reset_service.dart';
+import 'package:daily_tasks/src/feature/notification/controller/notification_settings_controller.dart';
 import 'package:daily_tasks/src/feature/settings/controller/application_settings_controller.dart';
 import 'package:daily_tasks/src/feature/weekly_task_rewards/controller/weekly_task_rewards_controller.dart';
 import 'package:daily_tasks/src/feature/weekly_tasks/controller/weekly_tasks_controller.dart';
 import 'package:daily_tasks/src/feature/weekly_tasks/service/weekly_tasks_reset_service.dart';
 import 'package:database/database.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// {@template dependencies}
@@ -54,6 +56,12 @@ class Dependencies {
 
   /// Weekly Tasks Reset Service
   late final WeeklyTasksResetService weeklyTasksResetService;
+
+  /// Local Notification Plugin
+  late final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
+  /// Notification Settings Controller
+  late final NotificationSettingsController notificationSettingsController;
 
   @override
   String toString() => 'Dependencies{}';

@@ -1,3 +1,9 @@
+import 'dart:io';
+
+import 'package:control/control.dart';
+import 'package:daily_tasks/src/feature/notification/controller/notification_settings_controller.dart';
+import 'package:daily_tasks/src/feature/notification/widget/notification_request_dialog.dart';
+import 'package:daily_tasks/src/feature/notification/widget/notifications_scope.dart';
 import 'package:daily_tasks/src/feature/settings/widget/application_settings_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
@@ -77,7 +83,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
         // --- Notifications --- //
         const GroupSeparator(title: 'Notifications'),
-        const _NotificationSettings(),
+        const _NotificationTest(),
+        if (Platform.isAndroid) const _AndroidNotificationStatusAndPermissions(),
+        const _NotificationRequestDialog(),
+        const _DailyNotificationSettings(),
+        const _WeeklyNotificationSettings(),
 
         // --- Tasks reset --- //
         const GroupSeparator(title: 'Tasks reset'),
@@ -177,23 +187,141 @@ class _LocaleSelectorState extends State<_LocaleSelector> {
   }
 }
 
-class _NotificationSettings extends StatelessWidget {
-  const _NotificationSettings();
+class _DailyNotificationSettings extends StatelessWidget {
+  const _DailyNotificationSettings();
+
+  @override
+  Widget build(BuildContext context) {
+    final notificationSettings = NotificationsScope.settingsOf(context);
+    final notificationSettingsController = NotificationsScope.controllerOf(context);
+    return SliverPadding(
+      padding: ScaffoldPadding.of(context),
+      sliver: SliverToBoxAdapter(
+        child: ListTile(
+          title: const Text('Daily Notifications'),
+          subtitle: const Text(
+            'Receive notifications for daily tasks (e.g., reminders, tasks reset).',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          trailing: Switch(
+            value: notificationSettings.enableDailyTasksNotifications ?? true,
+            onChanged: (value) => notificationSettingsController.updateNotificationSettings(
+              notificationSettings.copyWith(enableDailyTasksNotifications: value),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _WeeklyNotificationSettings extends StatelessWidget {
+  const _WeeklyNotificationSettings();
+
+  @override
+  Widget build(BuildContext context) {
+    final notificationSettings = NotificationsScope.settingsOf(context);
+    final notificationSettingsController = NotificationsScope.controllerOf(context);
+    return SliverPadding(
+      padding: ScaffoldPadding.of(context),
+      sliver: SliverToBoxAdapter(
+        child: ListTile(
+          title: const Text('Weekly Notifications'),
+          subtitle: const Text(
+            'Receive notifications for weekly tasks (e.g., reminders, tasks reset).',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          trailing: Switch(
+            value: notificationSettings.enableWeeklyTasksNotifications ?? true,
+            onChanged: (value) => notificationSettingsController.updateNotificationSettings(
+              notificationSettings.copyWith(enableWeeklyTasksNotifications: value),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _NotificationTest extends StatelessWidget {
+  const _NotificationTest();
 
   @override
   Widget build(BuildContext context) => SliverPadding(
     padding: ScaffoldPadding.of(context),
     sliver: SliverToBoxAdapter(
       child: ListTile(
-        title: const Text('Notifications'),
+        title: const Text('Test Notification'),
         subtitle: const Text(
-          'TODO: Add notification settings.',
+          'Send a test notification to verify the notification system is working correctly.',
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        onTap: () {
-          // Handle notification settings tap
+        trailing: ElevatedButton(
+          onPressed: () async => NotificationsScope.showNotification(
+            context,
+            title: 'Test Notification',
+            body: 'This is a test notification from the Daily Tasks app.',
+          ),
+          child: const Text('Send Test'),
+        ),
+      ),
+    ),
+  );
+}
+
+class _AndroidNotificationStatusAndPermissions extends StatefulWidget {
+  const _AndroidNotificationStatusAndPermissions();
+
+  @override
+  State<_AndroidNotificationStatusAndPermissions> createState() => _AndroidNotificationStatusAndPermissionsState();
+}
+
+class _AndroidNotificationStatusAndPermissionsState extends State<_AndroidNotificationStatusAndPermissions> {
+  @override
+  Widget build(BuildContext context) => SliverPadding(
+    padding: ScaffoldPadding.of(context),
+    sliver: SliverToBoxAdapter(
+      child: StateConsumer<NotificationSettingsController, NotificationSettingsState>(
+        controller: NotificationsScope.controllerOf(context),
+        builder: (context, state, child) {
+          // final isPermissionGranted = state.isAndroidPermissionGranted;
+          final isPermissionGranted = state.notificationSettings.isAndroidPermissionGranted ?? false;
+          return ListTile(
+            title: const Text('Android Notification Current Status'),
+            trailing: Text(
+              isPermissionGranted ? 'Granted' : 'Denied',
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(color: isPermissionGranted ? Colors.green : Colors.red),
+            ),
+          );
         },
+      ),
+    ),
+  );
+}
+
+class _NotificationRequestDialog extends StatelessWidget {
+  const _NotificationRequestDialog();
+
+  @override
+  Widget build(BuildContext context) => SliverPadding(
+    padding: ScaffoldPadding.of(context),
+    sliver: SliverToBoxAdapter(
+      child: ListTile(
+        title: const Text('Request Notification Permission Dialog'),
+        subtitle: const Text(
+          'Show a dialog to request notification permissions from the user.',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        trailing: ElevatedButton(
+          onPressed: () async => await NotificationRequestDialog.show(context),
+          child: const Text('Show Dialog'),
+        ),
       ),
     ),
   );

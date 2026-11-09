@@ -60,7 +60,8 @@ class SqlDatabase extends _$SqlDatabase {
     try {
       final migrator = Migrator(attachedDatabase);
       await _recreateDb(migrator);
-    } on Exception catch (e, _) {
+    } on Exception catch (e, s) {
+      l.e('Failed to recreate database: $e', s);
       return false;
     }
     return true;

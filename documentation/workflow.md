@@ -1,102 +1,102 @@
-# Рабочий процесс — DailyTasks
+# Workflow — DailyTasks
 
-## Фазы разработки фичи
+## Feature Development Phases
 
-### 1. Планирование и обсуждение
+### 1. Planning and Discussion
 
-Перед реализацией — уточнить требования:
-- Определить bounded context фичи
-- Выявить зависимости от других контекстов
-- Обсудить изменения в доменной модели
-- Предложить одно конкретное решение с явными границами ответственности
+Before implementation, clarify the requirements:
+- Identify the feature's bounded context
+- Identify dependencies on other contexts
+- Discuss changes to the domain model
+- Propose one concrete solution with explicit boundaries of responsibility
 
-**Результат:** решение согласовано или требует доработки.
+**Outcome:** the solution is agreed upon or needs further work.
 
-### 2. Архитектурное проектирование
+### 2. Architectural Design
 
-Если фича требует значительных архитектурных изменений:
-- Записать решение в `documentation/adr/{date}-{name}.md`
-- Описать проблему, варианты решения, выбранный вариант и последствия
+If the feature requires significant architectural changes:
+- Record the decision in `documentation/adr/{date}-{name}.md`
+- Describe the problem, the solution options, the chosen option, and the consequences
 
-Если планируется рефакторинг для реализации:
-- Записать в `documentation/refactoring/{name}.md`
-- Не запускать реализацию без согласования
+If refactoring is planned as part of the implementation:
+- Record it in `documentation/refactoring/{name}.md`
+- Do not start implementation without approval
 
-### 3. Реализация
+### 3. Implementation
 
-**Послойное разделение ответственности:**
+**Layered separation of responsibilities:**
 
-Создавать слои в порядке:
+Create layers in this order:
 
-1. **Model** — доменные модели фичи (если требуется)
+1. **Model** — the feature's domain models (if needed)
 2. **Data** — Repository, DataSource, DAO
-3. **Control** — управление состоянием, бизнес-логика
-4. **Widget** — UI компоненты и страницы
+3. **Control** — state management, business logic
+4. **Widget** — UI components and pages
 
-**Строгое соблюдение послойной цепочки:**
+**Strict adherence to the layered chain:**
 ```
 Widget → Control → Repository → DataSource → DAO → Drift
 ```
 
-Уровни не пропускаются. Прямые обращения через слои запрещены.
+Layers are never skipped. Direct calls across layers are forbidden.
 
-### 4. Тестирование
+### 4. Testing
 
-Покрывать тестами в порядке приоритета:
-1. **Control** — бизнес-логика (unit-тесты)
-2. **Data** — Repository, DataSource (unit-тесты)
-3. **Widget** — критические UI сценарии (widget-тесты)
+Cover with tests in order of priority:
+1. **Control** — business logic (unit tests)
+2. **Data** — Repository, DataSource (unit tests)
+3. **Widget** — critical UI scenarios (widget tests)
 
 ### 5. Code Review
 
-Критерии review:
-- Соответствие архитектуре (послойность, DDD принципы)
-- Соответствие `conventions.md` (именование, структура, импорты)
-- Наличие тестов для критической логики
-- Обработка ошибок (try-catch, null checks)
-- Производительность и утечки памяти
-- Документированность нетривиальной логики
+Review criteria:
+- Compliance with the architecture (layering, DDD principles)
+- Compliance with `conventions.md` (naming, structure, imports)
+- Tests for critical logic
+- Error handling (try-catch, null checks)
+- Performance and memory leaks
+- Documentation of non-trivial logic
 
-### 6. Мергирование
+### 6. Merging
 
-После approval:
-- Убедиться, что CI проходит (тесты, анализ)
-- Обновить `application/CHANGELOG.md`
-- Смергить в основную ветку
+After approval:
+- Make sure CI passes (tests, analysis)
+- Update `application/CHANGELOG.md`
+- Merge into the main branch
 
-## Обновление документации
+## Updating Documentation
 
-### При изменении архитектуры
+### When the architecture changes
 
-1. Обновить `documentation/vision.md` если изменился техстек или стратегия
-2. Добавить ADR в `documentation/adr/`
-3. Обновить `documentation/architecture/domain_structure.md` если изменилась структура доменов
+1. Update `documentation/vision.md` if the tech stack or strategy has changed
+2. Add an ADR to `documentation/adr/`
+3. Update `documentation/architecture/domain_structure.md` if the domain structure has changed
 
-### При изменении рабочего процесса
+### When the workflow changes
 
-Обновить `documentation/workflow.md` и `documentation/conventions.md`
+Update `documentation/workflow.md` and `documentation/conventions.md`
 
-### При добавлении новых терминов
+### When adding new terms
 
-Добавить в `documentation/fmcg_terms.md`
+Add them to `documentation/fmcg_terms.md`
 
-## Ветвление
+## Branching
 
-**Версионирование веток:**
-- `feature/{feature-name}` — новые фичи
-- `fix/{issue-name}` — баги
-- `refactor/{refactor-name}` — рефакторинг
-- `docs/{doc-name}` — документация
+**Branch naming:**
+- `feature/{feature-name}` — new features
+- `fix/{issue-name}` — bugs
+- `refactor/{refactor-name}` — refactoring
+- `docs/{doc-name}` — documentation
 
-**Пример:**
+**Examples:**
 - `feature/daily-tasks-reset`
 - `fix/notification-timing`
 - `refactor/database-layer`
 - `docs/api-documentation`
 
-## Коммиты
+## Commits
 
-**Формат коммит-сообщения:**
+**Commit message format:**
 
 ```
 <type>: <subject>
@@ -105,21 +105,21 @@ Widget → Control → Repository → DataSource → DAO → Drift
 ```
 
 **Types:**
-- `feat` — новая фича
-- `fix` — исправление бага
-- `refactor` — рефакторинг без изменения функциональности
-- `docs` — изменения в документации
-- `test` — добавление/изменение тестов
-- `style` — изменения форматирования (без изменения логики)
-- `chore` — изменения сборки, зависимостей, конфигурации
+- `feat` — new feature
+- `fix` — bug fix
+- `refactor` — refactoring without changing functionality
+- `docs` — documentation changes
+- `test` — adding/changing tests
+- `style` — formatting changes (no logic changes)
+- `chore` — build, dependency, or configuration changes
 
 **Subject:**
-- Описание на английском (для консистентности с кодом)
-- Начинать с глагола в повелительном наклонении
-- Максимум 50 символов
-- Без точки в конце
+- Written in English (for consistency with the code)
+- Start with a verb in the imperative mood
+- 50 characters maximum
+- No trailing period
 
-**Примеры:**
+**Examples:**
 ```
 feat: add daily task completion toggle
 fix: resolve null pointer in task weight calculation
@@ -127,26 +127,26 @@ refactor: extract task filtering logic into separate method
 docs: update workflow documentation
 ```
 
-## Релизы
+## Releases
 
-**Семантическое версионирование:** `MAJOR.MINOR.PATCH`
+**Semantic versioning:** `MAJOR.MINOR.PATCH`
 
-- `MAJOR` — несовместимые изменения
-- `MINOR` — новые фичи (обратно совместимые)
-- `PATCH` — исправления багов
+- `MAJOR` — incompatible changes
+- `MINOR` — new features (backward compatible)
+- `PATCH` — bug fixes
 
-**Процесс релиза:**
-1. Обновить версию в `app/pubspec.yaml`
-2. Обновить `application/CHANGELOG.md` с новыми фичами и исправлениями
-3. Создать git tag: `v1.2.3`
-4. Смергить в main
-5. Собрать артефакты для каждой платформы
+**Release process:**
+1. Update the version in `app/pubspec.yaml`
+2. Update `application/CHANGELOG.md` with new features and fixes
+3. Create a git tag: `v1.2.3`
+4. Merge into main
+5. Build artifacts for each platform
 
-## Локализация
+## Localization
 
-При добавлении новых строк UI:
-1. Добавить ключ в `packages/localization/lib/src/l10n/ru.json`
-2. Запустить генератор локализации:
+When adding new UI strings:
+1. Add the key to `packages/localization/lib/src/l10n/ru.json`
+2. Run the localization generator:
    ```bash
    dart pub global run sheety_localization:generate --credentials=credentials.json \
      --sheet=1rAo4H65psLdapV0D8TSAI6aepMgj8oAA2Cvz2HHdZRU \
@@ -156,22 +156,22 @@ docs: update workflow documentation
      --prefix=app \
      --format
    ```
-3. Коммитить сгенерированные файлы
+3. Commit the generated files
 
-## Анализ кода
+## Code Analysis
 
-Перед коммитом запустить:
+Before committing, run:
 ```bash
 dart analyze
 ```
 
-Все ошибки и предупреждения должны быть исправлены.
+All errors and warnings must be fixed.
 
-## Форматирование
+## Formatting
 
-Использовать встроенный Dart formatter:
+Use the built-in Dart formatter:
 ```bash
 dart format .
 ```
 
-Запускается автоматически перед коммитом (если настроен pre-commit hook).
+It runs automatically before each commit (if a pre-commit hook is configured).

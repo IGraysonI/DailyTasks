@@ -1,219 +1,219 @@
-# Терминология предметной области — DailyTasks
+# Domain Terminology — DailyTasks
 
-## Основные термины
+## Core Terms
 
-### Task (Задача)
+### Task
 
-Единица работы, которую пользователь хочет выполнить. Задача имеет:
-- **Title** — название задачи
-- **Description** — описание (опционально)
-- **Weight** — "стоимость" задачи в условных единицах
-- **Status** — выполнена или нет
-- **Cycle** — ежедневная или еженедельная
+A unit of work the user wants to complete. A task has:
+- **Title** — the task name
+- **Description** — a description (optional)
+- **Weight** — the task's "cost" in arbitrary units
+- **Status** — completed or not
+- **Cycle** — daily or weekly
 
-**Синонимы:** Item, Activity, Chore, Assignment
+**Synonyms:** Item, Activity, Chore, Assignment
 
-**Примеры:**
-- "Выполнить утреннюю гимнастику" (Daily Task, weight: 5)
-- "Прочитать 20 страниц книги" (Daily Task, weight: 10)
-- "Завершить проект X" (Weekly Task, weight: 50)
-
----
-
-### Weight (Вес)
-
-Числовое значение, которое указывает "сложность" или "затраты" на выполнение задачи. Используется для контроля нагрузки.
-
-**Единица:** условные единицы (очки, поинты)
-
-**Диапазон:** положительное целое число (обычно 1-100)
-
-**Назначение:** регулировать сбалансированное количество работы в день/неделю
-
-**Примеры веса:**
-- Простая задача: 1-5
-- Средняя задача: 5-20
-- Сложная задача: 20+
+**Examples:**
+- "Do morning exercises" (Daily Task, weight: 5)
+- "Read 20 pages of a book" (Daily Task, weight: 10)
+- "Finish project X" (Weekly Task, weight: 50)
 
 ---
 
-### Daily Task (Ежедневная задача)
+### Weight
 
-Задача, которая повторяется каждый день или может быть выполнена в пределах одного дня.
+A numeric value indicating the "difficulty" or "effort" required to complete a task. Used to control workload.
 
-**Цикл:** день (24 часа)
+**Unit:** arbitrary units (points)
 
-**Сброс:** в 00:00 (полночь) — все задачи вернулись в статус "невыполнено"
+**Range:** a positive integer (usually 1-100)
 
-**Примеры:**
-- Утренняя зарядка
-- Написать отчет за день
-- Выпить 2 литра воды
+**Purpose:** keep the amount of work per day/week balanced
 
----
-
-### Weekly Task (Еженедельная задача)
-
-Задача, которая выполняется или может быть выполнена в пределах одной недели.
-
-**Цикл:** неделя (7 дней)
-
-**Сброс:** в начало недели (обычно понедельник, 00:00)
-
-**Примеры:**
-- Завершить еженедельный отчет
-- Посетить спортзал
-- Уборка квартиры
+**Weight examples:**
+- Simple task: 1-5
+- Medium task: 5-20
+- Hard task: 20+
 
 ---
 
-### Cycle / Period (Цикл / Период)
+### Daily Task
 
-Временной интервал, в котором действует задача.
+A task that repeats every day or can be completed within a single day.
 
-**Типы:**
-- **Daily Cycle** — 24 часа (день)
-- **Weekly Cycle** — 7 дней (неделя)
+**Cycle:** day (24 hours)
 
-**Свойства цикла:**
-- Начало цикла (когда обнуляются задачи)
-- Продолжительность (количество часов/дней)
-- Тип повторения (как часто цикл повторяется)
+**Reset:** at 00:00 (midnight) — all tasks return to the "not completed" status
+
+**Examples:**
+- Morning workout
+- Write the daily report
+- Drink 2 liters of water
+
+---
+
+### Weekly Task
+
+A task that is done or can be done within a single week.
+
+**Cycle:** week (7 days)
+
+**Reset:** at the start of the week (usually Monday, 00:00)
+
+**Examples:**
+- Finish the weekly report
+- Go to the gym
+- Clean the apartment
+
+---
+
+### Cycle / Period
+
+The time interval in which a task is active.
+
+**Types:**
+- **Daily Cycle** — 24 hours (a day)
+- **Weekly Cycle** — 7 days (a week)
+
+**Cycle properties:**
+- Cycle start (when tasks are reset)
+- Duration (number of hours/days)
+- Recurrence type (how often the cycle repeats)
 
 ---
 
 ### Weight Limit / Daily Limit / Weekly Limit
 
-Максимальное количество веса, которое пользователь может/должен выполнить за день или неделю.
+The maximum amount of weight the user can/should complete in a day or week.
 
-**Назначение:** предотвратить перегруз, гарантировать устойчивый темп работы
+**Purpose:** prevent overload and ensure a sustainable pace of work
 
-**Значение:** настраивается пользователем
+**Value:** configured by the user
 
-**Примеры:**
-- Daily Limit: 50 (пользователь планирует выполнить не более 50 поинтов в день)
-- Weekly Limit: 200 (в неделю не более 200)
+**Examples:**
+- Daily Limit: 50 (the user plans to complete no more than 50 points per day)
+- Weekly Limit: 200 (no more than 200 per week)
 
 ---
 
 ### Completed Weight / Done Weight
 
-Сумма веса всех выполненных задач за текущий цикл.
+The total weight of all tasks completed in the current cycle.
 
-**Расчет:**
+**Calculation:**
 ```
 CompletedWeight = Σ(weight of completed tasks in current cycle)
 ```
 
-**Использование:** для отслеживания прогресса
+**Usage:** for tracking progress
 
 ---
 
 ### Remaining Weight
 
-Оставшийся доступный вес, который пользователь может выполнить в текущем цикле.
+The remaining available weight the user can complete in the current cycle.
 
-**Формула:**
+**Formula:**
 ```
 RemainingWeight = WeightLimit - CompletedWeight
 ```
 
-**Назначение:** показать пользователю, сколько еще он может взять задач
+**Purpose:** show the user how many more tasks they can take on
 
-**Свойство:** может быть отрицательным, если пользователь превысил лимит
+**Property:** can be negative if the user has exceeded the limit
 
 ---
 
-### Reward (Награда)
+### Reward
 
-Поощрение или результат за выполнение задач. В текущей версии — это отслеживание прогресса.
+An incentive or result for completing tasks. In the current version, this is progress tracking.
 
-**Типы наград:**
-- **Progress** — визуальное отражение выполненного веса
-- **Achievement** — значки за достижения (планируется)
-- **Currency** — внутренняя валюта (планируется)
+**Reward types:**
+- **Progress** — a visual representation of the completed weight
+- **Achievement** — badges for achievements (planned)
+- **Currency** — in-app currency (planned)
 
-**Примеры:**
-- "За сегодня выполнено 45 из 50 поинтов"
-- Прогресс-бар, заполненный на 90%
+**Examples:**
+- "45 of 50 points completed today"
+- A progress bar filled to 90%
 
 ---
 
 ### Completion Status
 
-Статус выполнения задачи — завершена она или нет.
+A task's completion status — whether it is finished or not.
 
-**Значения:**
-- **Completed / Done** — задача выполнена
-- **Incomplete / Pending** — задача не выполнена
+**Values:**
+- **Completed / Done** — the task is completed
+- **Incomplete / Pending** — the task is not completed
 
-**Дополнительные поля:**
-- `completedAt` — временная метка выполнения
-- `isCompleted` — булевый флаг
+**Additional fields:**
+- `completedAt` — completion timestamp
+- `isCompleted` — boolean flag
 
 ---
 
 ### Progress / Progression
 
-Визуальное отображение прогресса выполнения задач за текущий цикл.
+A visual display of task completion progress for the current cycle.
 
-**Показатели:**
-- Процент выполнения: `(CompletedWeight / WeightLimit) * 100`
-- Абсолютные значения: `CompletedWeight / WeightLimit`
-- Примеры: "45/50", "90%", прогресс-бар
+**Metrics:**
+- Completion percentage: `(CompletedWeight / WeightLimit) * 100`
+- Absolute values: `CompletedWeight / WeightLimit`
+- Examples: "45/50", "90%", a progress bar
 
 ---
 
 ### Reset
 
-Операция очистки статуса всех задач в цикле. Задачи возвращаются в статус "невыполнено".
+The operation of clearing the status of all tasks in a cycle. Tasks return to the "not completed" status.
 
-**Типы:**
-- **Daily Reset** — в полночь (автоматический)
-- **Weekly Reset** — в начало недели (автоматический)
-- **Manual Reset** — пользователь сам инициирует (опционально)
+**Types:**
+- **Daily Reset** — at midnight (automatic)
+- **Weekly Reset** — at the start of the week (automatic)
+- **Manual Reset** — initiated by the user (optional)
 
-**Поведение:**
-- Все задачи цикла возвращаются в статус `isCompleted = false`
-- История выполненных задач сохраняется в БД (для статистики)
-- CompletedWeight обнуляется
+**Behavior:**
+- All tasks in the cycle return to `isCompleted = false`
+- The history of completed tasks is kept in the database (for statistics)
+- CompletedWeight is reset to zero
 
 ---
 
 ### Settings / Preferences
 
-Пользовательские настройки приложения.
+User settings of the application.
 
-**Категории:**
-- **General** — язык, тема
-- **Notifications** — включить/выключить уведомления, время напоминаний
-- **Limits** — лимиты веса за день/неделю
-- **Appearance** — цветовая схема, размер шрифта
+**Categories:**
+- **General** — language, theme
+- **Notifications** — enable/disable notifications, reminder times
+- **Limits** — daily/weekly weight limits
+- **Appearance** — color scheme, font size
 
 ---
 
 ### Notification
 
-Оповещение пользователю о событии в приложении.
+An alert to the user about an event in the application.
 
-**Типы:**
-- **Reminder** — напоминание о невыполненной задаче
-- **Daily Start** — уведомление в начало дня
-- **Weekly Start** — уведомление в начало недели
-- **Milestone** — достижение определенного прогресса (планируется)
+**Types:**
+- **Reminder** — a reminder about an incomplete task
+- **Daily Start** — a notification at the start of the day
+- **Weekly Start** — a notification at the start of the week
+- **Milestone** — reaching a certain level of progress (planned)
 
 ---
 
 ### State / Application State
 
-Текущее состояние приложения и его слоев.
+The current state of the application and its layers.
 
-**Типы состояния:**
-- **Idle** — приложение готово к работе
-- **Processing / Loading** — выполняется асинхронная операция
-- **Error** — произошла ошибка
+**State types:**
+- **Idle** — the application is ready
+- **Processing / Loading** — an asynchronous operation is in progress
+- **Error** — an error has occurred
 
-**Пример:**
+**Example:**
 ```dart
 sealed class DailyTasksState {
   final List<DailyTaskModel> dailyTasks;
@@ -227,17 +227,17 @@ sealed class DailyTasksState {
 
 ---
 
-## Сокращения
+## Abbreviations
 
-| Сокращение | Расшифровка |
+| Abbreviation | Meaning |
 |-----------|-----------|
-| UI | User Interface (пользовательский интерфейс) |
-| UX | User Experience (пользовательский опыт) |
-| DB / БД | Database (база данных) |
-| DAO | Data Access Object (объект доступа к данным) |
-| DDD | Domain Driven Design (проектирование, управляемое доменом) |
-| SOLID | Архитектурные принципы |
-| KISS | Keep It Simple, Stupid (принцип простоты) |
+| UI | User Interface |
+| UX | User Experience |
+| DB | Database |
+| DAO | Data Access Object |
+| DDD | Domain Driven Design |
+| SOLID | Architectural design principles |
+| KISS | Keep It Simple, Stupid (simplicity principle) |
 | YAGNI | You Aren't Gonna Need It |
 | API | Application Programming Interface |
 | JSON | JavaScript Object Notation |
@@ -245,9 +245,9 @@ sealed class DailyTasksState {
 
 ---
 
-## Примеры использования в коде
+## Usage Examples in Code
 
-### Daily Task с весом
+### Daily Task with a weight
 
 ```dart
 DailyTaskModel(
@@ -261,12 +261,12 @@ DailyTaskModel(
 )
 ```
 
-### Вычисление оставшегося веса
+### Calculating the remaining weight
 
 ```dart
-// Лимит дня: 50 поинтов
-// Выполнено: 3 задачи по 10, 8, 15 поинтов = 33
-// Осталось: 50 - 33 = 17 поинтов
+// Daily limit: 50 points
+// Completed: 3 tasks worth 10, 8, 15 points = 33
+// Remaining: 50 - 33 = 17 points
 
 int remainingWeight(int dailyLimit, List<DailyTaskModel> tasks) {
   final completedWeight = tasks
@@ -276,7 +276,7 @@ int remainingWeight(int dailyLimit, List<DailyTaskModel> tasks) {
 }
 ```
 
-### Проверка возможности добавить задачу
+### Checking whether a task can be added
 
 ```dart
 bool canAddTask(int taskWeight, int remainingWeight) {
@@ -286,30 +286,30 @@ bool canAddTask(int taskWeight, int remainingWeight) {
 
 ---
 
-## Контекст FMCG (Fast-Moving Consumer Goods) — Адаптация
+## FMCG (Fast-Moving Consumer Goods) Context — Adaptation
 
-DailyTasks адаптирует концепции из FMCG:
+DailyTasks adapts concepts from FMCG:
 
-- **Stock / Inventory** → **Daily Limit / Weekly Limit** (доступный "склад" времени/энергии)
-- **SKU (Stock Keeping Unit)** → **Task** (единица работы)
-- **Turnover / Velocity** → **Completion Rate** (скорость выполнения)
-- **Demand** → **Task Priority / Weight** (потребность в выполнении)
-- **Supply Chain** → **Workflow** (цепь обработки задач)
+- **Stock / Inventory** → **Daily Limit / Weekly Limit** (the available "stock" of time/energy)
+- **SKU (Stock Keeping Unit)** → **Task** (a unit of work)
+- **Turnover / Velocity** → **Completion Rate** (speed of completion)
+- **Demand** → **Task Priority / Weight** (the need for completion)
+- **Supply Chain** → **Workflow** (the task processing chain)
 
-Это помогает применить принципы управления логистикой к управлению личными задачами.
+This helps apply logistics management principles to managing personal tasks.
 
 ---
 
-## Расширение терминологии
+## Extending the Terminology
 
-При добавлении новых фич — обновить этот файл с новыми терминами и примерами.
+When adding new features, update this file with new terms and examples.
 
-**Шаблон:**
+**Template:**
 ```markdown
 ### New Term
 
-Описание на 2-3 строки.
+A 2-3 line description.
 
-**Связанные:** другие термины
-**Примеры:** примеры использования
+**Related:** other terms
+**Examples:** usage examples
 ```

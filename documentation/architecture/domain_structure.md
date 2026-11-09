@@ -1,25 +1,25 @@
-# Структура доменов — DailyTasks
+# Domain Structure — DailyTasks
 
-## Обзор
+## Overview
 
-Приложение разделено на несколько bounded contexts, каждый отвечает за отдельную область бизнес-логики. Контексты взаимодействуют через четко определенные интерфейсы.
+The application is divided into several bounded contexts, each responsible for a separate area of business logic. Contexts interact through clearly defined interfaces.
 
 ## Bounded Contexts
 
-### 1. Daily Tasks (Ежедневные задачи)
+### 1. Daily Tasks
 
-**Путь:** `app/lib/src/feature/daily_tasks`
+**Path:** `app/lib/src/feature/daily_tasks`
 
-**Ответственность:**
-- Управление ежедневными задачами
-- Создание, редактирование, удаление задач
-- Отслеживание статуса выполнения (completed/incomplete)
-- Сброс задач в начале нового дня
+**Responsibilities:**
+- Managing daily tasks
+- Creating, editing, and deleting tasks
+- Tracking completion status (completed/incomplete)
+- Resetting tasks at the start of a new day
 
-**Основные сущности:**
-- `DailyTaskModel` — модель задачи с полями: id, title, description, weight, isCompleted, createdAt, completedAt
+**Core entities:**
+- `DailyTaskModel` — task model with fields: id, title, description, weight, isCompleted, createdAt, completedAt
 
-**Слои:**
+**Layers:**
 ```
 daily_tasks/
 ├── data/
@@ -29,7 +29,7 @@ daily_tasks/
 └── widget/                # DailyTasksPage, TaskCard, etc.
 ```
 
-**Интерфейс Repository:**
+**Repository interface:**
 ```dart
 abstract class DailyTasksRepository {
   Future<List<DailyTaskModel>> getDailyTasks();
@@ -43,24 +43,24 @@ abstract class DailyTasksRepository {
 }
 ```
 
-**Точки входа (Ports):**
-- `DailyTasksController` — управление состоянием и операции над задачами
+**Entry points (Ports):**
+- `DailyTasksController` — state management and task operations
 
 ---
 
-### 2. Weekly Tasks (Еженедельные задачи)
+### 2. Weekly Tasks
 
-**Путь:** `app/lib/src/feature/weekly_tasks`
+**Path:** `app/lib/src/feature/weekly_tasks`
 
-**Ответственность:**
-- Управление еженедельными задачами
-- Аналогично ежедневным, но с недельным циклом
-- Сброс задач в начало недели
+**Responsibilities:**
+- Managing weekly tasks
+- Same as daily tasks, but with a weekly cycle
+- Resetting tasks at the start of the week
 
-**Основные сущности:**
-- `WeeklyTaskModel` — аналогично DailyTaskModel
+**Core entities:**
+- `WeeklyTaskModel` — analogous to DailyTaskModel
 
-**Интерфейс Repository:**
+**Repository interface:**
 ```dart
 abstract class WeeklyTasksRepository {
   Future<List<WeeklyTaskModel>> getWeeklyTasks();
@@ -76,22 +76,22 @@ abstract class WeeklyTasksRepository {
 
 ---
 
-### 3. Daily Task Rewards (Награды за ежедневные задачи)
+### 3. Daily Task Rewards
 
-**Путь:** `app/lib/src/feature/daily_task_rewards`
+**Path:** `app/lib/src/feature/daily_task_rewards`
 
-**Ответственность:**
-- Вычисление наград за выполненные ежедневные задачи
-- Отслеживание веса выполненных задач за день
-- Проверка лимита дневного веса
+**Responsibilities:**
+- Calculating rewards for completed daily tasks
+- Tracking the weight of tasks completed during the day
+- Checking the daily weight limit
 
-**Основные сущности:**
-- `DailyRewardModel` — содержит totalWeight, completedWeight, remainingWeight, date
+**Core entities:**
+- `DailyRewardModel` — contains totalWeight, completedWeight, remainingWeight, date
 
-**Зависимости:**
-- **Daily Tasks** — получение списка выполненных задач и их веса
+**Dependencies:**
+- **Daily Tasks** — getting the list of completed tasks and their weight
 
-**Интерфейс Repository:**
+**Repository interface:**
 ```dart
 abstract class DailyTaskRewardsRepository {
   Future<DailyRewardModel> getDailyReward();
@@ -104,34 +104,34 @@ abstract class DailyTaskRewardsRepository {
 
 ---
 
-### 4. Weekly Task Rewards (Награды за еженедельные задачи)
+### 4. Weekly Task Rewards
 
-**Путь:** `app/lib/src/feature/weekly_task_rewards`
+**Path:** `app/lib/src/feature/weekly_task_rewards`
 
-**Ответственность:**
-- Вычисление наград за выполненные еженедельные задачи
-- Аналогично Daily Task Rewards, но за неделю
+**Responsibilities:**
+- Calculating rewards for completed weekly tasks
+- Same as Daily Task Rewards, but per week
 
-**Основные сущности:**
-- `WeeklyRewardModel` — аналогично DailyRewardModel
+**Core entities:**
+- `WeeklyRewardModel` — analogous to DailyRewardModel
 
-**Зависимости:**
-- **Weekly Tasks** — получение списка выполненных задач и их веса
+**Dependencies:**
+- **Weekly Tasks** — getting the list of completed tasks and their weight
 
 ---
 
-### 5. Settings (Настройки)
+### 5. Settings
 
-**Путь:** `app/lib/src/feature/settings`
+**Path:** `app/lib/src/feature/settings`
 
-**Ответственность:**
-- Управление пользовательскими настройками
-- Язык, тема оформления, notifications, лимиты
+**Responsibilities:**
+- Managing user settings
+- Language, theme, notifications, limits
 
-**Основные сущности:**
-- `SettingsModel` — язык, тема, уведомления активны, лимит дневного веса, лимит еженедельного веса
+**Core entities:**
+- `SettingsModel` — language, theme, notifications enabled, daily weight limit, weekly weight limit
 
-**Интерфейс Repository:**
+**Repository interface:**
 ```dart
 abstract class SettingsRepository {
   Future<SettingsModel> getSettings();
@@ -140,24 +140,24 @@ abstract class SettingsRepository {
 }
 ```
 
-**Точки входа:**
-- `ApplicationSettingsScope` — предоставляет настройки всему приложению
+**Entry points:**
+- `ApplicationSettingsScope` — provides settings to the entire application
 
 ---
 
-### 6. Developer (Инструменты разработчика)
+### 6. Developer (Developer Tools)
 
-**Путь:** `app/lib/src/feature/developer`
+**Path:** `app/lib/src/feature/developer`
 
-**Ответственность:**
-- Инструменты для отладки
-- Логирование, инспекция БД, тестовые данные
+**Responsibilities:**
+- Debugging tools
+- Logging, database inspection, test data
 
-**Доступно только в DEBUG режиме**
+**Available only in DEBUG mode**
 
 ---
 
-## Взаимодействие между контекстами
+## Interaction Between Contexts
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -179,7 +179,7 @@ abstract class SettingsRepository {
 └─────────────────────────────────────────────────────────┘
 ```
 
-### Daily Task Rewards зависит от Daily Tasks:
+### Daily Task Rewards depends on Daily Tasks:
 
 ```dart
 // daily_task_rewards/data/source/daily_task_rewards_source.dart
@@ -195,7 +195,7 @@ class DailyTaskRewardsLocalDataSource {
 }
 ```
 
-### Settings предоставляется через ApplicationSettingsScope:
+### Settings are provided through ApplicationSettingsScope:
 
 ```dart
 // common/widget/application_settings_scope.dart
@@ -207,77 +207,77 @@ class ApplicationSettingsScope extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settingsRepository = context.read<SettingsRepository>();
-    // Предоставить настройки в виде провайдера/scope
+    // Provide settings as a provider/scope
     return child;
   }
 }
 ```
 
-## Правила взаимодействия
+## Interaction Rules
 
-1. **Минимальная связанность:** Контексты обмениваются только через Repository интерфейсы
-2. **Одностороннее направление:** Daily Task Rewards → Daily Tasks (не наоборот)
-3. **Обмен данными:** Только через модели (Models), не через сущности из других контекстов
-4. **Нет циклических зависимостей:** Если A зависит от B, то B не должен зависеть от A
+1. **Minimal coupling:** contexts communicate only through Repository interfaces
+2. **One-way direction:** Daily Task Rewards → Daily Tasks (not the other way around)
+3. **Data exchange:** only through models, not through entities from other contexts
+4. **No circular dependencies:** if A depends on B, then B must not depend on A
 
 ## Shared Packages
 
-Разделяемые пакеты для использования во всех контекстах:
+Shared packages for use across all contexts:
 
 ### database
 
-**Путь:** `packages/database`
+**Path:** `packages/database`
 
-Слой доступа к БД (Drift ORM, DAO объекты). Содержит:
-- `AppDatabase` — главная база данных
-- DAO классы для каждой таблицы
-- Entity модели (дублеры доменных моделей для БД)
-- Маппинг между Entity и Domain моделями
+Database access layer (Drift ORM, DAO objects). Contains:
+- `AppDatabase` — the main database
+- DAO classes for each table
+- Entity models (database counterparts of domain models)
+- Mapping between Entity and Domain models
 
 ### ui
 
-**Путь:** `packages/ui`
+**Path:** `packages/ui`
 
-Общие UI компоненты и стили:
-- Design system компоненты
-- Глобальная тема
-- Переиспользуемые виджеты (AppBar, Button, Card, etc.)
-- Иконы, цвета, типография
+Shared UI components and styles:
+- Design system components
+- Global theme
+- Reusable widgets (AppBar, Button, Card, etc.)
+- Icons, colors, typography
 
 ### localization
 
-**Путь:** `packages/localization`
+**Path:** `packages/localization`
 
-Многоязычность (i18n):
-- ARB файлы для переводов
-- Сгенерированные локализация классы
-- Поддержка динамической смены языка
+Multi-language support (i18n):
+- ARB files for translations
+- Generated localization classes
+- Support for switching language at runtime
 
 ### analytics
 
-**Путь:** `packages/analytics`
+**Path:** `packages/analytics`
 
-Сбор аналитики:
-- Трекинг событий
-- Интеграция с сервисом аналитики
-- Функции логирования
+Analytics collection:
+- Event tracking
+- Integration with an analytics service
+- Logging functions
 
 ### client
 
-**Путь:** `packages/client`
+**Path:** `packages/client`
 
-HTTP-клиент и API интеграция (если требуется):
+HTTP client and API integration (if needed):
 - API client
-- Сетевые запросы
-- Интеграция с backend
+- Network requests
+- Backend integration
 
-## Расширение структуры
+## Extending the Structure
 
-При добавлении нового bounded context:
+When adding a new bounded context:
 
-1. Создать папку в `app/lib/src/feature/{context_name}`
-2. Следовать структуре: `data/` → `control/` → `widget/`
-3. Определить Repository интерфейс
-4. Определить точки входа (Ports) для остального приложения
-5. Документировать зависимости в этом файле
-6. Если требуется shared логика — добавить в `packages/`
+1. Create a folder in `app/lib/src/feature/{context_name}`
+2. Follow the structure: `data/` → `control/` → `widget/`
+3. Define the Repository interface
+4. Define the entry points (Ports) for the rest of the application
+5. Document its dependencies in this file
+6. If shared logic is needed, add it to `packages/`

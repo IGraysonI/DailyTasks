@@ -1,33 +1,33 @@
-# Соглашения по коду — DailyTasks
+# Code Conventions — DailyTasks
 
-## Общие принципы
+## General Principles
 
-**SOLID** — принципы проектирования, способствующие созданию гибкого и поддерживаемого кода.
+**SOLID** — design principles that help create flexible and maintainable code.
 
-**YAGNI** — "You Aren't Gonna Need It". Не добавляйте функциональность, пока она не станет необходимой.
+**YAGNI** — "You Aren't Gonna Need It". Don't add functionality until it becomes necessary.
 
-**KISS** — простое решение предпочтительнее изощрённого. Понятность кода важнее его краткости. Нет преждевременной оптимизации.
+**KISS** — a simple solution is preferable to a sophisticated one. Code clarity matters more than brevity. No premature optimization.
 
-**Без Freezed** — используются обычные Dart-классы с @immutable аннотацией, где требуется.
+**No Freezed** — plain Dart classes are used, with the @immutable annotation where needed.
 
-**Без Use Cases** — бизнес-логика сосредоточена исключительно в Control слое.
+**No Use Cases** — business logic lives exclusively in the Control layer.
 
-## Структура фичи в application
+## Feature Structure in the Application
 
-Каждая фича в `app/lib/src/feature/{feature_name}` имеет структуру:
+Each feature in `app/lib/src/feature/{feature_name}` has the following structure:
 
 ```
 {feature_name}/
 ├── data/
-│   ├── repository  # Repository реализация
-│   ├── source      # DataSource (локальная БД, API)
-├── control/        # Control (бизнес-логика, state management)
-└── widget/         # UI компоненты и страницы
+│   ├── repository  # Repository implementation
+│   ├── source      # DataSource (local DB, API)
+├── control/        # Control (business logic, state management)
+└── widget/         # UI components and pages
 ```
 
 ### Repository
 
-Фасад доступа к данным фичи. Объединяет несколько DataSource, скрывает инфраструктурные детали.
+The feature's data access facade. Combines several DataSources and hides infrastructure details.
 
 ```dart
 class TaskRepository {
@@ -43,7 +43,7 @@ class TaskRepository {
 
 ### DataSource
 
-Источник данных — локальная БД, API, кэш. Работает с DAO.
+A data source — local DB, API, cache. Works with DAOs.
 
 ```dart
 class TaskLocalDataSource {
@@ -57,9 +57,9 @@ class TaskLocalDataSource {
 
 ### Control
 
-Управление состоянием и бизнес-логика фичи. Наследует `StateController<T>` из пакета `control`, где `T` — состояние фичи. Использует `handle()` для выполнения асинхронных операций с автоматической обработкой ошибок.
+State management and business logic of the feature. Extends `StateController<T>` from the `control` package, where `T` is the feature state. Uses `handle()` to run asynchronous operations with automatic error handling.
 
-**Структура состояния:**
+**State structure:**
 
 ```dart
 part 'tasks_state.dart';
@@ -88,7 +88,7 @@ sealed class TasksState {
 }
 ```
 
-**Реализация контроллера:**
+**Controller implementation:**
 
 ```dart
 final class TasksController extends StateController<TasksState> 
@@ -103,7 +103,7 @@ final class TasksController extends StateController<TasksState>
 
   final TasksRepository _tasksRepository;
 
-  /// Получить список задач
+  /// Fetch the list of tasks
   void fetchTasks() => handle(
     () async {
       setState(TasksState.processing(
@@ -127,16 +127,16 @@ final class TasksController extends StateController<TasksState>
 }
 ```
 
-**Ключевые особенности:**
-- `StateController<T>` управляет состоянием через `setState()`
-- `handle()` оборачивает асинхронные операции с автоматической обработкой ошибок и состояния processing
-- `DroppableControllerHandler` отменяет предыдущие операции при новых запросах (FIFO)
-- Методы работают с репозиторием и обновляют состояние при успехе или ошибке
-- Состояние имеет два основных типа: `idle` (готовый) и `processing` (выполнение)
+**Key points:**
+- `StateController<T>` manages state via `setState()`
+- `handle()` wraps asynchronous operations with automatic error and processing-state handling
+- `DroppableControllerHandler` cancels previous operations when new requests arrive (FIFO)
+- Methods work with the repository and update the state on success or error
+- The state has two main types: `idle` (ready) and `processing` (in progress)
 
 ### Widget
 
-UI компоненты и страницы. Получают контроллер InheritedWidget, слушают изменения состояния через `StateConsumer`. Отображают данные на основе текущего состояния.
+UI components and pages. They get the controller from an InheritedWidget and listen to state changes via `StateConsumer`. They render data based on the current state.
 
 ```dart
 class TasksPage extends StatelessWidget {
@@ -204,41 +204,41 @@ class TasksPage extends StatelessWidget {
 }
 ```
 
-**Взаимодействие с контроллером:**
-- Получение: `Dependencies.of(context).tasksController`
-- Слушание состояния: `StateConsumer<TasksController, TasksState>`
-- Вызов методов: `controller.fetchTasks()`, `controller.toggleTaskCompletion(id)`
+**Interacting with the controller:**
+- Obtaining: `Dependencies.of(context).tasksController`
+- Listening to state: `StateConsumer<TasksController, TasksState>`
+- Calling methods: `controller.fetchTasks()`, `controller.toggleTaskCompletion(id)`
 
-## Именование
+## Naming
 
-- **Классы:** PascalCase (`Task`, `TaskControl`, `TaskRepository`)
-- **Переменные, методы:** camelCase (`getTasks`, `taskList`, `isCompleted`)
-- **Константы:** camelCase (`maxDailyWeight`, `defaultTaskTimeout`)
-- **Приватные члены:** `_privateMember`
-- **Файлы:** snake_case (`task_control.dart`, `task_repository.dart`)
+- **Classes:** PascalCase (`Task`, `TaskControl`, `TaskRepository`)
+- **Variables, methods:** camelCase (`getTasks`, `taskList`, `isCompleted`)
+- **Constants:** camelCase (`maxDailyWeight`, `defaultTaskTimeout`)
+- **Private members:** `_privateMember`
+- **Files:** snake_case (`task_control.dart`, `task_repository.dart`)
 
-## Комментарии
+## Comments
 
-Минимум комментариев. Код должен быть самоописывающимся. Комментарии только для:
-- Нетривиальной бизнес-логики
-- Почему сделано так, а не иначе (не что)
+Keep comments to a minimum. Code should be self-documenting. Comments only for:
+- Non-trivial business logic
+- Why something is done this way and not another (not what)
 - TODO, FIXME, NOTE
 
 ```dart
-// Вес пересчитывается с учётом выполненных задач за день
+// Weight is recalculated taking into account the tasks completed today
 int calculateRemainingWeight() {
   return maxDailyWeight - completedWeight;
 }
 ```
 
-## Импорты
+## Imports
 
-Порядок импортов:
+Import order:
 
-1. `dart:` (стандартная библиотека)
+1. `dart:` (standard library)
 2. `package:flutter` (Flutter)
-3. Остальные `package:` (в алфавитном порядке)
-4. Относительные импорты (`../`, `./`)
+3. Other `package:` imports (alphabetically)
+4. Relative imports (`../`, `./`)
 
 ```dart
 import 'dart:async';
@@ -253,20 +253,20 @@ import '../data/repository/task_repository.dart';
 
 ## Null Safety
 
-Полный Null Safety. Использовать `?` и `!` только когда это логически обоснованно. Избегать `!` в production коде.
+Full null safety. Use `?` and `!` only when logically justified. Avoid `!` in production code.
 
 ```dart
-String? taskName; // может быть null
-String taskId;    // никогда не null
-final result = taskName ?? 'Unknown'; // безопасная обработка
+String? taskName; // may be null
+String taskId;    // never null
+final result = taskName ?? 'Unknown'; // safe handling
 ```
 
-## Тестирование
+## Testing
 
-Тесты находятся в `test/` папке с той же структурой, что и `lib/src`. Покрывать тестами:
-- Бизнес-логику (Control)
-- Repository и DataSource
-- Критические UI сценарии
+Tests live in the `test/` folder with the same structure as `lib/src`. Cover with tests:
+- Business logic (Control)
+- Repository and DataSource
+- Critical UI scenarios
 
 ```
 test/

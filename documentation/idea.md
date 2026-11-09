@@ -1,30 +1,30 @@
-# Идея продукта — DailyTasks
+# Product Idea — DailyTasks
 
-## Суть
+## Essence
 
-DailyTasks — приложение для управления ежедневными и еженедельными задачами с весовой системой. Пользователь устанавливает максимальный вес задач на день, а каждой задаче присваивает вес. Система вознаграждает пользователя за выполнение, обеспечивая геймифицированный опыт, вдохновленный системой задач в играх жанра gacha.
+DailyTasks is an app for managing daily and weekly tasks with a weight system. The user sets a maximum task weight for the day and assigns a weight to each task. The system rewards the user for completing tasks, providing a gamified experience inspired by the task systems in gacha games.
 
-## Проблема
+## Problem
 
-Пользователи часто:
-- Забывают о повседневных обязательствах
-- Не имеют ясного ощущения прогресса
-- Теряют мотивацию без видимых результатов
+Users often:
+- Forget about everyday commitments
+- Lack a clear sense of progress
+- Lose motivation without visible results
 
-## Решение
+## Solution
 
-Приложение предоставляет:
-- **Управление задачами** — создание, отслеживание, выполнение ежедневных и еженедельных задач
-- **Весовую систему** — каждая задача имеет вес, пользователь устанавливает сам пользователь для определения важности задачи
-- **Систему вознаграждений** — пользователь получает награды за выполнение задач
-- **Уведомления** — напоминания о новом дне/неделе и задачах
-- **Кроссплатформность** — мобильные платформы (iOS, Android) и десктоп (Windows, Linux, macOS)
-- **Локализация** — поддержка нескольких языков
+The app provides:
+- **Task management** — creating, tracking, and completing daily and weekly tasks
+- **Weight system** — each task has a weight, set by the user to define how important the task is
+- **Reward system** — the user receives rewards for completing tasks
+- **Notifications** — reminders about a new day/week and about tasks
+- **Cross-platform** — mobile platforms (iOS, Android) and desktop (Windows, Linux, macOS)
+- **Localization** — support for multiple languages
 
-## Целевая аудитория
+## Target Audience
 
-Пользователи, ищущие геймифицированный способ управления повседневными задачами и привычками. Возрастная категория от 18 до 60+ лет, техно-ориентированные люди.
+Users looking for a gamified way to manage everyday tasks and habits. Age range 18 to 60+, tech-savvy people.
 
-## Ценность
+## Value
 
-Повышение личной производительности через визуальное отслеживание прогресса и система вознаграждений. Снижение когнитивной нагрузки за счет автоматического управления лимитами и напоминаниями.
+Increased personal productivity through visual progress tracking and a reward system. Reduced cognitive load thanks to automatic management of limits and reminders.

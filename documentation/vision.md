@@ -1,77 +1,77 @@
-# Техническое видение — DailyTasks
+# Technical Vision — DailyTasks
 
-## Архитектурные принципы
+## Architectural Principles
 
-### Послойная архитектура
+### Layered Architecture
 
-Приложение следует строгой послойной цепочке вызовов:
+The application follows a strict layered call chain:
 
 ```
-Widget (UI) → Control (Бизнес-логика) → Repository → DataSource → DAO → Drift (Database)
+Widget (UI) → Control (Business logic) → Repository → DataSource → DAO → Drift (Database)
 ```
 
-- **Widget** — UI компоненты, состояние интерфейса
-- **Control** — бизнес-логика, управление состоянием фич
-- **Repository** — фасад доступа к данным
-- **DataSource** — источники данных (локальная БД, API, кэш)
-- **DAO** — объекты доступа к данным
-- **Drift** — ORM для SQLite
+- **Widget** — UI components, interface state
+- **Control** — business logic, feature state management
+- **Repository** — data access facade
+- **DataSource** — data sources (local DB, API, cache)
+- **DAO** — data access objects
+- **Drift** — ORM for SQLite
 
-Уровни не пропускаются. Прямые обращения через слои запрещены.
+Layers are never skipped. Direct calls across layers are forbidden.
 
 ### DDD — Domain Driven Design
 
-Приложение организовано вокруг bounded contexts:
+The application is organized around bounded contexts:
 
-- **daily_tasks** — управление ежедневными задачами
-- **weekly_tasks** — управление еженедельными задачами
-- **daily_task_rewards** — система вознаграждений для дневных задач
-- **weekly_task_rewards** — система вознаграждений для еженедельных задач
-- **settings** — настройки приложения
-- **developer** — инструменты разработчика (отладка, логирование)
+- **daily_tasks** — daily task management
+- **weekly_tasks** — weekly task management
+- **daily_task_rewards** — reward system for daily tasks
+- **weekly_task_rewards** — reward system for weekly tasks
+- **settings** — application settings
+- **developer** — developer tools (debugging, logging)
 
-Высокая сплочённость внутри контекста, минимальная связанность между контекстами.
+High cohesion within a context, minimal coupling between contexts.
 
 ### Shared packages
 
-Разделяемые пакеты используются только для устойчивых, действительно общепрограммных контрактов:
+Shared packages are used only for stable, truly application-wide contracts:
 
-- **localization** — многоязычность (i18n)
-- **ui** — общие UI компоненты и стили
-- **database** — слой доступа к БД (Drift, DAO)
-- **analytics** — сбор аналитики событий
-- **client** — HTTP-клиент и API интеграция
+- **localization** — multi-language support (i18n)
+- **ui** — shared UI components and styles
+- **database** — database access layer (Drift, DAO)
+- **analytics** — event analytics collection
+- **client** — HTTP client and API integration
 
-## Технологический стек
+## Technology Stack
 
-| Слой | Технология |
+| Layer | Technology |
 |------|-----------|
-| **Фреймворк** | Flutter 3.29.3+ |
-| **Язык** | Dart 3.7+ |
-| **БД** | SQLite (Drift ORM) |
+| **Framework** | Flutter 3.29.3+ |
+| **Language** | Dart 3.7+ |
+| **Database** | SQLite (Drift ORM) |
 | **State Management** | Control + ChangeNotifier |
-| **Маршрутизация** | Octopus |
-| **Локализация** | flutter_localizations + sheety_localization |
-| **Логирование** | l + Custom ErrorUtil |
+| **Routing** | Octopus |
+| **Localization** | flutter_localizations + sheety_localization |
+| **Logging** | l + Custom ErrorUtil |
 
-## Платформы
+## Platforms
 
-- **Мобильные:** Android, iOS
-- **Десктоп:** Windows, Linux, macOS
-- **Веб:** Support планируется
+- **Mobile:** Android, iOS
+- **Desktop:** Windows, Linux, macOS
+- **Web:** support is planned
 
-## Инициализация
+## Initialization
 
-Приложение инициализируется через `initialization` фичу, которая:
-1. Загружает зависимости
-2. Настраивает сервисы
-3. Вводит их через DI контейнер
-4. Обрабатывает ошибки инициализации
+The application is initialized through the `initialization` feature, which:
+1. Loads dependencies
+2. Configures services
+3. Injects them through the DI container
+4. Handles initialization errors
 
-## Обработка ошибок
+## Error Handling
 
-Глобальная обработка ошибок через `AppZone` и `ErrorUtil`. Ошибки логируются и отображаются пользователю в случае критических сбоев.
+Global error handling via `AppZone` and `ErrorUtil`. Errors are logged and shown to the user in case of critical failures.
 
-## Состояние приложения
+## Application State
 
-Управляется через `ApplicationSettingsScope`. Настройки пользователя (notifications, тема, язык) хранятся в локальной БД и синхронизируются при инициализации.
+Managed through `ApplicationSettingsScope`. User settings (notifications, theme, language) are stored in the local database and synchronized during initialization.

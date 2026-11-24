@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:ui/ui.dart';
 
 /// {@template app_theme}
 /// An immutable class that holds properties needed to build a [ThemeData] for the app.
@@ -18,7 +19,7 @@ final class ApplicationTheme with Diagnosticable {
   /// The default theme to use.
   static const defaultTheme = ApplicationTheme(
     themeMode: ThemeMode.system,
-    seed: Color(0xFF6200EE),
+    seed: Color(0xFF0098DC),
   );
 
   /// Builds a [ThemeData] based on the [themeMode] and [seed].
@@ -26,8 +27,24 @@ final class ApplicationTheme with Diagnosticable {
   /// This can also be used to add additional properties to the [ThemeData],
   /// such as extensions or custom properties.
   ThemeData buildThemeData(Brightness brightness) {
-    final colorScheme = ColorScheme.fromSeed(seedColor: seed, brightness: brightness);
-    return ThemeData.from(colorScheme: colorScheme, useMaterial3: true);
+    final palette = ArkPalette.of(brightness).copyWith(accent: seed);
+    final colorScheme = ColorScheme.fromSeed(seedColor: seed, brightness: brightness).copyWith(
+      primary: palette.accent,
+      surface: palette.background,
+      onSurface: palette.text,
+      error: palette.danger,
+    );
+    const sharpShape = RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(2)));
+    return ThemeData.from(colorScheme: colorScheme, useMaterial3: true).copyWith(
+      scaffoldBackgroundColor: palette.background,
+      extensions: <ThemeExtension<dynamic>>[palette],
+      cardTheme: const CardThemeData(shape: sharpShape),
+      dialogTheme: DialogThemeData(backgroundColor: palette.panel, shape: sharpShape),
+      popupMenuTheme: PopupMenuThemeData(color: palette.panel, shape: sharpShape),
+      elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(shape: arkCutShape)),
+      textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(shape: arkCutShape)),
+      snackBarTheme: SnackBarThemeData(backgroundColor: palette.emphasis, shape: sharpShape),
+    );
   }
 
   /// Copy with method to create a new instance of [ApplicationTheme]
@@ -36,11 +53,10 @@ final class ApplicationTheme with Diagnosticable {
   ApplicationTheme copyWith({
     ThemeMode? themeMode,
     Color? seed,
-  }) =>
-      ApplicationTheme(
-        themeMode: themeMode ?? this.themeMode,
-        seed: seed ?? this.seed,
-      );
+  }) => ApplicationTheme(
+    themeMode: themeMode ?? this.themeMode,
+    seed: seed ?? this.seed,
+  );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {

@@ -1,6 +1,7 @@
 import 'package:daily_tasks/src/common/router/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:octopus/octopus.dart';
+import 'package:ui/ui.dart';
 
 /// {@template developer_button}
 /// DeveloperButton widget for navigating to the developer screen.
@@ -10,8 +11,8 @@ class DeveloperButton extends StatelessWidget {
   const DeveloperButton({super.key});
 
   @override
-  Widget build(BuildContext context) => IconButton(
-    icon: const Icon(Icons.developer_mode),
+  Widget build(BuildContext context) => ArkNavSlot(
+    icon: Icons.developer_mode,
     tooltip: 'Developer Button',
     onPressed: () => Octopus.of(context).push(Routes.developer),
   );

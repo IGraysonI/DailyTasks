@@ -1,6 +1,7 @@
 import 'package:daily_tasks/src/common/router/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:octopus/octopus.dart';
+import 'package:ui/ui.dart';
 
 /// {@template settings_button}
 /// SettingsButton widget for navigating to the settings screen.
@@ -10,8 +11,8 @@ class SettingsButton extends StatelessWidget {
   const SettingsButton({super.key});
 
   @override
-  Widget build(BuildContext context) => IconButton(
-    icon: const Icon(Icons.settings),
+  Widget build(BuildContext context) => ArkNavSlot(
+    icon: Icons.settings,
     tooltip: 'Settings',
     onPressed: () => Octopus.of(context).push(Routes.settings),
   );

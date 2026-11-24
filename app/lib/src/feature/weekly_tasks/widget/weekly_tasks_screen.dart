@@ -1,8 +1,6 @@
 import 'package:control/control.dart';
 import 'package:daily_tasks/src/common/model/dependencies.dart';
 import 'package:daily_tasks/src/common/util/state_listener_util.dart';
-import 'package:daily_tasks/src/feature/daily_tasks/widget/daily_task_dialog.dart';
-import 'package:daily_tasks/src/feature/weekly_task_rewards/widget/weekly_task_rewards_indicator.dart';
 import 'package:daily_tasks/src/feature/weekly_tasks/controller/weekly_tasks_controller.dart';
 import 'package:daily_tasks/src/feature/weekly_tasks/widget/weekly_task_dialog.dart';
 import 'package:daily_tasks/src/feature/weekly_tasks/widget/weekly_tasks_scope.dart';
@@ -11,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:ui/ui.dart';
 
 /// {@template weekly_tasks_screen}
-/// Screen that displays all weekly tasks.
+/// Section with task actions and the vertically scrolled list of weekly tasks.
 /// {@endtemplate}
 class WeeklyTasksScreen extends StatefulWidget {
   /// {@macro weekly_tasks_screen}
@@ -23,7 +21,8 @@ class WeeklyTasksScreen extends StatefulWidget {
   State<WeeklyTasksScreen> createState() => _WeeklyTasksScreenState();
 }
 
-class _WeeklyTasksScreenState extends State<WeeklyTasksScreen> with AutomaticKeepAliveClientMixin {
+class _WeeklyTasksScreenState extends State<WeeklyTasksScreen> {
+  // Lifecycle of the controller is owned by WeeklyTasksScope.
   late final WeeklyTasksController _weeklyTasksController;
 
   @override
@@ -33,86 +32,48 @@ class _WeeklyTasksScreenState extends State<WeeklyTasksScreen> with AutomaticKee
   }
 
   @override
-  void dispose() {
-    _weeklyTasksController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return StateConsumer<WeeklyTasksController, WeeklyTasksState>(
-      controller: _weeklyTasksController,
-      listener: StateListenerUtil.defaultStateListener,
-      builder: (context, state, child) => Padding(
-        padding: const EdgeInsets.all(16),
-        child: AnimatedOpacity(
-          opacity: state.isProcessing ? .5 : 1,
-          duration: const Duration(milliseconds: 350),
-          child: IgnorePointer(
-            ignoring: state.isProcessing,
-            child: CustomScrollView(
-              slivers: [
-                const SliverToBoxAdapter(child: WeeklyTaskRewardsIndicator()),
-                SliverToBoxAdapter(child: Space.sm()),
-                const SliverToBoxAdapter(child: Divider()),
-                SliverToBoxAdapter(
-                  child: Text(
-                    'Список задач',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                ),
-                SliverToBoxAdapter(child: Space.sm()),
-                SliverToBoxAdapter(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () => _weeklyTasksController.deleteAllWeeklyTasks(),
-                        child: const Text('Delete all'),
-                      ),
-                      Space.sm(),
-                      ElevatedButton(
-                        onPressed: () => _weeklyTasksController.fetchWeeklyTasks(),
-                        child: const Text('Fetch'),
-                      ),
-                      Space.sm(),
-                      ElevatedButton(
-                        onPressed: () => WeeklyTaskDialog.show(context),
-                        child: const Text('Add'),
-                      ),
-                      Space.sm(),
-                      ElevatedButton(
-                        onPressed: () => _weeklyTasksController.resetWeeklyTasks(),
-                        child: const Text('Reset all'),
-                      ),
-                    ],
-                  ),
-                ),
-                SliverToBoxAdapter(child: Space.sm()),
-                const _WeeklyTasksListView(),
-              ],
+  Widget build(BuildContext context) => StateConsumer<WeeklyTasksController, WeeklyTasksState>(
+    controller: _weeklyTasksController,
+    listener: StateListenerUtil.defaultStateListener,
+    builder: (context, state, child) => Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ArkToolbar(
+          leading: Text(
+            'Задачи на неделю',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(color: ArkPalette.from(context).textMuted, fontSize: 13, letterSpacing: 1),
+          ),
+          actions: [
+            ArkAction(
+              icon: Icons.add,
+              label: 'Add',
+              tone: ArkTone.primary,
+              onPressed: () => WeeklyTaskDialog.show(context),
+            ),
+            ArkAction(icon: Icons.refresh, label: 'Fetch', onPressed: _weeklyTasksController.fetchWeeklyTasks),
+            ArkAction(icon: Icons.restart_alt, label: 'Reset all', onPressed: _weeklyTasksController.resetWeeklyTasks),
+            ArkAction(
+              icon: Icons.delete_sweep_outlined,
+              label: 'Delete all',
+              tone: ArkTone.danger,
+              onPressed: _weeklyTasksController.deleteAllWeeklyTasks,
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Expanded(
+          child: AnimatedOpacity(
+            opacity: state.isProcessing ? .5 : 1,
+            duration: const Duration(milliseconds: 350),
+            child: IgnorePointer(
+              ignoring: state.isProcessing,
+              child: const _WeeklyTasksListView(),
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  @override
-  bool get wantKeepAlive => true;
-}
-
-class _NoDataWidget extends StatelessWidget {
-  const _NoDataWidget();
-
-  @override
-  Widget build(BuildContext context) => SliverToBoxAdapter(
-    child: NoDataWidget(
-      text: 'Задачи отсутствуют',
-      buttonText: 'Добавить задачу',
-      onPressed: () => DailyTaskDialog.show(context).ignore(),
+      ],
     ),
   );
 }
@@ -123,65 +84,24 @@ class _WeeklyTasksListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final weeklyTasks = WeeklyTasksScope.getWeeklyTasks(context);
-    if (weeklyTasks.isEmpty) return const _NoDataWidget();
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          final weeklyTask = weeklyTasks[index];
-          return _WeeklyTaskListTile(
-            weeklyTask,
-            key: ValueKey<int>(weeklyTask.id),
-          );
-        },
-        childCount: weeklyTasks.length,
-      ),
+    if (weeklyTasks.isEmpty) return const ArkEmptyState(text: 'Задачи отсутствуют');
+    return ListView.separated(
+      itemCount: weeklyTasks.length,
+      separatorBuilder: (context, index) => const SizedBox(height: 8),
+      itemBuilder: (context, index) {
+        final weeklyTask = weeklyTasks[index];
+        return ArkTaskCard(
+          key: ValueKey<int>(weeklyTask.id),
+          tag: 'weight ${weeklyTask.weight}',
+          title: weeklyTask.title,
+          description: weeklyTask.description,
+          isCompleted: weeklyTask.isCompleted,
+          onToggle: () => WeeklyTasksScope.controller(context, listen: false).toggleWeeklyTaskCompletion(weeklyTask.id),
+          menu: _OptionsPopupButton(weeklyTask),
+        );
+      },
     );
   }
-}
-
-class _WeeklyTaskListTile extends StatelessWidget {
-  const _WeeklyTaskListTile(
-    this.weeklyTaskModel, {
-    super.key,
-  });
-
-  final WeeklyTaskModel weeklyTaskModel;
-
-  void _onTap(BuildContext context) =>
-      WeeklyTasksScope.controller(context).toggleWeeklyTaskCompletion(weeklyTaskModel.id);
-
-  @override
-  Widget build(BuildContext context) => ListTile(
-    title: Text(
-      weeklyTaskModel.title,
-      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-        color: weeklyTaskModel.isCompleted ? Colors.green : Colors.white,
-      ),
-    ),
-    subtitle: Text(weeklyTaskModel.description ?? ''),
-    trailing: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        GestureDetector(
-          onTap: () => _onTap(context),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                '${weeklyTaskModel.weight}',
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: weeklyTaskModel.isCompleted ? Colors.green : Colors.grey,
-                ),
-              ),
-              Space.sm(),
-              Icon(Icons.check_circle, color: weeklyTaskModel.isCompleted ? Colors.green : Colors.grey),
-            ],
-          ),
-        ),
-        _OptionsPopupButton(weeklyTaskModel),
-      ],
-    ),
-  );
 }
 
 class _OptionsPopupButton extends StatelessWidget {

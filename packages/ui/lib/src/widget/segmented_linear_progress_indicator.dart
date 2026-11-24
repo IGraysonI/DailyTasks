@@ -10,6 +10,7 @@ class SegmentedLinearProgressIndicator extends StatelessWidget {
     required this.currentValue,
     this.filledColor = Colors.blue,
     this.emptyColor = Colors.grey,
+    this.rewardColor = Colors.blue,
     this.rewardSegments,
     super.key,
   }) : assert(maxValue <= 15, 'maxValue cannot be greater than 15');
@@ -25,6 +26,9 @@ class SegmentedLinearProgressIndicator extends StatelessWidget {
 
   /// The color of the empty segments.
   final Color emptyColor;
+
+  /// The color of the reward segment borders.
+  final Color rewardColor;
 
   /// List of reward segments that would be marked on the progress indicator.
   final List<int>? rewardSegments;
@@ -45,6 +49,7 @@ class SegmentedLinearProgressIndicator extends StatelessWidget {
                 isFilled: index < currentValue,
                 primaryColor: filledColor,
                 secondaryColor: emptyColor,
+                rewardColor: rewardColor,
                 isRewardSegment: rewardSegments?.contains(index + 1) ?? false,
                 numberOfRewardInSegment: rewardSegments?.where((segment) => segment == index + 1).length ?? 0,
                 context: context,
@@ -62,6 +67,7 @@ class _SegmentPainter extends CustomPainter {
     required this.isFilled,
     required this.primaryColor,
     required this.secondaryColor,
+    required this.rewardColor,
     required this.isRewardSegment,
     required this.numberOfRewardInSegment,
     required this.context,
@@ -70,6 +76,7 @@ class _SegmentPainter extends CustomPainter {
   final bool isFilled;
   final Color primaryColor;
   final Color secondaryColor;
+  final Color rewardColor;
   final bool isRewardSegment;
   final int numberOfRewardInSegment;
   final BuildContext context;
@@ -163,7 +170,7 @@ class _SegmentPainter extends CustomPainter {
 
     if (isRewardSegment) {
       final borderPaint = Paint()
-        ..color = Colors.blue
+        ..color = rewardColor
         ..style = PaintingStyle.stroke
         ..strokeWidth = 4.5;
       canvas.drawPath(path, borderPaint);
@@ -171,5 +178,11 @@ class _SegmentPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _SegmentPainter oldDelegate) =>
+      oldDelegate.isFilled != isFilled ||
+      oldDelegate.primaryColor != primaryColor ||
+      oldDelegate.secondaryColor != secondaryColor ||
+      oldDelegate.rewardColor != rewardColor ||
+      oldDelegate.isRewardSegment != isRewardSegment ||
+      oldDelegate.numberOfRewardInSegment != numberOfRewardInSegment;
 }

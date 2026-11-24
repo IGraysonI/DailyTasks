@@ -34,7 +34,6 @@ import 'package:l/l.dart';
 import 'package:platform_info/platform_info.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ui/ui.dart';
 
 typedef _InitializationStep = FutureOr<void> Function(Dependencies dependencies);
 
@@ -167,7 +166,8 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
     const initializationSettingsWindows = WindowsInitializationSettings(
       appName: 'Daily Tasks',
       appUserModelId: 'Com.DailyTasks.App',
-      guid: Config.windowsGuid,
+      // guid: Config.windowsGuid,
+      guid: 'B1A2C3D4-E5F6-7890-1234-56789ABCDEF0',
     );
     const initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
